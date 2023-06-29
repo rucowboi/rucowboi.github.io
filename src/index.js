@@ -13,7 +13,7 @@ require('./leaflet-singleclick.js');
 require('./printing-leaflet-easyPrint.js');
 
 
-
+// test
 //
 // CONSTANTS
 // for reasons unknown, can't use "const" here; Webpack 4...
