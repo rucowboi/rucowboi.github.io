@@ -1268,7 +1268,8 @@ function performSearchDemographics (searchparams) {
     console.log('demogdata_cta: ', demogdata_cta)
     const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.Zone == 'Statewide' && row.Years == searchparams.time; })[0];
     const demogdata_nation = DATA_DEMOGS.filter(function (row) { return row.Zone == 'Nationwide' && row.Years == searchparams.time; })[0];
-
+    console.log('demogdata_state: ', demogdata_state)
+    console.log('demogdata_nation: ', demogdata_nation)
     const $demographics_section = $('#demographic-tables');
     const $ctastats = $demographics_section.find('[data-region="cta"]');
     const $nationstats = $demographics_section.find('[data-region="nation"]');
@@ -1925,7 +1926,7 @@ function formatFieldValue (value, format) {
             break;
         case 'percent':
             formatted = parseFloat(value);
-            formatted = ! isNaN(formatted) ? (formatted < 1 ? '&lt; 1' : formatted.toFixed(1)) : '-';
+            formatted = ! isNaN(formatted) ? (formatted < 1 ? '< 1' : formatted.toFixed(1)) : '-';
             formatted = `${formatted} %`;
             break;
         case 'money':
