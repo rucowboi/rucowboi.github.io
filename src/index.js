@@ -1260,10 +1260,12 @@ function performSearchShowFilters (searchparams) {
 
 function performSearchDemographics (searchparams) {
     console.log('searchparams: ', searchparams)
+    console.log('DATA_DEMOGS: ', DATA_DEMOGS)
     // distill demographic data for the selected CTA
     // ths has no connection to the cancer dataset at all
     // see DEMOGRAPHIC_TABLES and initDemographicTables() which created these tables during setup
     const demogdata_cta = DATA_DEMOGS.filter(function (row) { return row.Zone == searchparams.ctaid && row.Years == searchparams.time; })[0];
+    console.log('demogdata_cta: ', demogdata_cta)
     const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.Zone == 'Statewide' && row.Years == searchparams.time; })[0];
     const demogdata_nation = DATA_DEMOGS.filter(function (row) { return row.Zone == 'Nationwide' && row.Years == searchparams.time; })[0];
 
@@ -1300,6 +1302,7 @@ function performSearchDemographics (searchparams) {
         tableinfo.rows.forEach(function (tablerowinfo) {
             const $slots_cta = $demographics_section.find(`span[data-region="cta"][data-statistic="${tablerowinfo.field}"]`);
             const value_cta = formatFieldValue(demogdata_cta[tablerowinfo.field], tablerowinfo.format);
+            // console.log('value_cta', value_cta)
             $slots_cta.text(value_cta);
 
             const $slots_state = $demographics_section.find(`span[data-region="state"][data-statistic="${tablerowinfo.field}"]`);
@@ -1325,9 +1328,11 @@ function performSearchPlaces (searchparams) {
 
     // find the cities and counties here from our preared data
     console.log('DATA_CTACOUNTY: ', DATA_CTACOUNTY)
-    const counties = DATA_CTACOUNTY.filter(row => row.Zone == searchparams.ctaid).map(row => `${row.County} County`);
+    const counties = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.County} County`);
     console.log('counties: ', counties)
-    const cities = DATA_CTACITY.filter(row => row.Zone == searchparams.ctaid).map(row => row.City);
+    console.log('DATA_CTACITY: ', DATA_CTACITY)
+    const cities = DATA_CTACITY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.City);
+    console.log('cities: ', cities)
     counties.sort();
     cities.sort();
 

@@ -24,7 +24,8 @@ class PlacesIntersector:
         print("    Reproject {}  => {}".format(inputshp, outputshp))
 
         command = "{} {} -proj {} -filter-fields {} -rename-fields name={},id={} -o {} -quiet".format(
-            settings.MAPSHAPER_CLI,
+            # settings.MAPSHAPER_CLI,
+            'mapshaper',
             inputshp,
             settings.PLANAR_SRS,
             ','.join([idfield, namefield]),
@@ -40,9 +41,10 @@ class PlacesIntersector:
         outfh = open(csvfilename, 'w')
         csvfh = csv.writer(outfh)
         csvfh.writerow(['ZoneIDOrig', placecolumnname])
+        # csvfh.writerow(['Zone', placecolumnname])
         print(" settings.REPROJECTED_ZONESFILE", settings.REPROJECTED_ZONESFILE)
-        # ctads = ogr.Open(settings.REPROJECTED_ZONESFILE, False)
-        ctads = ogr.Open(settings.INPUT_ZONESFILE, False)
+        ctads = ogr.Open(settings.REPROJECTED_ZONESFILE, False)
+        # ctads = ogr.Open(settings.INPUT_ZONESFILE, False)
 
         ctalayer = ctads.GetLayer(0)
 
