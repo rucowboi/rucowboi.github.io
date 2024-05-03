@@ -1733,9 +1733,8 @@ function performSearchMap (searchparams) {
         // const ctaid = layer.feature.properties.Zone;
         const ctaid = layer.feature.properties.ZoneIDOrig;
         const score = ctascores[ctaid];
-
         let style;
-        if (score == null || score == undefined) {
+        if (score == null || score == undefined || score == "") {
             style = Object.assign({}, CHOROPLETH_STYLE_NODATA);
         }
         else {
