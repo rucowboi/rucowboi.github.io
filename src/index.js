@@ -1672,6 +1672,7 @@ function performSearchMap (searchparams) {
 
     if (['Cases', 'AAIR'].indexOf(rankthemby) != -1) {  // the special case for AAIR/Cases incidence data
         DATA_CANCER
+        .filter(row => row.Zone != 'Nationwide')
         .filter(row => row.Zone != 'Statewide')
         .filter(row => row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)
         .forEach((row) => {
@@ -1689,13 +1690,13 @@ function performSearchMap (searchparams) {
     }
     else {  // demographic data
         DATA_DEMOGS
+        .filter(row => row.Zone != 'Nationwide')
         .filter(row => row.Zone != 'Statewide')  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
         .forEach((row) => {
             const choropleth_score = row[rankthemby];  // the control's selected value = a CHOROPLETH_OPTIONS "field" = a literal CSV column name
             ctascores[row.Zone] = choropleth_score;
         });
     }
-
     // find the min and max, and send it to the control for display
     const allscores = Object.values(ctascores).filter(function (score) { return score; });
     const scoringmin = Math.min(...allscores);
