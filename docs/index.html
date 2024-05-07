@@ -55,8 +55,8 @@
     </script>
 
     <!-- our own awesomesauce -->
-    <link rel="stylesheet" type="text/css" href="index.css?Fri_May_03_2024_16_25_25_GMT_0400__Eastern_Daylight_Time_" />
-    <script type="text/javascript" src="index.js?Fri_May_03_2024_16_25_25_GMT_0400__Eastern_Daylight_Time_"></script>
+    <link rel="stylesheet" type="text/css" href="index.css?Tue_May_07_2024_12_47_22_GMT_0400__Eastern_Daylight_Time_" />
+    <script type="text/javascript" src="index.js?Tue_May_07_2024_12_47_22_GMT_0400__Eastern_Daylight_Time_"></script>
 </head>
 <body>
 
@@ -154,6 +154,13 @@
                     <div class="input-group">
                         <label for="data-filters-race">Race/Ethnicity <i class="fa fa-info-circle" aria-hidden="true" data-tooltip="race"></i></label>
                         <select name="race" id="data-filters-race" aria-label="Select the race/ethnicity to report">
+                            <!-- see initDataFilters() where we create options based on constants in index.js -->
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="data-filters-type">Area Type </label>
+                        <select name="type" id="data-filters-type" aria-label="Select area type to report">
                             <!-- see initDataFilters() where we create options based on constants in index.js -->
                         </select>
                     </div>

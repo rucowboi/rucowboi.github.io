@@ -92,6 +92,10 @@ var SEARCHOPTIONS_RACE = [  // field prefix for AAIR, LCI, UCI fields within the
     { value: 'B', label: "Non-Hispanic Black" },
     { value: 'H', label: "Hispanic" },
 ];
+var SEARCHOPTIONS_TYPE = [
+    { value: 'zone', label: "Zone" },
+    { value: 'county', label: "County" },
+]
 
 // if any of the cancer sites should apply to only one sex, you may define that here
 // the left-hand side (key) here is a cancer site value from SEARCHOPTIONS_CANCERSITE
@@ -902,6 +906,7 @@ function initDataFilters () {
     const $searchwidgets_sex = $('div.data-filters select[name="sex"]');
     const $searchwidgets_race = $('div.data-filters select[name="race"]');
     const $searchwidgets_time = $('div.data-filters select[name="time"]');
+    const $searchwidgets_type = $('div.data-filters select[name="type"]');
 
     SEARCHOPTIONS_CANCERSITE.forEach(function (option) {
         $(`<option value="${option.value}">${option.label}</option>`).appendTo($searchwidgets_site);
@@ -914,6 +919,9 @@ function initDataFilters () {
     });
     SEARCHOPTIONS_TIME.forEach(function (option) {
         $(`<option value="${option.value}">${option.label}</option>`).appendTo($searchwidgets_time);
+    });
+    SEARCHOPTIONS_TYPE.forEach(function (option) {
+        $(`<option value="${option.value}">${option.label}</option>`).appendTo($searchwidgets_type);
     });
 
     if (getOptionCount('time') < 2) {  // some datasets have only 1 option, sop  showing this is silly
