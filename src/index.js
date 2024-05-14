@@ -110,8 +110,8 @@ var SEARCHOPTIONS_RACE = [  // field prefix for AAIR, LCI, UCI fields within the
     { value: 'H', label: "Hispanic" },
 ];
 var SEARCHOPTIONS_TYPE = [
-    { value: 'zone', label: "Zone" },
-    { value: 'county', label: "County" },
+    { value: 'Zone', label: "Zone" },
+    { value: 'County', label: "County" },
 ]
 
 // if any of the cancer sites should apply to only one sex, you may define that here
@@ -1860,6 +1860,7 @@ function compileParams (addextras=false) {
 
     // these params are always present: the core search params
     const params = {
+        type: $searchwidgets.filter('[name="type"]').val(),
         address: $searchwidgets.filter('[name="address"]').val(),
         sex: $searchwidgets.filter('[name="sex"]').val(),
         site: $searchwidgets.filter('[name="site"]').val(),
