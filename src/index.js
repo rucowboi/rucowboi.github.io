@@ -781,8 +781,10 @@ function initDownloadButtons () {
 
 function initDemographicTables () {
     const $demographics_section = $('#demographic-tables');
-
+    const initType = compileType()
+    console.log('initType: ', initType)
     DEMOGRAPHIC_TABLES.forEach(function (tableinfo) {
+        console.log('tableinfo', tableinfo)
         const $table = $(`
             <table class="table-striped table-sm">
                 <thead>
@@ -1144,12 +1146,14 @@ function performSearch () {
 
     // get the search params so we can filter to the specific row
     // if we have an address to geocode, then do that as well
+    const singleParams = compileType();
+    console.log('singleParams: ', singleParams)
     const params = compileParams();
     console.log('params: ', params)
     // the CTA ID and CTA Name are figured here, since we need to find the CTA just to proceed to performSearchReally()
     // may as well just capture it here and include it into the searchparams
     params.ctaid = '10';
-    params.ctaname = '10';
+    params.ctaname = 'Delaware';
     if (params.address) {
         // address search can never be easy  :)
         // the address may be a latlng string, or a CTA ID, or a CTA ID buried inside a longer string, ... or maybe even an address!
@@ -1194,6 +1198,7 @@ function performSearch () {
                     params.ctaname = cta.feature.properties.ZoneName.replace(/\_\d+$/, '');  // trim off the end
                     params.latlng = searchlatlng;
                     params.bbox = causedbyaddresschange ? cta.getBounds() : null;
+                    params.test = "test"
                     performSearchReally(params);
                 }
                 else {
@@ -1212,6 +1217,7 @@ function performSearch () {
 
 
 function performSearchReally (searchparams) {
+    console.log('performSearchReally searchparams: ', searchparams)
     // performSearch() was a wrapper to figure out what CTA to focus
     // ultimately they come here for the real data filtering and display
 
@@ -1293,8 +1299,17 @@ function performSearchDemographics (searchparams) {
     // see DEMOGRAPHIC_TABLES and initDemographicTables() which created these tables during setup
     console.log('searchparams.ctaid', searchparams.ctaid)
     console.log('searchparams.time', searchparams.time)
-    const demogdata_cta = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.ctaid && row.Years == searchparams.time; })[0];
+    let demogdata_cta = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.ctaid && row.Years == searchparams.time; })[0];
     console.log('demogdata_cta: ', demogdata_cta)
+    if (searchparams.type == 'County'){
+        const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
+        console.log('countiesCode: ', countiesCode)
+        const demogdata_county = DATA_DEMOGS.filter(function (row) { return row.GeoID == countiesCode && row.Years == searchparams.time; })[0];
+        console.log('demogdata_county: ', demogdata_county)
+        demogdata_cta = demogdata_county
+    }
+    
+    
     const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.GeoID == '10' && row.Years == searchparams.time; })[0];
     const demogdata_nation = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US' && row.Years == searchparams.time; })[0];
     console.log('demogdata_state: ', demogdata_state)
@@ -1320,7 +1335,11 @@ function performSearchDemographics (searchparams) {
     }
 
     // fill in the blanks: the CTA name and ID
-    const ctanametext = searchparams.ctaname;
+    let ctanametext = searchparams.ctaname;
+    if (searchparams.type == 'County'){
+        const counties = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.County} County`);
+        ctanametext = counties[0]
+    }
     const ctaidtext = searchparams.ctaid == '10' ? '' : `(${demogdata_cta.GeoID})`;
     $demographics_section.find('span[data-statistics="ctaname"]').text(ctanametext);
     $demographics_section.find('span[data-statistics="ctaid"]').text(ctaidtext);
@@ -1360,6 +1379,8 @@ function performSearchPlaces (searchparams) {
     console.log('DATA_CTACOUNTY: ', DATA_CTACOUNTY)
     const counties = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.County} County`);
     console.log('counties: ', counties)
+    const countiesCodes = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.CountyCode}`);
+    console.log('countiesCodes: ', countiesCodes)
     console.log('DATA_CTACITY: ', DATA_CTACITY)
     const cities = DATA_CTACITY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.City);
     console.log('cities: ', cities)
@@ -1852,6 +1873,15 @@ function getOptionCount (fieldname) {
     const $picker = $(`div.data-filters select[name="${fieldname}"]`);
     const $options = $picker.find('option');
     return $options.length;
+}
+
+function compileType () {
+    console.log('compileType')
+    const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
+    console.log('compileType $searchwidgets: ', $searchwidgets)
+    const type = $searchwidgets.filter('[name="type"]').val()
+    console.log('compileType type: ', type)
+    return type;
 }
 
 
