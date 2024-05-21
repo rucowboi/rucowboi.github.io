@@ -787,7 +787,7 @@ function initDemographicTables () {
                 <thead>
                     <tr>
                         <th class="nowrap left"><span class="subtitle" tabindex="0">${tableinfo.title}</span></th>
-                        <th class="nowrap right" data-region="cta" aria-hidden="true">Zone</th>
+                        <th class="nowrap right typeName" data-region="cta" aria-hidden="true">Zone</th>
                         <th class="nowrap right" data-region="state" aria-hidden="true">Statewide</th>
                         <th class="nowrap right" data-region="nation" aria-hidden="true">Nationwide</th>
                     </tr>
@@ -1227,6 +1227,19 @@ function performSearch () {
 
 function performSearchReally (searchparams) {
     console.log('performSearchReally searchparams: ', searchparams)
+    const typeNames = $('.typeName')
+    if(searchparams.type == 'Zone'){
+        for (let i=0; i < typeNames.length; i++){
+            typeNames[i].innerHTML = "Zone"
+        }
+    }
+    if(searchparams.type == 'County'){
+        for (let i=0; i < typeNames.length; i++){
+            typeNames[i].innerHTML = "County"
+        }
+    }
+    
+    // typeNames.innerHTML = "test"
     // performSearch() was a wrapper to figure out what CTA to focus
     // ultimately they come here for the real data filtering and display
 
@@ -1258,21 +1271,17 @@ function performSearchShowFilters (searchparams) {
     const $filtersummary = $('div.data-filters-summary');
     $filtersummary.empty();
 
-    
     {
+        if (searchparams.type == "Zone"){
+         
         let text = searchparams.ctaname == '10' ? searchparams.ctaname : `${searchparams.ctaname} (${searchparams.ctaid})`;
-        if (searchparams.type == 'County'){
-            const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
-            console.log('123countiesCode: ', countiesCode)
-            searchparams.countyCode = countiesCode[0] + '';
-            const cancerdata_county = DATA_CANCER.filter(row => row.GeoID == countiesCode && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
-            console.log('123cancerdata_county: ', cancerdata_county)
-            text = `${cancerdata_county[0]} (${countiesCode})`
-        }
         const $box = $('<span data-filter="address"></span>').text(text).appendTo($filtersummary);
         if (searchparams.ctaname != '10') {
             $box.prop('tabindex', '0').addClass('data-filter-clear').append('<div class="summary-close"><i class="fa fa-times noprint" tabindex="0" aria-label="Click to clear this filter"></i></div>');
         }
+        } else {
+            $('<span data-filter="address" style="display: none;"></span>').appendTo($filtersummary);
+    }
     }
 
     {
@@ -1360,7 +1369,7 @@ function performSearchDemographics (searchparams) {
     }
     const ctaidtext = searchparams.ctaid == '10' ? '' : `(${demogdata_cta.GeoID})`;
     $demographics_section.find('span[data-statistics="ctaname"]').text(ctanametext);
-    $demographics_section.find('span[data-statistics="ctaid"]').text(ctaidtext);
+    // $demographics_section.find('span[data-statistics="ctaid"]').text(ctaidtext);
     $demographics_section.find('span[data-statistics="ctaname"]').closest('span.subtitle').prop('aria-label', ctanametext + ' ' + ctaidtext);
 
     // fill in the blanks: demographics
@@ -1416,7 +1425,7 @@ function performSearchPlaces (searchparams) {
         const $block = $('<div></div>').html(`<b>Counties: </b>`).appendTo($box);
         $('<span></span>').text(text).appendTo($block);
     }
-    if (cities.length) {
+    if (cities.length && searchparams.type == "Zone") {
         const text = cities.join(', ');
         const $block = $('<div></div>').html(`<b>Places: </b>`).appendTo($box);
         $('<span></span>').text(text).appendTo($block);
@@ -1580,13 +1589,13 @@ function performSearchIncidenceBarChart (searchparams) {
     const $chart_section  = $('#incidence-barchart-section');
     $chart_section.find('span[data-statistic="cancersite"]').text( getLabelFor('site', searchparams.site) );
     $chart_section.find('span[data-statistics="ctaname"]').text(searchparams.ctaname);
-    $chart_section.find('span[data-statistics="ctaid"]').text(searchparams.ctaid ? `(${searchparams.ctaid})` : '');
+    // $chart_section.find('span[data-statistics="ctaid"]').text(searchparams.ctaid ? `(${searchparams.ctaid})` : '');
     if (searchparams.type == 'County'){
         const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
         const county = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.County);
 
         $chart_section.find('span[data-statistics="ctaname"]').text(county + ' County');
-        $chart_section.find('span[data-statistics="ctaid"]').text(countiesCode ? `(${countiesCode})` : '');
+        // $chart_section.find('span[data-statistics="ctaid"]').text(countiesCode ? `(${countiesCode})` : '');
     }
 
     // incidence chart is multiple rows: filter by CTA+cancer+time, but keep data for all sexes
