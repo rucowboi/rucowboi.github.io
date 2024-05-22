@@ -234,13 +234,12 @@ var CHOROPLETH_OPTIONS = [
     { field: 'PctMinority', label: "% Minority (other than non-Hispanic White)", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
     { field: 'PctHispanic', label: "% Hispanic", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
     { field: 'PctBlackNH', label: "% Black (non-Hispanic)", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctRural', label: "% Living in Rural Area", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'Pct100Pov', label: "% Below Poverty", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // cht comment out because not in data causes error
     { field: 'PctNoHealthIns', label: "% Without Health Insurance", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
     { field: 'PctEducBchPlus', label: "% With Bachelors Degree or Higher", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
     { field: 'PctEducLHS', label: "% Did Not Finish High School", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'Pct100Pov', label: "% Below Poverty", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // cht comment out because not in data causes error
     { field: 'PctDisabled', label: "% With a Disability", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // cht comment out because not in data causes error
-
+    { field: 'Pct_forborn', label: "% Foreign Born", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // 
 ];
 
 // the style to use for the MAP_LAYERS.county GeoJSON overlay
@@ -279,7 +278,7 @@ var MAP_LAYERS = [
     {
         id: 'zones',
         label: "Zones",
-        checked: true,
+        checked: false,
         layer: undefined,  // see initFixCountyOverlay() where we patch this in to become a L.GeoJSON layer, since that comes after startup promises but before initMap()
     },
     // {
@@ -287,15 +286,15 @@ var MAP_LAYERS = [
     //     label: "Places",
     //     layer: undefined,  // see initFixCountyOverlay() where we patch this in to become a L.GeoJSON layer, since that comes after startup promises but before initMap()
     // },
-    {
-        id: 'streets',
-        label: "Streets",
-        layer: L.tileLayer('http://a.tile.stamen.com/toner-lines/{z}/{x}/{y}.png', {
-            pane: 'markerPane',  // between CTA lines and CTA fills
-            attribution: 'Map tiles by <a target="_blank" href="http://www.mapbox.com">MapBox</a>.<br />Data &copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributings</a>',
-            opacity: 0.75,
-        }),
-    },
+    // {
+    //     id: 'streets',
+    //     label: "Streets",
+    //     layer: L.tileLayer('http://a.tile.stamen.com/toner-lines/{z}/{x}/{y}.png', {
+    //         pane: 'markerPane',  // between CTA lines and CTA fills
+    //         attribution: 'Map tiles by <a target="_blank" href="http://www.mapbox.com">MapBox</a>.<br />Data &copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributings</a>',
+    //         opacity: 0.75,
+    //     }),
+    // },
 ];
 
 
@@ -1237,6 +1236,9 @@ function performSearchReally (searchparams) {
         for (let i=0; i < typeNames.length; i++){
             typeNames[i].innerHTML = "County"
         }
+        const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
+        console.log('countiesCode: ', countiesCode)
+        searchparams.countyCode = countiesCode[0]
     }
     
     // typeNames.innerHTML = "test"
@@ -1252,11 +1254,13 @@ function performSearchReally (searchparams) {
     // and it doesn't make sense to try our usual design pattern of filtering data then handing off to a renderer
 
     performSearchShowFilters(searchparams);
+    performSearchMap(searchparams);
+
     performSearchDemographics(searchparams);
     performSearchPlaces(searchparams);
     performSearchIncidenceReadout(searchparams);
     performSearchIncidenceBarChart(searchparams);
-    performSearchMap(searchparams);
+    // performSearchMap(searchparams);
     performSearchUpdateDataDownloadLinks(searchparams);
 }
 
@@ -1331,6 +1335,7 @@ function performSearchDemographics (searchparams) {
     if (searchparams.type == 'County'){
         const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
         console.log('countiesCode: ', countiesCode)
+        searchparams.countyCode = countiesCode[0]
         const demogdata_county = DATA_DEMOGS.filter(function (row) { return row.GeoID == countiesCode && row.Years == searchparams.time; })[0];
         console.log('demogdata_county: ', demogdata_county)
         demogdata_cta = demogdata_county
@@ -1876,6 +1881,11 @@ function performSearchMap (searchparams) {
         MAP.fitBounds(searchparams.bbox);
     }
 
+    // clear the zone borders
+    MAP.ctapolygonbounds.eachLayer((layer) => {
+        layer.setStyle({ color: null });
+    })
+
     // highlight the selected CTA
     MAP.countypolygonbounds.eachLayer((layer) => {
         console.log('layer.feature.properties', layer.feature.properties)
@@ -1883,7 +1893,10 @@ function performSearchMap (searchparams) {
         // const ctaid = layer.feature.properties.Zone;
         // const ctaid = layer.feature.properties.ZoneIDOrig;
         const ctaid = layer.feature.properties.GEOID;
-        const istheone = ctaid == searchparams.countyCode;
+        const istheone = ctaid == searchparams.countyCode +'';
+        console.log('ctaid 234: ', ctaid)
+        console.log('searchparams.countyCode 234: ', searchparams.countyCode)
+        console.log('istheone 234: ', istheone)
 
         if (istheone) {
             layer.setStyle(CHOROPLETH_BORDER_SELECTED);
