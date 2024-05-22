@@ -1,16 +1,16 @@
-ZoneIDOrig,County
-A9004,Sussex
-A9007,Sussex
-A9015,Sussex
-A9011,Kent
-A9006,Kent
-A9002,Kent
-A9009, New Castle
-A9008, New Castle
-A9012, New Castle
-A9014, New Castle
-A9001, New Castle
-A9005, New Castle
-A9003, New Castle
-A9013, New Castle
-A9010, New Castle
+ZoneIDOrig,County,CountyCode
+A9004,Sussex,10005
+A9007,Sussex,10005
+A9015,Sussex,10005
+A9011,Kent,10001
+A9006,Kent,10001
+A9002,Kent,10001
+A9009, New Castle,10003
+A9008, New Castle,10003
+A9012, New Castle,10003
+A9014, New Castle,10003
+A9001, New Castle,10003
+A9005, New Castle,10003
+A9003, New Castle,10003
+A9013, New Castle,10003
+A9010, New Castle,10003
