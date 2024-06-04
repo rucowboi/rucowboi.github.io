@@ -1959,8 +1959,11 @@ function performSearchMap (searchparams) {
             ctascores[row.GeoID] = choropleth_score;
         });
     }
+    const filteredDataWithoutZones = Object.fromEntries(
+        Object.entries(ctascores).filter(([key, value]) => !key.includes("A"))
+    );
     // find the min and max, and send it to the control for display
-    const allscores = Object.values(ctascores).filter(function (score) { return score; });
+    const allscores = Object.values(filteredDataWithoutZones).filter(function (score) { return score; });
     const scoringmin = Math.min(...allscores);
     const scoringmax = Math.max(...allscores);
     const legendformat = CHOROPLETH_OPTIONS.filter(function (vizopt) { return vizopt.field == rankthemby; })[0].format;
