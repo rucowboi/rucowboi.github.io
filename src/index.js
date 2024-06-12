@@ -196,7 +196,7 @@ var DEMOGRAPHIC_TABLES = [
 // then CHOROPLETH_STYLE_INCIDENCE and CHOROPLETH_STYLE_DEMOGRAPHIC are added to form the choropleth coloring
 // see performSearchMap() which calculates scoring and uses these color ramps, to implement the choropleth behavior
 var CHOROPLETH_STYLE_NODATA = { fillOpacity: 0.25, fillColor: '#cccccc', color: 'black', opacity: 0.2, weight: 1 };
-// var CHOROPLETH_STYLE_NODATA = { fillOpacity: 0.25, fillColor: 'red', color: 'black', opacity: 0.2, weight: 1 };
+var CHOROPLETH_STYLE_NODATA_CLEAR = { fillOpacity: 0, fillColor: '#cccccc', color: 'black', opacity: 0, weight: 0 };
 
 
 // var CHOROPLETH_BORDER_DEFAULT = { color: '#b3b3b3', opacity: 1, weight: 1, fill: false };
@@ -901,13 +901,13 @@ function initMapAndPolygonData () {
 
     MAP.countypolygonfills = L.topoJson(COUNTYTOPOJSONDATA, {
         pane: 'shadowPane',
-        style: CHOROPLETH_STYLE_NODATA,  // see performSearchMap() where these are reassigned based on filters
+        style: CHOROPLETH_STYLE_NODATA_CLEAR,  // see performSearchMap() where these are reassigned based on filters
     })
     .addTo(MAP);
 
     MAP.countypolygonbounds = L.topoJson(COUNTYTOPOJSONDATA, {
         pane: 'tooltipPane',
-        style: CHOROPLETH_BORDER_DEFAULT,  // see performSearchMap() where these are reassigned based on filters
+        style: CHOROPLETH_BORDER_NONE,  // see performSearchMap() where these are reassigned based on filters
     })
     .addTo(MAP);
 
@@ -1742,7 +1742,7 @@ function performSearchMap (searchparams) {
     })
 
     MAP.countypolygonfills.eachLayer((layer) => { 
-        layer.setStyle(Object.assign({}, CHOROPLETH_STYLE_NODATA));
+        layer.setStyle(Object.assign({}, CHOROPLETH_STYLE_NODATA_CLEAR));
     })
 
     if (searchparams.type == 'Zone'){
