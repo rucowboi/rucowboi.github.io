@@ -130,7 +130,10 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="data-filters-address">Location Search <span class="warnmessage d-none" style="padding: 1px 5px; display: block; margin: 0 0 5px 0;"></span></label>
+                        <label for="data-filters-address">Location Search
+                            <i class="fa fa-info-circle" aria-hidden="true" data-tooltip="location"></i>
+                            <span class="warnmessage d-none" style="padding: 1px 5px; display: block; margin: 0 0 5px 0;"></span>
+                        </label>
                         <input class="form-control" type="text" name="address" id="data-filters-address" placeholder="Search by address or city" aria-label="Enter address to select an area to report" />
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -560,6 +563,9 @@ For more information about what cancer cases are reportable to the DCR, please v
         </div>		
         <div aria-hidden="true" data-tooltip="race">
             Race/ethnicity is categorized as: non-Hispanic White, non-Hispanic Black, and Hispanic. "All races" includes all of the above, as well as other and unknown race/ethnicity and American Indian/Alaska Native. The latter two groups are not reported separately due to small numbers for many cancer sites. 
+        </div>
+        <div aria-hidden="true" data-tooltip="location">
+            To be able to accurately search for an address, please include components of an address including street name and number and city, at a minimum. For example, “258 Chapman Rd, Newark".
         </div>
         <div aria-hidden="true" data-tooltip="sex">
             Delaware Cancer Maps defines this field as the sex or gender of the cancer patient, and codes available are male, female, intersex, transsexual, and transgender (natal male, natal female, or not specified). However, categories beyond male and female are not consistently coded by medical reporting facilities, and population estimates for gender categories beyond male and female are not available. Thus, cancer incidence data are reported for only male and female sex at this time.
