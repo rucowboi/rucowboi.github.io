@@ -202,6 +202,7 @@ var CHOROPLETH_STYLE_NODATA = { fillOpacity: 0.25, fillColor: '#cccccc', color: 
 // var CHOROPLETH_BORDER_DEFAULT = { color: '#b3b3b3', opacity: 1, weight: 1, fill: false };
 var CHOROPLETH_BORDER_DEFAULT = { color: 'black', opacity: 1, weight: 1, fill: false };
 var CHOROPLETH_BORDER_SELECTED = { color: '#293885', opacity: 1, weight: 5, fill: false };
+var CHOROPLETH_BORDER_NONE = { color: null, opacity: 100, weight: 0, fill: false };
 
 var CHOROPLETH_STYLE_INCIDENCE = {
     Q1: { fillOpacity: 0.75, fillColor: '#ffffb3', stroke: false },
@@ -1733,7 +1734,7 @@ function performSearchMap (searchparams) {
     })
 
     MAP.countypolygonbounds.eachLayer((layer) => {
-        layer.setStyle(CHOROPLETH_BORDER_DEFAULT);
+        layer.setStyle(CHOROPLETH_BORDER_NONE);
     })
 
     MAP.ctapolygonfills.eachLayer((layer) => { 
