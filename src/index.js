@@ -111,7 +111,7 @@ var SEARCHOPTIONS_RACE = [  // field prefix for AAIR, LCI, UCI fields within the
 ];
 var SEARCHOPTIONS_TYPE = [
     { value: 'Zone', label: "Zone" },
-    { value: 'County', label: "County" },
+    // { value: 'County', label: "County" },
 ]
 
 // if any of the cancer sites should apply to only one sex, you may define that here
