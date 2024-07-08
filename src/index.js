@@ -13,8 +13,6 @@ require('./leaflet-singleclick.js');
 require('./printing-leaflet-easyPrint.js');
 
 
-// test
-//
 // CONSTANTS
 // for reasons unknown, can't use "const" here; Webpack 4...
 //
@@ -33,35 +31,13 @@ var BING_API_KEY = 'AqmUJHuT9QJE5A0m1Kf48g2vxBND3cJ0_jJI3jJQIv9oE11VIG9WZbhq2owR
 
 // URLs of our data files, storage for them in memory for filtering and querying, and raw copies for exporting
 var DATA_URL_CTAGEOM = 'static/data/cta.json';
-// Old Cancer Incidence
-// var DATA_URL_CANCER = 'static/data/cancerincidence.csv';
-// var DATA_URL_CANCER = 'static/data/zone_cancer_incidence.csv';
-// New Cancer Incidences
-// var NEW_ZONE_CANCER = 'static/data/zone_cancer_incidence.csv';
-// var NEW_COUNTY_CANCER = 'static/data/county_cancer_incidence.csv';
-// var NEW_STATE_CANCER = 'static/data/state_cancer_incidence.csv';
-// var NEW_USA_CANCER = 'static/data/usa_cancer_incidence.csv';
-// var array_all_cancer = [NEW_ZONE_CANCER, NEW_COUNTY_CANCER, NEW_STATE_CANCER, NEW_USA_CANCER]
-// for(let i = 1; i < array_all_cancer.length; i++) {
-//     const [, ...spl] = array_all_cancer[i].split("\n");
-//     // instead of doing [, ...spl] we could also call: spl.shift();
-//     array_all_cancer[i] = spl.join("\n");
-//   }
-
 var DATA_URL_CANCER = 'static/data/allCancerRatesData.csv';
-
-// var DATA_URL_DEMOGS = 'static/data/demographics.csv';
 var DATA_URL_DEMOGS = 'static/data/allDemographics.csv';
 var DATA_URL_CTACOUNTY = 'static/data/counties_by_cta.csv';
 var DATA_URL_CTACITY = 'static/data/cities_by_cta.csv';
 var DATA_URL_COUNTYGEOM = 'static/data/countybounds.json';
-
 var DATA_URL_ZONEGEOM = 'static/data/cta.json';
-// var DATA_URL_COUNTYGEOM = 'static/data/testCounties.json';
-var DATA_URL_PLACEGEOM = 'static/data/testPlaces.json';
-
-
-
+var DATA_URL_PLACEGEOM = 'static/data/placebounds.json';
 
 // the set of options for search filters: cancer site, race, and time period
 // each definition is the field value from the incidence CSV, mapped onto a human-readable label
@@ -317,6 +293,16 @@ var GEOCODE_CACHE = {};
 //
 // INIT
 //
+var main = {}
+// main.stateName = "New Jersey"
+// main.numOfCancerSites = "25"
+// main.numOfZones = "14"
+// main.minZonePop = "50,000"
+// main.maxZonePop = "150,000"
+// main.minTractsPerZone = "1,000"
+// main.maxTractsPerZone = "100,000"
+// main.raceList = [ "non-Hispanic White", "non-Hispanic Black", "non-Hispanic Asian/Pacific Islander", "non-Hispanic American Indian/Alaska Native", "Hispanic"]
+// main.reportingMinCases = "1000"
 
 $(document).ready(function () {
     // promises, a much nicer way to fetch, fetch, fetch
@@ -380,29 +366,31 @@ $(document).ready(function () {
     ];
 
     Promise.all(waitforparsing).then(function (datasets) {
-        console.log('datasets: ', datasets)
         // save these to the globals that we'll read/filter/display
         // then send them to postprocessing for data fixes
         CTATOPOJSONDATA = datasets[0];
-        console.log('CTATOPOJSONDATA: ', CTATOPOJSONDATA)
         COUNTYTOPOJSONDATA = datasets[1];
         DATA_DEMOGS = datasets[2];
         DATA_CANCER = datasets[3];
-        console.log('DATA_CANCER', DATA_CANCER)
         DATA_CTACOUNTY = datasets[4];
-        console.log('DATA_CTACOUNTY: ', DATA_CTACOUNTY)
         DATA_CTACITY = datasets[5];
         ZONETOPOJSONDATA = datasets[6];
-        console.log('ZONETOPOJSONDATA: ', ZONETOPOJSONDATA)
         PlaceTOPOJSONDATA = datasets[7];
 
+        initRenameState(main.stateName);
+        initNumberOfCancerSites(main.numOfCancerSites);
+        initNumberOfZones(main.numOfZones);
+        initMinZonePop(main.minZonePop);
+        initMaxZonePop(main.maxZonePop);
+        initMinTractsPerZone(main.minTractsPerZone);
+        initMaxTractsPerZone(main.maxTractsPerZone);
+        initRaceList(main.raceList);
+        initReportingMinCases(main.reportingMinCases);
         initValidateDemographicDataset();
         initValidateIncidenceDataset();
         initFixCountyOverlay();
         initFixZoneOverlay();
         // initFixPlaceOverlay();
-
-        // and we can finally get started!
         initDemographicTables();
         initMapAndPolygonData();
         initDataFilters();
@@ -412,7 +400,6 @@ $(document).ready(function () {
         initFaqAccordion();
         initGoogleAnalyticsHooks();
         initTermsOfUse();
-
         initLoadInitialState();
         performSearch();
         initUrlParamUpdater();
@@ -426,6 +413,114 @@ function initUrlParamUpdater () {
     }, 1 * 1000);
 }
 
+function initRenameState(name) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.stateName');
+
+    // Iterate through each element
+    if (name){
+   
+    elements.forEach(element => {
+            element.innerText = name;
+    });
+    }
+}
+
+function initNumberOfCancerSites(num) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.numOfCancerSites');
+
+    // Iterate through each element
+    if (num){
+    elements.forEach(element => {
+            element.innerText = num;
+    });
+    }
+}
+
+function initNumberOfZones(num) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.numZones');
+
+    // Iterate through each element
+    if (num){
+    elements.forEach(element => {
+            element.innerText = num;
+    });
+}
+}
+
+function initMinZonePop(num) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.minZonePop');
+
+    // Iterate through each element
+    if (num){
+    elements.forEach(element => {
+            element.innerText = num;
+    });
+}
+}
+
+function initMaxZonePop(num) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.maxZonePop');
+
+    // Iterate through each element
+    if (num){
+    elements.forEach(element => {
+            element.innerText = num;
+    });
+}
+}
+
+function initMinTractsPerZone(num) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.minTractsPerZone');
+
+    // Iterate through each element
+    if (num){
+    elements.forEach(element => {
+            element.innerText = num;
+    });
+}
+}
+
+function initMaxTractsPerZone(num) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.maxTractsPerZone');
+
+    // Iterate through each element
+    if (num){
+    elements.forEach(element => {
+            element.innerText = num;
+    });
+}
+}
+
+function initRaceList(list) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.confirmRaceList');
+
+    // Iterate through each element
+    if (list){
+    elements.forEach(element => {
+            element.innerText = list.slice(0, -1).join(', ') + ', and ' + list[list.length - 1];
+    });
+}
+}
+
+function initReportingMinCases(num) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.reportingMinCases');
+
+    // Iterate through each element
+    if (num){
+    elements.forEach(element => {
+            element.innerText = num;
+    });
+}
+}
 
 function initLoadInitialState () {
     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
