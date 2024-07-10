@@ -55,8 +55,8 @@
     </script>
 
     <!-- our own awesomesauce -->
-    <link rel="stylesheet" type="text/css" href="index.css?Mon_Jul_08_2024_13_57_07_GMT_0400__Eastern_Daylight_Time_" />
-    <script type="text/javascript" src="index.js?Mon_Jul_08_2024_13_57_07_GMT_0400__Eastern_Daylight_Time_"></script>
+    <link rel="stylesheet" type="text/css" href="index.css?Wed_Jul_10_2024_13_27_08_GMT_0400__Eastern_Daylight_Time_" />
+    <script type="text/javascript" src="index.js?Wed_Jul_10_2024_13_27_08_GMT_0400__Eastern_Daylight_Time_"></script>
 </head>
 <body>
 
@@ -66,14 +66,17 @@
 
     <div class="container noprint">
         <nav class="navbar navbar-light">
-            <!-- <div id="logo-img">
+            <div id="logo-img" style="display:flex">
+                
                 <img src="./static/ribbon_purple.png" alt="Health Maps Logo" />
-                <h1 class="site-title-1" aria-label="Health Maps" tabindex="0"><span class="stateName">[REPLACE STATE/REGISTRY]</span></h1>
-                <h1 class="site-title-2" aria-hidden="true">Health Maps</h1>
-            </div> -->
-            <div id="logo-img">
-                <img src="./static/logo.png" alt="Health Maps Logo" />
+                <div style="display:block">
+                    <h1 class="site-title-1" aria-label="Health Maps" tabindex="0"><span class="stateName">[REPLACE STATE/REGISTRY]</span></h1>
+                    <h1 class="site-title-2" aria-hidden="true">Health Maps</h1>
+                </div>
             </div>
+            <!-- <div id="logo-img">
+                <img src="./static/logo.png" alt="Health Maps Logo" />
+            </div> -->
         </nav>
     </div><!--/container section-->
 
@@ -293,14 +296,15 @@
                 </p>
                 <p class="title">Project Team</p>
                 <p>
-                    <a target="_blank" href="https://dhss.delaware.gov/dph/dcr/home.html">Delaware Cancer Registry</a>
+                    <!-- <a target="_blank" href="https://dhss.delaware.gov/dph/dcr/home.html">Delaware Cancer Registry</a> -->
+                     <a target="_blank" href=""><span class="stateRegistry">[REPLACE REGISTRY]</span></a>
                     <br/>
                     <a target="_blank" href="http://seer.cancer.gov">National Cancer Institute</a>
                     <br/>
                     <a target="_blank" href="https://www.westat.com/project/using-gis-interpret-spatial-context-and-cancer-risk">Westat, Inc.</a>
                 </p>
                 <p class="title">Funding</p>
-                <p>The <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Registry is supported by the National Program of Cancer Registries (NPCR) of the Centers for Disease Control and Prevention (CDC), <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Consortium, and the Division of Public Health, Comprehensive Cancer Control Program.</p>
+                <p class="fundingSource">[REPLACE FUNDING SOURCE]</p>
                 <p>National Cancer Institute</p>
             </div><!--/tab-pane -->
             <div class="tab-pane container" id="learn-method">
@@ -352,8 +356,7 @@
                         </button>
                     </h2>
                     <div id="faq3" class="usa-accordion__content" hidden="">
-                        The <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Registry (DCR) collects information about new cancer cases, cancer treatment and cancer deaths. All hospitals, laboratories, physicians and other health care providers are required by state law to report all newly diagnosed or treated cancer cases to the Registry. Registry data is used to monitor cancer trends, promote research to increase survival, guide policy planning, and respond to <span class="stateName">[REPLACE STATE/REGISTRY]</span> residents’ cancer concerns. Patient information is kept absolutely confidential.
-For more information about what cancer cases are reportable to the DCR, please visit: <a target="_blank" href="https://dhss.delaware.gov/dph/dcr/files/delawarecancerregulations.pdf">here</a>.
+                        <span class="aboutBlurb">[REPLACE ABOUT BLURB]</span>
                     </div>
 
                     <h2 class="usa-accordion__heading">
@@ -386,7 +389,7 @@ For more information about what cancer cases are reportable to the DCR, please v
                         </button>
                     </h2>
                     <div id="faq4b" class="usa-accordion__content" hidden="">
-                        Zone and statewide incidence data come from <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Registry.  National Program of Cancer Registries and Surveillance, Epidemiology and End Results Program SEER*Stat Database: NPCR and SEER Incidence - U.S. Cancer Statistics Public Use Research Database, 2021 Submission (2001-2019). United States Department of Health and Human Services, Centers for Disease Control and Prevention and National Cancer Institute. Released June 2022. Accessed at <a target="_blank" href="https://www.cdc.gov/cancer/uscs/public-use">www.cdc.gov/cancer/uscs/public-use</a>.
+                        Zone and statewide incidence data come from <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Registry.  <span class="nationalCancerDataSource">[REPLACE NATIONAL CANCER DATA SOURCE INFO]</span>
                     </div>
                     <div id="faq5" class="usa-accordion__content" hidden="">
                         It takes several years for cancer incidence data for an entire population to be considered "complete," that is, when a cancer registry is confident that all new cases of cancer have been reported. Selected population sociodemographic data and population estimates for calculating cancer incidence rates are from the 2010 Census short form, the most recent year of complete census data. Additional sociodemographic data are from the 2012-2016 American Community Survey; although more current American Community Survey data are available, these years were selected to more closely correspond to the population estimate data used for calculating cancer incidence rates.
@@ -543,7 +546,7 @@ For more information about what cancer cases are reportable to the DCR, please v
                     This mapping tool is based on <a href="https://www.californiahealthmaps.org/">California Health Maps</a>, which is led by the Greater Bay Area Cancer Registry, University of California, San Francisco. Originally developed by <a href="https://www.greeninfo.org/" target="_blank">GreenInfo Network</a>,
                 </div>
                 <div class="col-sm-5 right small">
-                    <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Maps, based on November 2021 submission data: <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Registry, August 2023.
+                    <span class="citationInfo">[REPLACE CITATION INFO]</span>
                 </div>
             </div>
         </div>
