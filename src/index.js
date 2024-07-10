@@ -303,6 +303,12 @@ var main = {}
 // main.maxTractsPerZone = "100,000"
 // main.raceList = [ "non-Hispanic White", "non-Hispanic Black", "non-Hispanic Asian/Pacific Islander", "non-Hispanic American Indian/Alaska Native", "Hispanic"]
 // main.reportingMinCases = "1000"
+// main.registry = "test"
+// main.registryLink = "https://www.google.com"
+// main.fundingSource = "This is supported through funding"
+// main.citationInfo = "This is where you put your citation info"
+// main.nationalCancerDataSource = "this is your national cancer data source info"
+// main.aboutBlurb = "This is your about blurb"
 
 $(document).ready(function () {
     // promises, a much nicer way to fetch, fetch, fetch
@@ -386,6 +392,11 @@ $(document).ready(function () {
         initMaxTractsPerZone(main.maxTractsPerZone);
         initRaceList(main.raceList);
         initReportingMinCases(main.reportingMinCases);
+        initStateRegistry(main.registry, main.registryLink);
+        initFundingSource(main.fundingSource);
+        initCitationInfo(main.citationInfo);
+        initNationalCancerDataSourceInfo(main.nationalCancerDataSource);
+        initAboutBlurb(main.aboutBlurb);
         initValidateDemographicDataset();
         initValidateIncidenceDataset();
         initFixCountyOverlay();
@@ -518,6 +529,67 @@ function initReportingMinCases(num) {
     if (num){
     elements.forEach(element => {
             element.innerText = num;
+    });
+}
+}
+
+function initStateRegistry(registry, link) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.stateRegistry');
+
+    // Iterate through each element
+    if (registry && link){
+    elements.forEach(element => {
+            element.innerText = registry;
+            element.parentElement.href = link;
+    });
+}
+}
+
+function initFundingSource(text) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.fundingSource');
+
+    // Iterate through each element
+    if (text){
+    elements.forEach(element => {
+            element.innerText = text;
+    });
+}
+}
+
+function initCitationInfo(text) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.citationInfo');
+
+    // Iterate through each element
+    if (text){
+    elements.forEach(element => {
+            element.innerText = text;
+    });
+}
+}
+
+function initNationalCancerDataSourceInfo(text) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.nationalCancerDataSource');
+
+    // Iterate through each element
+    if (text){
+    elements.forEach(element => {
+            element.innerText = text;
+    });
+}
+}
+
+function initAboutBlurb(text) {
+    // Find all elements with class "stateName"
+    const elements = document.querySelectorAll('.aboutBlurb');
+
+    // Iterate through each element
+    if (text){
+    elements.forEach(element => {
+            element.innerText = text;
     });
 }
 }
