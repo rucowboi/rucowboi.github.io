@@ -30,14 +30,17 @@ var MAX_ZOOM = 15;
 var BING_API_KEY = 'AqmUJHuT9QJE5A0m1Kf48g2vxBND3cJ0_jJI3jJQIv9oE11VIG9WZbhq2owRSUZK';
 
 // URLs of our data files, storage for them in memory for filtering and querying, and raw copies for exporting
-var DATA_URL_CTAGEOM = 'static/data/cta.json';
+// These are you main two sets of data to use. You provide this data of the cancer and cancer demographic information for your State or District
 var DATA_URL_CANCER = 'static/data/allCancerRatesData.csv';
 var DATA_URL_DEMOGS = 'static/data/allDemographics.csv';
-var DATA_URL_CTACOUNTY = 'static/data/counties_by_cta.csv';
-var DATA_URL_CTACITY = 'static/data/cities_by_cta.csv';
-var DATA_URL_COUNTYGEOM = 'static/data/countybounds.json';
-var DATA_URL_ZONEGEOM = 'static/data/cta.json';
-var DATA_URL_PLACEGEOM = 'static/data/placebounds.json';
+
+// These are the JSON files used for the maps and creating the CTACOUNTY and CTACITY files. These files are updated by running the python scripts
+var DATA_URL_CTAGEOM = 'static/data/cta.json'; // zones
+var DATA_URL_COUNTYGEOM = 'static/data/countybounds.json'; // counties
+
+// These files are updated by running the python scripts
+var DATA_URL_CTACITY = 'static/data/cities_by_cta.csv'; // zones
+var DATA_URL_CTACOUNTY = 'static/data/counties_by_cta.csv'; // counties
 
 // the set of options for search filters: cancer site, race, and time period
 // each definition is the field value from the incidence CSV, mapped onto a human-readable label
@@ -363,12 +366,6 @@ $(document).ready(function () {
                 },
             });
         }),
-        new Promise(function(resolve) {
-            $.get(DATA_URL_ZONEGEOM, (data) => { resolve(data); }, 'json');
-        }),
-        new Promise(function(resolve) {
-            $.get(DATA_URL_PLACEGEOM, (data) => { resolve(data); }, 'json');
-        }),
     ];
 
     Promise.all(waitforparsing).then(function (datasets) {
@@ -380,9 +377,6 @@ $(document).ready(function () {
         DATA_CANCER = datasets[3];
         DATA_CTACOUNTY = datasets[4];
         DATA_CTACITY = datasets[5];
-        ZONETOPOJSONDATA = datasets[6];
-        PlaceTOPOJSONDATA = datasets[7];
-
         initRenameState(main.stateName);
         initNumberOfCancerSites(main.numOfCancerSites);
         initNumberOfZones(main.numOfZones);
@@ -820,7 +814,7 @@ function initFixCountyOverlay () {
 
 function initFixZoneOverlay () {
     const maplayerinfo = MAP_LAYERS.filter(function (maplayerinfo) { return maplayerinfo.id == 'zones'; })[0];
-    maplayerinfo.layer = L.topoJson(ZONETOPOJSONDATA, {
+    maplayerinfo.layer = L.topoJson(CTATOPOJSONDATA, {
         pane: 'tooltipPane',
         zIndex: 500,
         style: ZONEBOUNDS_STYLE,  // see performSearchMap() where these are reassigned based on filters
