@@ -28,7 +28,9 @@ Recomend use of node 14 by running `nvm use 14`.
         i) Will create `static/data/countybounds.json`
     c)  run `python3 make_placescsv.py`
         i) Will creat `static/data/counties_by_cta.csv` and `static/data/cities_by_cta.csv`
-3. Replace the object keys of the variable `main` in the `src/index.js` file. This replaces areas on the page that say `[REPLACE ...]`
+3.
+    a) Replace the object keys of the variable `main` in the `src/index.js` file. This replaces areas on the page that say `[REPLACE ...]`
+    b) Alter MAP_BBOX, MIN_ZOOM, MAX_ZOOM in the `src/index.js` file to position the map.
 4. Test. Running `npm start` will run locallyt the latest `src` code. Use `npm run build` to update `docs` with the updated `src` code. 
 NOTE: The Notes below provide more details. Some names may be updated or outdated.
 

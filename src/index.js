@@ -297,7 +297,7 @@ var GEOCODE_CACHE = {};
 // INIT
 //
 var main = {}
-// main.stateName = "New Jersey"
+// main.stateName = "Delaware"
 // main.numOfCancerSites = "25"
 // main.numOfZones = "14"
 // main.minZonePop = "50,000"
@@ -312,6 +312,8 @@ var main = {}
 // main.citationInfo = "This is where you put your citation info"
 // main.nationalCancerDataSource = "this is your national cancer data source info"
 // main.aboutBlurb = "This is your about blurb"
+
+main.ctaid = 10 // starting zone for site to start up
 
 $(document).ready(function () {
     // promises, a much nicer way to fetch, fetch, fetch
@@ -1322,8 +1324,10 @@ function performSearch () {
     console.log('params: ', params)
     // the CTA ID and CTA Name are figured here, since we need to find the CTA just to proceed to performSearchReally()
     // may as well just capture it here and include it into the searchparams
-    params.ctaid = '10';
-    params.ctaname = 'Delaware';
+    // params.ctaid = '10';
+    // params.ctaname = 'Delaware';
+    params.ctaid = main.ctaid;
+    params.ctaname = main.stateName;
     if (params.address) {
         // address search can never be easy  :)
         // the address may be a latlng string, or a CTA ID, or a CTA ID buried inside a longer string, ... or maybe even an address!
