@@ -24,7 +24,7 @@ Recomend use of node 14 by running `nvm use 14`.
 2. Run Python Scripts: this will replace specific data files
     a) Replace `CTAZones.shp` with your zone boundaries and run `python3 make_ctageofile.py`
         i) Will create `static/data/cta.json`
-    b) Replace `counties.shp` with your zone boundaries and run `python3 make_ctageofile.py`
+    b) Replace `counties.shp` with your county boundaries and run `python3 make_ctageofile.py`
         i) Will create `static/data/countybounds.json`
     c)  run `python3 make_placescsv.py`
         i) Will creat `static/data/counties_by_cta.csv` and `static/data/cities_by_cta.csv`
