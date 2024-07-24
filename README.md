@@ -13,26 +13,68 @@ This template was developed based on the California Health Maps website at�htt
 
 2024 Zone/County Update: The cancer map template has been updated to include county and zone data.
 
-2024 Zone/County Update: Updating the site will follow these steps
-Recomend use of node 14 by running `nvm use 14`.
-0. Check if site runs with pre-installed sample data
-    a) `yarn -i`
-    b) `npm start`
-1. Replace general data files
-    a) `static/data/allCancerRatesData.csv`
-    b) `static/data/allDemographics.csv`
-2. Run Python Scripts: this will replace specific data files
-    a) Replace `CTAZones.shp` with your zone boundaries and run `python3 make_ctageofile.py`
-        i) Will create `static/data/cta.json`
-    b) Replace `counties.shp` with your county boundaries and run `python3 make_countygeofile.py`
-        i) Will create `static/data/countybounds.json`
-    c)  run `python3 make_placescsv.py`
-        i) Will creat `static/data/counties_by_cta.csv` and `static/data/cities_by_cta.csv`
-3.
-    a) Replace the object keys of the variable `main` in the `src/index.js` file. This replaces areas on the page that say `[REPLACE ...]`
-    b) Alter MAP_BBOX, MIN_ZOOM, MAX_ZOOM in the `src/index.js` file to position the map.
-4. Test. Running `npm start` will run locallyt the latest `src` code. Use `npm run build` to update `docs` with the updated `src` code. 
-NOTE: The Notes below provide more details. Some names may be updated or outdated.
+# 2024 Zone/County Update
+
+To update the site, follow these steps:
+
+## Prerequisites
+- Recomend use of Node.js version 14 by running:
+  ```bash
+  nvm use 14
+  ```
+- You will need Python 3
+- You will need the OSGEO/GDAL module for Python 3
+
+## 0. Preliminary Check
+1. Check if the site runs with pre-installed sample data:
+   ```bash
+   yarn -i
+   npm start
+   ```
+
+## 1. Replace General Data Files
+1. Replace the following files:
+   - `static/data/allCancerRatesData.csv`
+   - `static/data/allDemographics.csv`
+
+## 2. Run Python Scripts to Replace Specific Data Files 
+- run the data-preparation scripts under `datascripts/`
+1. Replace `CTAZones.shp` with your zone boundaries and run:
+   ```bash
+   python make_ctageofile.py
+   ```
+   This will create `static/data/cta.json`.
+
+2. Replace `counties.shp` with your county boundaries and run:
+   ```bash
+   python make_countygeofile.py
+   ```
+   This will create `static/data/countybounds.json`.
+
+3. Run the following script to update place-specific CSV files:
+   ```bash
+   python make_placescsv.py
+   ```
+   This will create:
+   - `static/data/counties_by_cta.csv`
+   - `static/data/cities_by_cta.csv`
+
+## 3. Update JavaScript Files
+1. Replace the object keys of the variable `main` in the `src/index.js` file. This replaces areas on the page that say `[REPLACE ...]`.
+2. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
+
+## 4. Testing and Building
+1. Test the updated code by running:
+   ```bash
+   npm start
+   ```
+2. To update the `docs` with the latest `src` code, run:
+   ```bash
+   npm run build
+   ```
+
+## Notes
+- The provided notes offer additional details. Some names may be updated or outdated.
 
 
 ## Prerequisites
