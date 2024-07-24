@@ -50,7 +50,9 @@ LATLNGPRECISION = 0.0001
 
 # the path to the mapshaper CLI tool
 # this should be in node_modules/.bin as it was installed via yarn/npm
-MAPSHAPER_CLI = "../node_modules/.bin/mapshaper"
+# MAPSHAPER_CLI = "../node_modules/.bin/mapshaper"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+MAPSHAPER_CLI = os.path.join(script_dir, '..', 'node_modules', '.bin', 'mapshaper')
 
 # choose a planar SRS which preserves area well, e.g. EPSG:3083 for Texas-centric AEA, or 3310 for California Teale-Albers
 # this is used for finding the area of intersection, for finding city/county overlaps to CTA Zones

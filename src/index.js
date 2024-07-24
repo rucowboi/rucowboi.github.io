@@ -313,7 +313,7 @@ var main = {}
 // main.nationalCancerDataSource = "this is your national cancer data source info"
 // main.aboutBlurb = "This is your about blurb"
 
-main.ctaid = 10 // starting zone for site to start up
+main.ctaid = 10 // starting state for site to start up
 
 $(document).ready(function () {
     // promises, a much nicer way to fetch, fetch, fetch
@@ -729,7 +729,7 @@ function initValidateIncidenceDataset () {
                     });
                     const hasstatewide = matchesthiscombo.filter(function (row) {
                         // return row.GeoID == 'Statewide';
-                        return row.GeoID == '10';
+                        return row.GeoID == main.ctaid;
                     });
                     if (! matchesthiscombo.length) errors.push(`No data rows would match ${timeoption.value}/${siteoption.value}/${sexoption.value}`);
                     else if (! hasstatewide.length) errors.push(`No Statewide data rows for ${timeoption.value}/${siteoption.value}/${sexoption.value}`);
@@ -778,7 +778,7 @@ function initValidateDemographicDataset () {
     // there should be as many Statewide demographics rows as there are options in SEARCHOPTIONS_TIME; that is, one per time period
     // same goes for Nationwide: 1 per time period
     if (DATA_DEMOGS[0].GeoID) {
-        const hasstatewide = DATA_DEMOGS.filter(function (row) { return row.GeoID == '10'; });
+        const hasstatewide = DATA_DEMOGS.filter(function (row) { return row.GeoID == main.ctaid; });
         if (hasstatewide.length != SEARCHOPTIONS_TIME.length) errors.push(`Found ${hasstatewide.length} demographic rows for Statewide`);
 
         if (NATIONWIDE_DEMOGRAPHICS) {
@@ -1444,9 +1444,9 @@ function performSearchShowFilters (searchparams) {
     {
         if (searchparams.type == "Zone"){
          
-        let text = searchparams.ctaname == '10' ? searchparams.ctaname : `${searchparams.ctaname} (${searchparams.ctaid})`;
+        let text = searchparams.ctaname == main.ctaid ? searchparams.ctaname : `${searchparams.ctaname} (${searchparams.ctaid})`;
         const $box = $('<span data-filter="address"></span>').text(text).appendTo($filtersummary);
-        if (searchparams.ctaname != '10') {
+        if (searchparams.ctaname != main.ctaid) {
             $box.prop('tabindex', '0').addClass('data-filter-clear').append('<div class="summary-close"><i class="fa fa-times noprint" tabindex="0" aria-label="Click to clear this filter"></i></div>');
         }
         } else {
@@ -1508,7 +1508,7 @@ function performSearchDemographics (searchparams) {
     }
     
     
-    const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.GeoID == '10' && row.Years == searchparams.time; })[0];
+    const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.GeoID == main.ctaid && row.Years == searchparams.time; })[0];
     const demogdata_nation = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US' && row.Years == searchparams.time; })[0];
     console.log('demogdata_state: ', demogdata_state)
     console.log('demogdata_nation: ', demogdata_nation)
@@ -1517,7 +1517,7 @@ function performSearchDemographics (searchparams) {
     const $nationstats = $demographics_section.find('[data-region="nation"]');
 
     // show/hide the CTA Zone content, depending whether a CTA Zone was selected (that is, not Statewide)
-    if (searchparams.ctaid == '10') {
+    if (searchparams.ctaid == main.ctaid) {
         $ctastats.hide();
     }
     else {
@@ -1538,7 +1538,7 @@ function performSearchDemographics (searchparams) {
         const counties = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.County} County`);
         ctanametext = counties[0]
     }
-    const ctaidtext = searchparams.ctaid == '10' ? '' : `(${demogdata_cta.GeoID})`;
+    const ctaidtext = searchparams.ctaid == main.ctaid ? '' : `(${demogdata_cta.GeoID})`;
     $demographics_section.find('span[data-statistics="ctaname"]').text(ctanametext);
     // $demographics_section.find('span[data-statistics="ctaid"]').text(ctaidtext);
     $demographics_section.find('span[data-statistics="ctaname"]').closest('span.subtitle').prop('aria-label', ctanametext + ' ' + ctaidtext);
@@ -1571,7 +1571,7 @@ function performSearchPlaces (searchparams) {
     // fetch a list of places (cities and counties) in the selected CTA, display it into its list(s)
 
     // statewide, we don't display a list at all; bail
-    if (searchparams.ctaid == '10') return;
+    if (searchparams.ctaid == main.ctaid) return;
 
     // find the cities and counties here from our preared data
     console.log('DATA_CTACOUNTY: ', DATA_CTACOUNTY)
@@ -1619,7 +1619,7 @@ function performSearchIncidenceReadout (searchparams) {
         cancerdata_cta = cancerdata_county
     }
 
-    const cancerdata_state = DATA_CANCER.filter(row => row.GeoID == '10' && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
+    const cancerdata_state = DATA_CANCER.filter(row => row.GeoID == main.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
     const cancerdata_nation = DATA_CANCER.filter(row => row.GeoID == 'US' && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
 
     let cta_lci, cta_uci, cta_aair;
@@ -1707,7 +1707,7 @@ function performSearchIncidenceReadout (searchparams) {
     }
 
     // show/hide the CTA columns (well, actually, each individual cell)
-    if (searchparams.ctaid == '10') {
+    if (searchparams.ctaid == main.ctaid) {
         $('#incidence-readouts [data-region="cta"]').hide();
     }
     else {
@@ -1750,7 +1750,7 @@ function performSearchIncidenceReadout (searchparams) {
     //maxuci *= 1.2;  // but if course, this REALLY broadens the range a bit too much
 
     updateCandleChart($candlechart_cta, 'Selected Area', cta_aair, cta_lci, cta_uci, minlci, maxuci);
-    updateCandleChart($candlechart_state, '10', state_aair, state_lci, state_uci, minlci, maxuci);
+    updateCandleChart($candlechart_state, main.ctaid, state_aair, state_lci, state_uci, minlci, maxuci);
     updateCandleChart($candlechart_nation, 'US', nation_aair, nation_lci, nation_uci, minlci, maxuci);
 }
 
@@ -1962,7 +1962,7 @@ function performSearchMap (searchparams) {
     if (['Cases', 'AAIR'].indexOf(rankthemby) != -1) {  // the special case for AAIR/Cases incidence data
         DATA_CANCER
         .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != '10')
+        .filter(row => row.GeoID != main.ctaid)
         .filter(row => row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)
         .forEach((row) => {
             let choropleth_score;
@@ -1980,7 +1980,7 @@ function performSearchMap (searchparams) {
     else {  // demographic data
         DATA_DEMOGS
         .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != '10')  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
+        .filter(row => row.GeoID != main.ctaid)  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
         .forEach((row) => {
             const choropleth_score = row[rankthemby];  // the control's selected value = a CHOROPLETH_OPTIONS "field" = a literal CSV column name
             ctascores[row.GeoID] = choropleth_score;
@@ -2101,7 +2101,7 @@ function performSearchMap (searchparams) {
     if (['Cases', 'AAIR'].indexOf(rankthemby) != -1) {  // the special case for AAIR/Cases incidence data
         DATA_CANCER
         .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != '10')
+        .filter(row => row.GeoID != main.ctaid)
         .filter(row => row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)
         .forEach((row) => {
             let choropleth_score;
@@ -2119,7 +2119,7 @@ function performSearchMap (searchparams) {
     else {  // demographic data
         DATA_DEMOGS
         .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != '10')  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
+        .filter(row => row.GeoID != main.ctaid)  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
         .forEach((row) => {
             const choropleth_score = row[rankthemby];  // the control's selected value = a CHOROPLETH_OPTIONS "field" = a literal CSV column name
             ctascores[row.GeoID] = choropleth_score;
@@ -2190,7 +2190,7 @@ function performSearchMap (searchparams) {
 function performSearchUpdateDataDownloadLinks (searchparams) {
     const $downloadlink = $('#downloadoptions a[data-export="zonedata"]');
 
-    if (searchparams.ctaid == '10') {
+    if (searchparams.ctaid == main.ctaid) {
         $downloadlink.hide().prop('href', 'javascript:void(0);');
     }
     else {
