@@ -1,5 +1,6 @@
 #!/bin/env python
-
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
 # the destination CSV and TopoJSON files which we will generate
 OUTPUT_CTATOPOJSON = "../static/data/cta.json"
 OUTPUT_INCIDENCECSV = "../static/data/cancerincidence.csv"
@@ -34,14 +35,17 @@ REPROJECTED_ZONESFILE = "./tempfiles/ctazones2.shp"
 # Census Designated Places shapefile and the County shapefile
 # used for the CTA-to-City and CTA-to-County CSV lookup CSVs
 INPUT_COUNTYBOUNDS_SHP = "./inputs/counties.shp"
-COUNTYBOUNDS_IDFIELD = "COUNTYFP"
+# COUNTYBOUNDS_IDFIELD = "COUNTYFP"
+COUNTYBOUNDS_IDFIELD = "COUNTY"
 COUNTYBOUNDS_NAMEFIELD = "NAME"
+COUNTYBOUNDS_NUMBER = "StCoFIPS"
 REPROJECTED_COUNTY_SHP = "./tempfiles/counties2.shp"
 
 INPUT_CITYBOUNDS_SHP = "./inputs/cities.shp"
 CITYBOUNDS_IDFIELD = "PLACEFP"
 CITYBOUNDS_NAMEFIELD = "NAME"
 REPROJECTED_CITY_SHP = "./tempfiles/cities2.shp"
+# REPROJECTED_CITY_SHP = os.path.join(script_dir, 'tempfiles', 'cities2.shp')
 
 # TopoJSON settings for simplifying, quantizing coordinates, and rounding coordiate decimals
 SIMPLIFY = "20%"
@@ -51,7 +55,7 @@ LATLNGPRECISION = 0.0001
 # the path to the mapshaper CLI tool
 # this should be in node_modules/.bin as it was installed via yarn/npm
 # MAPSHAPER_CLI = "../node_modules/.bin/mapshaper"
-script_dir = os.path.dirname(os.path.abspath(__file__))
+
 MAPSHAPER_CLI = os.path.join(script_dir, '..', 'node_modules', '.bin', 'mapshaper')
 
 # choose a planar SRS which preserves area well, e.g. EPSG:3083 for Texas-centric AEA, or 3310 for California Teale-Albers

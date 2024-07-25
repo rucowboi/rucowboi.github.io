@@ -17,9 +17,11 @@ class CountyShapefileConverter:
             'counties',
             ','.join([
                 settings.COUNTYBOUNDS_NAMEFIELD,
+                settings.COUNTYBOUNDS_NUMBER
             ]),
             ','.join([
                 "{}={}".format('Name', settings.COUNTYBOUNDS_NAMEFIELD),
+                "{}={}".format('GEOID', settings.COUNTYBOUNDS_NUMBER)
             ]),
             settings.SIMPLIFY, settings.QUANTIZE, settings.LATLNGPRECISION,
             settings.OUTPUT_COUNTYJSON
