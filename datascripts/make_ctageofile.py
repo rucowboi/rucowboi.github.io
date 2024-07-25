@@ -20,7 +20,7 @@ class ZoneFileConverter:
                 settings.CTAZONES_SHAPEFILE_NAMEFIELD
             ]),
             ','.join([
-                "{}={}".format('Zone', settings.CTAZONES_SHAPEFILE_IDFIELD),
+                "{}={}".format('ZoneIDOrig', settings.CTAZONES_SHAPEFILE_IDFIELD),
                 "{}={}".format('ZoneName', settings.CTAZONES_SHAPEFILE_NAMEFIELD)
             ]),
             settings.SIMPLIFY, settings.QUANTIZE, settings.LATLNGPRECISION,
