@@ -76,7 +76,7 @@ To update the site, follow these steps:
    ```bash
    npm run build
    ```
-3. Follows errors thrown if they occur. Certain fields and data have to match excatly. Custom changes may be required.
+3. Follow errors suggestions if they occur. Certain fields and data have to match excatly. Custom changes may be required.
 
 ## Notes
 - The provided notes below offer additional details. Some names may have been updated or outdated.
