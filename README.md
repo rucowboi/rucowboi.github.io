@@ -64,7 +64,7 @@ To update the site, follow these steps:
 
 ## 3. Update JavaScript Files
 1. Replace the object keys of the variable `main` in the `src/index.js` file. These mostly replaces text on the page that say `[REPLACE ...]`.
-   - main.ctaid needs to be replaced to start as your state code number for the javascript logic
+   - main.ctaid needs to be replaced to start as your state's FIPS code number for the javascript logic
 2. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
 
 ## 4. Testing and Building

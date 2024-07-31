@@ -161,12 +161,12 @@ var DEMOGRAPHIC_TABLES = [
             { field: 'PctDisabled', label: "% With a Disability", format: 'percent', tooltip_id: 'PctDisabled' }, // cht comment out because not in data causes error
         ],
     },
-    {
-        title: "Nativity in US",
-        rows: [
-            { field: 'Pct_forborn', label: "% Foreign Born", format: 'percent', tooltip_id: 'Pct_forborn' },
-        ],
-    },
+    // {
+    //     title: "Nativity in US",
+    //     rows: [
+    //         { field: 'Pct_forborn', label: "% Foreign Born", format: 'percent', tooltip_id: 'Pct_forborn' },
+    //     ],
+    // },
 ];
 
 // the Leaflet styles for those choropleth options defined in CHOROPLETH_OPTIONS below
