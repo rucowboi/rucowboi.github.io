@@ -23,7 +23,10 @@ To update the site, follow these steps:
   nvm use 14
   ```
 - You will need Python 3
-- You will need the OSGEO/GDAL module for Python 3
+- You will need the Fionna and Shapely module for Python 3
+  ```bash
+  pip install fiona shapely
+  ```
 
 ## 0. Preliminary Check
 1. Check if the site runs with pre-installed sample data:
@@ -60,7 +63,8 @@ To update the site, follow these steps:
    - `static/data/cities_by_cta.csv`
 
 ## 3. Update JavaScript Files
-1. Replace the object keys of the variable `main` in the `src/index.js` file. This replaces areas on the page that say `[REPLACE ...]`.
+1. Replace the object keys of the variable `main` in the `src/index.js` file. These mostly replaces text on the page that say `[REPLACE ...]`.
+   - main.ctaid needs to be replaced to start as your state code number for the javascript logic
 2. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
 
 ## 4. Testing and Building
@@ -72,21 +76,10 @@ To update the site, follow these steps:
    ```bash
    npm run build
    ```
+3. Follows errors thrown if they occur. Certain fields and data have to match excatly. Custom changes may be required.
 
 ## Notes
-- The provided notes offer additional details. Some names may be updated or outdated.
-
-
-## Prerequisites
-
-### Software Setup
-
-You need the **NVM** and **Yarn** command-line tools installed. To check, run `yarn --version` and `nvm --version`
-2024 Zone/County Update: Recomend use of node 14 by running `nvm use 14`. 
-
-You will need Python 3 in order to run the data-preparation scripts under `datascripts/`. To check, run `python3 --version` and `pip3 -version`
-
-You will need the OSGEO/GDAL module for Python 3. To check, run `python3 -c 'from osgeo import ogr; print("OK")'` If it is not installed on your system, you will need to install GDAL and then Python's GDAL package. To install GDAL, see https://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries for recommended packages for various operating systems, including Mac and Windows. To install the Python library, run `pip3 install GDAL`
+- The provided notes below offer additional details. Some names may have been updated or outdated.
 
 #### A note about Yarn on Ubuntu and Windows Subsystem for Linux (WSL)
 
@@ -321,11 +314,7 @@ Again, **do not forget to do `npm run build`** after making changes the content 
 ## Further Customizations
 
 ### HTML Site/Registry Name and Statistics
-
-The file `src/index.html` contains a boilerplate version of site copy, with several places where you will want to enter the name of your website/registry/project, statistical thresholds and values, and so on.
-
-Search for the `[REPLACE` string throughout `src/index.html` and replace the values mentioned there. Some are simple values amenable to simple search-and-replace, but most are narrative text that may require more involvement.
-
+   - These match with the `main` object in index.js
 A list of such replacements is:
 * `[REPLACE STATE/REGISTRY]` -- The name of your state, project, or cancer registry. Commonly used with the phrase "Cancer Maps" after it, indicating the name of this website. A simple search-and-replace should work here.
 * `[REPLACE NUM_CANCER_SITES]` -- The number of cancer sites by which data may be searched. Usually the same as the number of `SEARCHOPTIONS_CANCERSITE` entries.
