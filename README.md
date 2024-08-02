@@ -11,14 +11,14 @@ See a demonstration at https://nci-naaccr-zone-design.github.io/Cancer-Map-Templ
 
 This template was developed based on the California Health Maps website at�https://www.californiahealthmaps.org/.
 
-2024 Zone/County Update: The cancer map template has been updated to include county and zone data.
+2024 Zone/County Update: The cancer map template has been updated to be able to display county and zone-level data.
 
 # 2024 Zone/County Update
 
 To update the site, follow these steps:
 
 ## Prerequisites
-- Recomend use of Node.js version 14 by running:
+- Recommend use of Node.js version 14 by running:
   ```bash
   nvm use 14
   ```
@@ -63,7 +63,7 @@ To update the site, follow these steps:
    - `static/data/cities_by_cta.csv`
 
 ## 3. Update JavaScript Files
-1. Replace the object keys of the variable `main` in the `src/index.js` file. These mostly replaces text on the page that say `[REPLACE ...]`.
+1. Replace the object keys of the variable `main` in the `src/index.js` file. These mostly replace text on the page that say `[REPLACE ...]`.
    - main.ctaid needs to be replaced to start as your state's FIPS code number for the javascript logic
 2. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
 
@@ -79,7 +79,7 @@ To update the site, follow these steps:
 3. Follow errors suggestions if they occur. Certain fields and data have to match excatly. Custom changes may be required.
 
 ## Notes
-- The provided notes below offer additional details. Some names may have been updated or outdated.
+- The provided notes below offer additional details associated with the original template. Some names may have been updated or are outdated.
 
 #### A note about Yarn on Ubuntu and Windows Subsystem for Linux (WSL)
 
