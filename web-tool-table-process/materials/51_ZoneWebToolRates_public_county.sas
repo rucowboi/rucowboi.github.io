@@ -11,16 +11,20 @@
     a ZoneID for the web tool without the StFIPS or the trailing repetition letters */
 /*4/7/2023 - edited 'Export web tool dataset to a CSV file' step to fix typo that originally exported RateTable_WebTool instead of
 	RateTable_WebTool4*/
+/*10/19/2023 - modifications to allow data by county and to create combined dataset with updated GeoID and GeoType variables*/
 
 options sysprintfont=("Courier New" 8) leftmargin=0.75in nocenter compress=no;
 
-%let stateAbbr=IA;    /* Set state/registry abbreviation */
-%let runNum=IA01; /* Run number used for Step 2 AZTool execution */
-%let year1=2018;  /* Latest year */
-%let year5=2014_2018;  /* 5-year range */
-%let year10=2009_2018;  /* 10-year range */
+%let stateAbbr=DE;    /* Set state/registry abbreviation */
+%let stateName=Delaware; /*10/19/23 Set state name*/
+%let stateFIPS = 10; /*10/19/23 Set state FIPS code*/
+%let runNum=DE01; /* Run number used for Step 2 AZTool execution */
+%let year1=2019;  /* Latest year */
+%let year5=2015_2019;  /* 5-year range */
+%let year10=2010_2019;  /* 10-year range */
 %let nationwide=yes;  /* Include nationwide rates (yes|no)? */
-%let allUSdset=AllUS_Combined_2021subm_to2018; /* USCS dataset with national rates */
+%let allUSdset=AllUS_Combined_2021subm_to2019; /* USCS dataset with national rates */
+%let county=yes; /*Include county-level rates (yes|no)? */ /*10/19/2023 add option for county rates*/
 
 /* Specify data path here for portability: */
 %let pathbase=C:\Work\WebToolTables;
@@ -69,6 +73,18 @@ PROC IMPORT OUT=SEERin_allUS
 run;
 %end; /* &nationwide=yes processing */
 
+%if &county. = %quote(yes) %then %do;
+/* Import SEER*Stat rate session results - county-level */ /*10/19/2023 add option for county rates*/
+PROC IMPORT OUT=SEERin_county
+            DATAFILE="&pathbase.\&stateAbbr.county_RateCalcs.txt"
+            DBMS=DLM REPLACE;
+    DELIMITER='09'x; /* Tab */
+    GETNAMES=YES;
+    DATAROW=2;
+    GUESSINGROWS=max; 
+run;
+%end; /* &county=yes processing */
+
 /* Clear formats, informats and labels for SEER*Stat rate session datasets */
 proc datasets lib=work nolist;
     MODIFY SEERin_zones; FORMAT _all_; INFORMAT _all_; ATTRIB _all_ label=''; run;
@@ -76,6 +92,9 @@ proc datasets lib=work nolist;
     %if &nationwide. = %quote(yes) %then %do;
         MODIFY SEERin_allUS; FORMAT _all_; INFORMAT _all_; ATTRIB _all_ label=''; run;
     %end; /* &nationwide=yes processing */
+	%if &county. = %quote(yes) %then %do;
+        MODIFY SEERin_county; FORMAT _all_; INFORMAT _all_; ATTRIB _all_ label=''; run;
+    %end; /* &county=yes processing */
 quit;
 
 /* Import SEER*Stat cancer site table */
@@ -108,7 +127,7 @@ run;
 proc sort data=SEERin_zones2; by ZoneIDFull; run;
 proc sort data=ZoneList; by ZoneIDFull; run;
 data SEERin_zones3;
-    length ZoneID $10 ZoneName $200;
+    length ZoneID $10 ZoneName $200 GeoType $10; /* 10/19/2023 add GeoType variable for distinguishing geography type in individual datasets for separation later*/
     merge SEERin_zones2 (in=inData)
         ZoneList (in=inNames keep=ZoneName ZoneIDFull /*11/23/2022 use ZoneIDFull rather than ZoneIDOrig*/
             /*rename=(ZoneIDOrig=ZoneID)*/);
@@ -116,32 +135,57 @@ data SEERin_zones3;
     if inData;
     if not inNames then putlog "*** Missing zone name for ZoneID: " ZoneIDFull;
 	ZoneID = substr(ZoneIDFull,3); /* 11/23/2022: Strip off the leading StFIPS code */
-    ZoneID = compress(ZoneID,'abcdefghijklmnopqrstuvwxyz'); /* 11/23/2022: Remove repetition letters */
+    /*ZoneID = compress(ZoneID,'abcdefghijklmnopqrstuvwxyz');*/ /* 11/23/2022: Remove repetition letters */ /*7/31/24 No longer needed*/
     drop ZoneIDFull; /* 11/23/2022 */
+	GeoType = "Zone"; /* 10/19/2023 */
 run;
 
 /* Add a ZoneID variable to the state dataset so we can combine with zones */
 data SEERin_state2;
-    length ZoneID $10;
+    length ZoneID $10 ZoneName $200 GeoType $10; /* 10/19/2023 add GeoType and ZoneName variables*/
     set SEERin_state;
-    ZoneID = "Statewide";
+    ZoneID = "&stateFIPS.";
+	GeoType = "State";
+	ZoneName = "&stateName.";
 run;
 
 %if &nationwide. = %quote(yes) %then %do;
 /* Add a ZoneID variable to the US dataset so we can combine with zones */
 data SEERin_allUS2;
-    length ZoneID $10;
+    length ZoneID $10 ZoneName $200 GeoType $10; /* 10/19/2023 add GeoType and ZoneName variables*/
     set SEERin_allUS;
-    ZoneID = "Nationwide";
+    ZoneID = "US";
+	GeoType = "Nationwide";
+	ZoneName = "United States";
 run;
 %end; /* &nationwide=yes processing */
 
-/* Combine zone and state (and possibly national) datasets */
+/*10/19/2023 add option for county rates*/
+%if &county. = %quote(yes) %then %do;
+/* Add a ZoneID variable and ZoneName variable to the county dataset so we can combine with zones */
+data SEERin_county2;
+    length ZoneID $10 ZoneName $200  GeoType $10; /* 10/19/2023 add GeoType and ZoneName variables*/
+    set SEERin_county;
+	/*10/19/2023 extract state county FIPS code from 'County_DE' field to populate ZoneID*/
+	retain re;
+	if _N_ = 1 then re=prxparse('/\((.*?)\)/');
+	if prxmatch(re,County_&stateAbbr.) then ZoneID = prxposn(re, 1, County_&stateAbbr.);
+	/*10/19/2023 extract county name from 'County_&stateAbbr.' field to populate ZoneName*/
+	ZoneName = strip(scan(County_&stateAbbr.,2,':('));
+	drop County_&stateAbbr. re;
+	GeoType = "County";
+run;
+%end; /* &county=yes processing */
+
+/* Combine zone and state (and possibly national and county) datasets */ /*10/19/23 Added option for county data*/
 data RateTable;
     set SEERin_zones3 SEERin_state2
     %if &nationwide. = %quote(yes) %then %do;
     SEERin_allUS2
     %end; /* &nationwide=yes processing */
+	%if &county. = %quote(yes) %then %do;
+    SEERin_County2
+    %end; /* &county=yes processing */
     ;
 run;
 
@@ -222,7 +266,7 @@ run;
 /* Create a cancer site sort sequence field based on state rates */
 data SiteSortSeq;
     set RateTable3;
-    if ZoneID = "Statewide";
+    if GeoType = "State"; /*10/19/23 Update criteria from ZoneID to GeoType*/
     if Years = '10yrs';
     if RaceEth = '.AllRaceEth';
     if (Sex = 'Female') and (index(Site,'female')=0) then delete;
@@ -292,14 +336,17 @@ data RateTable_wSuppr;
         else                    ByGroup = '4-BySiteSexRaceEth';
         end;
     drop SexSpecSite;
+	rename ZoneID = GeoID; /*10/19/23 Rename ZoneID to GeoID to be consistent with other rate table*/
+	label ZoneID = GeoID;
 run;
 
 /* Create separate rate variables for each race/ethnicity */
 proc sort data=RateTable_wSuppr;
-    by ZoneID Site_short Sex Years RaceEth;
+    by GeoID Site_short Sex Years RaceEth; /*10/19/23 Update ZoneID to GeoID*/
 run;
+/*10/19/23 Update ZoneID to GeoID*/
 data RateTable_WebTool;
-    length ZoneID $10 Sex $10 Site_short $10 Years $5;
+    length GeoID $10 Sex $10 Site_short $10 Years $5;
     retain
         All_PopTot All_Cases All_AAIR All_LCI All_UCI .
         W_PopTot W_Cases W_AAIR W_LCI W_UCI .
@@ -309,7 +356,7 @@ data RateTable_WebTool;
         AIAN_PopTot AIAN_Cases AIAN_AAIR AIAN_LCI AIAN_UCI .
         ;
     set RateTable_wSuppr;
-    by ZoneID Site_short Sex Years;
+    by GeoID Site_short Sex Years;
     select (RaceEth);
         when ('.AllRaceEth') do;
             All_PopTot = PopTot; All_Cases = Cases; All_AAIR = AAIR; All_LCI = LCI; All_UCI = UCI;
@@ -329,7 +376,7 @@ data RateTable_WebTool;
         when ('Hispanic') do;
             H_PopTot = PopTot; H_Cases = Cases; H_AAIR = AAIR; H_LCI = LCI; H_UCI = UCI;
             end;
-        otherwise putlog "*** Unexpected race ethnicity value: " RaceEth ZoneID Site_short Sex Years;
+        otherwise putlog "*** Unexpected race ethnicity value: " RaceEth GeoID Site_short Sex Years;
         end;
     if last.Years then do;
         output;
@@ -351,7 +398,7 @@ data RateTable_WebTool;
     drop RaceEth AAIR LCI UCI Cases PopTot
         LT16cases ByGroup;
     rename
-        ZoneID = Zone
+		ZoneName = GeoName /*10/19/23 rename ZoneName to GeoName to account for new tables by geography*/
         Site_short = Cancer
         All_PopTot = PopTot
         All_Cases = Cases
@@ -427,12 +474,11 @@ run;
 /* Final sorts */
 %macro FinalSort(ds=,zoneIdVar=,lastBy=);
 proc sort data=&ds.;
-    by Years SiteSort Sex &zoneIdVar. &lastBy.;
+    by GeoType Years SiteSort Sex &zoneIdVar. &lastBy.; /* 10/19/2023 Add sort by GeoType */
 run;
 %mend FinalSort;
-%FinalSort(ds=RateTable_wSuppr,zoneIdVar=ZoneID,lastBy=RaceEth);
-%FinalSort(ds=RateTable_WebTool4,zoneIdVar=Zone,lastBy=);
-
+%FinalSort(ds=RateTable_wSuppr,zoneIdVar=GeoID,lastBy=RaceEth); /* 10/19/2023 Update ZoneIDVar to =GeoID*/
+%FinalSort(ds=RateTable_WebTool4,zoneIdVar=GeoID,lastBy=); /* 10/19/2023 Update ZoneIDVar to =GeoID*/
 
 /* Save the main SAS datasets */
 data ZONEDATA.RateTable_&stateAbbr.to&year1._wSuppr;  /* Rates with suppression */
@@ -442,13 +488,13 @@ data ZONEDATA.RateTable_&stateAbbr.to&year1._WebTool;  /* Rates for WebTool */
     set RateTable_WebTool4;
 run;
 
-/* Export web tool dataset to a CSV file */
+/* Export web tool dataset to a CSV file */ 
+
 proc export data=RateTable_WebTool4 (drop=SiteSort)
-            OUTFILE= "&pathbase.\RateTable_&stateAbbr.to&year1._WebTool.csv"
+            OUTFILE= "&pathbase.\RateTable_All_&stateAbbr.to&year1._WebTool.csv"
             DBMS=csv REPLACE;
      PUTNAMES=YES;
 run;
-
 
 /* Summary statistics */
 title "51_ZoneWebToolRates_&stateAbbr.to&year1. - summary statistics for web tool rate table";
@@ -456,9 +502,11 @@ proc freq data=ZONEDATA.RateTable_&stateAbbr.to&year1._WebTool;
     table Cancer / list missing;
     table Sex / list missing;
     table Years / list missing;
+	table GeoType / list missing; /*10/19/2023 Add table for GeoType*/
 run;
 ods pdf STARTPAGE=NO;
 proc means data=ZONEDATA.RateTable_&stateAbbr.to&year1._WebTool;
+by GeoType; /*10/19/2023 Add by GeoType to output separate statistics by geography*/
 run;
 ods pdf STARTPAGE=YES;
 
