@@ -1379,6 +1379,7 @@ function performSearch () {
                     // show an address error
                     MAP.addressmarker.setLatLng(searchlatlng).addTo(MAP);
                     toggleAddressSearchFailure('Data not available for that location');
+                    performSearchReally(params);
                 }
             });
         }
