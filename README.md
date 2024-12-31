@@ -43,9 +43,9 @@ You will need to provide a number of data tables and geographic boundary files t
 ## Steps for building the site
 
 ### Prerequisites
-- Recommend use of Node.js version 14 by running:
+- Recommend use of Node.js version 20 by running:
   ```bash
-  nvm use 14
+  nvm use 20
   ```
 - You will need Python 3
 - You will need the Fionna and Shapely module for Python 3
@@ -56,24 +56,31 @@ You will need to provide a number of data tables and geographic boundary files t
 ### 0. Preliminary Check
 1. Check if the site runs with pre-installed sample data:
    ```bash
-   yarn -i
+   yarn install
    npm start
    ```
+   - installs the dependencies like mapshaper
 
 ### 1. Replace General Data Files
 1. Replace the following files:
    - `static/data/allCancerRatesData.csv`
    - `static/data/allDemographics.csv`
 
-### 2. Run Python Scripts to Replace Specific Data Files 
+### 2. Replace files
+- the shapefile format is WGS84 (plain latitude-longitude / unprojected) SRS, which is a collection of files of different formats that work together
+1. Replace /datascript/inputs/CTAZones.shp and associated CTAZones files with your zone boundaries files
+2. Replace /datascript/inputs/cities.shp and associated cities files with your cities boundaries files
+3. Replace /datascript/inputs/counties.shp and associated counties files with your county boundaries files
+ 
+### 3. Run Python Scripts
 - run the data-preparation scripts under `datascripts/`
-1. Replace `CTAZones.shp` with your zone boundaries and run:
+1. 
    ```bash
    python make_ctageofile.py
    ```
    This will create `static/data/cta.json`.
 
-2. Replace `counties.shp` with your county boundaries and run:
+2. 
    ```bash
    python make_countygeofile.py
    ```
@@ -87,12 +94,12 @@ You will need to provide a number of data tables and geographic boundary files t
    - `static/data/counties_by_cta.csv`
    - `static/data/cities_by_cta.csv`
 
-### 3. Update JavaScript Files
-1. Replace the object keys of the variable `main` in the `src/index.js` file. These mostly replace text on the page that say `[REPLACE ...]`.
-   - main.ctaid needs to be replaced to start as your state's FIPS code number for the javascript logic
-2. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
+### 4. Update JavaScript Files
+1. Replace main.ctaid with your state's FIPS code number. (`src/index.js` line 316)
+2. Uncomment and replace the 13 `main.[name]` values (`src/index.js` lines 300-314). These mostly replace text on the page that say `[REPLACE ...]`.
+3. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
 
-## 4. Testing and Building
+## 5. Testing and Building
 1. Test the updated code by running:
    ```bash
    npm start
