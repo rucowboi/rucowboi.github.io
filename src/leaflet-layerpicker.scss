@@ -3,7 +3,7 @@
  * where we customize the icons etc
  */
 
-@import 'index.scss';
+@use 'index.scss' as *;
 
 .leaflet-layerpicker-control {
 	/* styles for the button and the content */
@@ -45,7 +45,7 @@
 			top: 5px;
 			right: 5px;
 
-			color: $midgrey;
+			color: #666666;
 			cursor: pointer;
 
 		    top: -10px;

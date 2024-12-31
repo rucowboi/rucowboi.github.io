@@ -9,12 +9,12 @@
         }
 
         span.title, span.subtitle {
-            color: $nearblack;
+            color: #000000;
         }
 
         tr:nth-child(odd) {
             td, th[scope] {
-                background-color: $yellow;
+                background-color: #feecd4;
             }
         }
 
@@ -22,10 +22,10 @@
             border-right: 5px solid white;
         }
         th[data-region="state"], td[data-region="state"] {
-            color: $nearblack;
+            color: #000000;
         }
         th[data-region="nation"], td[data-region="nation"] {
-            color: $nearblack;
+            color: #000000;
         }
 
         th[scope] {  /* TH must be used for semantics, esp screen readers and scope, but we want them to look like regular TDs */

@@ -5,10 +5,10 @@
 
 #downloadbutton {
     /* override the .btn colors, to look like a .btn-alternate even during hover/active events like when we're expanded */
-    background-color: $midpurple;
+    background-color: #6472B9;
     color: white;
     &:hover, &:active {
-        background-color: $midpurple;
+        background-color: #6472B9;
         color: white;
     }
 
@@ -20,7 +20,7 @@
 
 /* in order to make it expand over top of the map below, need absolute positioning and fixed width */
 #downloadoptions {
-    background-color: $midpurple;
+    background-color: #6472B9;
     color: white;
 
     border-radius: 4px;
@@ -34,7 +34,7 @@
         display: block;
         color: white;
         &:active, &:hover {
-            color: $midorange;
+            color: #f99e26;
         }
     }
 

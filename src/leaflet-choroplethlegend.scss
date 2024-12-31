@@ -3,7 +3,7 @@
  * where we customize the icons etc
  */
 
-@import 'index.scss';
+@use 'index.scss' as *;
 
 .leaflet-choroplethlegend-control {
 	/* styles for the button and the content */
@@ -45,7 +45,7 @@
 			top: 5px;
 			right: 5px;
 
-			color: $midgrey;
+			color: #666666;
 			cursor: pointer;
 
 		    top: -10px;
@@ -61,8 +61,8 @@
 			width: 200px;
 	        border-radius: 5px;
 	        background-color: white;
-	        color: $nearblack;
-	        border: 1px solid $midgrey;
+	        color: #000000;
+	        border: 1px solid #666666;
 	        padding: 2px 5px;
 			font-size: 16px;
 

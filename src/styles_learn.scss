@@ -16,7 +16,7 @@ div.container.learn-text {
     .source {
         font-weight: 600;
         font-size: 14px;
-        color: $midgrey;
+        color: #666666;
     }
 
     ul.source {
@@ -29,15 +29,15 @@ div.container.learn-text {
         }
         
         a {
-            background-color: $lightpurple;
-            color: $nearblack;
+            background-color: #e6eaff;
+            color: #000000;
             border-radius: 0;
             text-decoration: none;
             margin-right: 10px;
         }
 
         a.active {
-            background-color: $darkpurple;
+            background-color: #293985;
             color: white;
         }
     }

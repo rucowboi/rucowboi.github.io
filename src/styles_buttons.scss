@@ -9,21 +9,21 @@
 
     &.btn-default {
         background-color: white;
-        color: $nearblack;
-        border: 1px solid $nearblack;
+        color: #000000;
+        border: 1px solid #000000;
 
         &:hover, &:active {
-            color: $midorange;
+            color: #f99e26;
         }
     }
     &.btn-alternate {
-        background-color: $midpurple;
+        background-color: #6472B9;
         color: white;
-        border: 1px solid $nearblack;
+        border: 1px solid #000000;
 
         &:hover, &:active {
-            background-color: $lightpurple;
-            color: $nearblack;
+            background-color: #e6eaff;
+            color: #000000;
         }
     }
 }
