@@ -55,8 +55,8 @@
     </script>
 
     <!-- our own awesomesauce -->
-    <link rel="stylesheet" type="text/css" href="index.css?Wed_Jan_15_2025_15_31_25_GMT_0500__Eastern_Standard_Time_" />
-    <script type="text/javascript" src="index.js?Wed_Jan_15_2025_15_31_25_GMT_0500__Eastern_Standard_Time_"></script>
+    <link rel="stylesheet" type="text/css" href="index.css?Wed_Feb_12_2025_16_40_48_GMT_0500__Eastern_Standard_Time_" />
+    <script type="text/javascript" src="index.js?Wed_Feb_12_2025_16_40_48_GMT_0500__Eastern_Standard_Time_"></script>
 </head>
 <body>
 
@@ -104,8 +104,8 @@
 
                 <div id="downloadoptions" class="d-none" aria-expanded="false">
                     <a href="javascript:void(0);" data-export="map" title="Download a PNG image of the map"><i class="fa fa-download"></i> Download Map</a>
-                    <a href="javascript:void(0);" target="_blank" data-export="zonedata" title="Download data for the selected CTA Zone"><i class="fa fa-download"></i> Zone Data</a>
-                    <a href="./static/downloads/all_zones.zip" target="_blank" data-export="alldata" title="Download data for all CTA Zones"><i class="fa fa-download"></i> All Data</a>
+                    <!-- <a href="javascript:void(0);" target="_blank" data-export="zonedata" title="Download data for the selected CTA Zone"><i class="fa fa-download"></i> Zone Data</a> -->
+                    <!-- <a href="./static/downloads/all_zones.zip" target="_blank" data-export="alldata" title="Download data for all CTA Zones"><i class="fa fa-download"></i> All Data</a> -->
                 </div>
 
                 <button class="btn btn-alternate" id="printpagebutton" onClick="window.print();"><i class="fa fa-print"></i> Print Page</button>
@@ -175,8 +175,10 @@
             <div class="col-md-7 col-lg-8">
                 <div class="printonly" id="logo-img-print" aria-hidden="true">
                     <img src="./static/ribbon_purple.png" alt="Health Maps Logo" />
-                    <h1 class="site-title-1" aria-label="Health Maps" tabindex="0">State Name</h1>
-                    <h1 class="site-title-2" aria-hidden="true">Health Maps</h1>
+                        <div style="display:block">
+                            <h1 class="site-title-1" aria-label="Health Maps" tabindex="0"><span class="stateName">[REPLACE STATE/REGISTRY]</span></h1>
+                            <h1 class="site-title-2" aria-hidden="true">Health Maps</h1>
+                        </div>
                 </div>
 
                 <div class="map" id="map" aria-hidden="true"></div>

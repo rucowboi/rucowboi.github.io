@@ -312,6 +312,7 @@ var main = {}
 // main.citationInfo = "This is where you put your citation info"
 // main.nationalCancerDataSource = "this is your national cancer data source info"
 // main.aboutBlurb = "This is your about blurb"
+main.startingLocation = "2 The Circle, Georgetown, DE 19947" // Replace with your desired default location
 
 main.ctaid = 10 // starting state for site to start up
 
@@ -400,7 +401,7 @@ $(document).ready(function () {
         // initFixPlaceOverlay();
         initDemographicTables();
         initMapAndPolygonData();
-        initDataFilters();
+        initDataFilters(main.startingLocation);
         initTooltips();
         initPrintPage();
         initDownloadButtons();
@@ -606,11 +607,11 @@ function initLoadInitialState () {
 
     // on page load, fill in the address box too BUT ALSO set its hasbeenchanged attribute so that performSearch() will zoom to the CTA Zone
     // there is behavior not to re-zoom the map if a non-address field was the cause, e.g. changing sex should not re-zoom the map
-    if (params.get('address')) {
-        const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
-        const $addrbox = $searchwidgets.filter('[name="address"]');
-        $addrbox.data('hasbeenchanged', true);
-    }
+    // if (params.get('address')) {
+    //     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
+    //     const $addrbox = $searchwidgets.filter('[name="address"]');
+    //     $addrbox.data('hasbeenchanged', true);
+    // }
 
     // map overlays and chorpopleth choice, are managed via map controls
     if (params.get('overlays')) {
@@ -853,7 +854,7 @@ function initPrintPage () {
         $mapdomnode.className = 'col-12';
         MAP.invalidateSize();
         $printbutton.html( $printbutton.data('busy-html') );
-
+        $incidencebarchart.css('width', '100%');
         $incidencebarchart.addClass('printing');
         window.dispatchEvent(new Event('resize'));
     });
@@ -1093,7 +1094,7 @@ function initMapAndPolygonData () {
 }
 
 
-function initDataFilters () {
+function initDataFilters (location) {
     // part 1: fill in the SELECT options from the configurable constants
     const $searchwidgets_site = $('div.data-filters select[name="site"]');
     const $searchwidgets_sex = $('div.data-filters select[name="sex"]');
@@ -1120,6 +1121,8 @@ function initDataFilters () {
     if (getOptionCount('time') < 2) {  // some datasets have only 1 option, sop  showing this is silly
         $searchwidgets_time.closest('div.input-group').hide();
     }
+    
+    $('#data-filters-address').val(location);
 
     // part 2: add actions to the search widgets
     // the search widgets: select race/sex/cancer/time and trigger a search
@@ -1428,7 +1431,7 @@ function performSearchReally (searchparams) {
     performSearchIncidenceReadout(searchparams);
     performSearchIncidenceBarChart(searchparams);
     // performSearchMap(searchparams);
-    performSearchUpdateDataDownloadLinks(searchparams);
+    // performSearchUpdateDataDownloadLinks(searchparams); // commented out until file downloads addressed
 }
 
 
