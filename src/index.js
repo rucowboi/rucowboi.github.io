@@ -853,7 +853,7 @@ function initPrintPage () {
         $mapdomnode.className = 'col-12';
         MAP.invalidateSize();
         $printbutton.html( $printbutton.data('busy-html') );
-
+        $incidencebarchart.css('width', '100%');
         $incidencebarchart.addClass('printing');
         window.dispatchEvent(new Event('resize'));
     });
