@@ -1428,7 +1428,7 @@ function performSearchReally (searchparams) {
     performSearchIncidenceReadout(searchparams);
     performSearchIncidenceBarChart(searchparams);
     // performSearchMap(searchparams);
-    performSearchUpdateDataDownloadLinks(searchparams);
+    // performSearchUpdateDataDownloadLinks(searchparams); // commented out until file downloads addressed
 }
 
 
