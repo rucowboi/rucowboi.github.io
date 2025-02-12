@@ -12,6 +12,8 @@
 /*4/7/2023 - edited 'Export web tool dataset to a CSV file' step to fix typo that originally exported RateTable_WebTool instead of
 	RateTable_WebTool4*/
 /*10/19/2023 - modifications to allow data by county and to create combined dataset with updated GeoID and GeoType variables*/
+/*1/7/2025 - added code to remove cases where sex is not equal to 'Male and Female', 'Male', and 'Female', since these
+cases will not have populations to be able to calculate rates*/
 
 options sysprintfont=("Courier New" 8) leftmargin=0.75in nocenter compress=no;
 
@@ -193,7 +195,8 @@ run;
 data RateTable2;
     length ZoneID $10 SexNew $10 Site $40 Years $5 RaceEth $12;
     set RateTable;
-    if Sex = 'Male and female' then SexNew = 'Both';
+	if Sex not in ('Male and female', 'Male', 'Female') then delete; /*1/7/25 adding code to remove cases where sex is not equal to 'Male and Female', 'Male', and 'Female', since these cases will not have populations to be able to calculate rates*/
+	else if Sex = 'Male and female' then SexNew = 'Both';
     else SexNew = Sex;
     Site = USCS_Sites;
     select (LatestYears_1_5_10);
