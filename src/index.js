@@ -313,7 +313,6 @@ var main = {}
 // main.nationalCancerDataSource = "this is your national cancer data source info"
 // main.aboutBlurb = "This is your about blurb"
 main.startingLocation = "2 The Circle, Georgetown, DE 19947" // Replace with your desired default location
-
 main.ctaid = 10 // starting state for site to start up
 
 $(document).ready(function () {

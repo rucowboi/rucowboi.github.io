@@ -98,6 +98,8 @@ You will need to provide a number of data tables and geographic boundary files t
 1. Replace main.ctaid with your state's FIPS code number. (`src/index.js` line 316)
 2. Uncomment and replace the 13 `main.[name]` values (`src/index.js` lines 300-314). These mostly replace text on the page that say `[REPLACE ...]`.
 3. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
+4. Replace main.startingLocation with Location Search starting location. (src/index.js line 315)
+   - location format can be an adress("2 The Circle, Georgetown, DE 19947") or coordinates ("38.64707,-75.59814")
 
 ## 5. Testing and Building
 1. Test the updated code by running:
@@ -294,6 +296,7 @@ After the CTA zones, counties, and places shapefiles are in place, run `python3 
 Again, **do not forget to do `npm run build`** after making changes to the content of `static/`, including replacing images or loading new data.
 
 ### Creating Downloadable Files
+Note: This section is to be ignored for now. The downloadable files, including CSV exports, are currently not functional or under development. Please revisit this once the necessary changes to the download feature are implemented.
 
 The files offered by the Download button, are static ZIP files containing CSV extracts of merged demographic and incidence data.
 
