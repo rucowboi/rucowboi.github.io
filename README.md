@@ -99,7 +99,7 @@ You will need to provide a number of data tables and geographic boundary files t
 2. Uncomment and replace the 13 `main.[name]` values (`src/index.js` lines 300-314). These mostly replace text on the page that say `[REPLACE ...]`.
 3. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
 4. Replace main.startingLocation with Location Search starting location. (src/index.js line 315)
-   - location format can be an adress("2 The Circle, Georgetown, DE 19947") or coordinates ("38.64707,-75.59814")
+   - location format can be an address("2 The Circle, Georgetown, DE 19947") or coordinates ("38.64707,-75.59814")
 
 ## 5. Testing and Building
 1. Test the updated code by running:
