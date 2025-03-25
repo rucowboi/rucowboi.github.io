@@ -19,9 +19,15 @@ require('./printing-leaflet-easyPrint.js');
 
 // the map and some constants
 var MAP;
+<<<<<<< HEAD
 // need to figure out lat /long bounds for NJ to center map on page load #CC25
 // var MAP_BBOX = [[38.5268, -74.2317], [39.8108, -75.5277]];  // [[s, w], [n, e]] DELAWARE
  var MAP_BBOX = [[38.93, -75.56], [41.36, -73.89]];  // [[s, w], [n, e]]
+=======
+// var MAP_BBOX = [[32.092, -94.438], [33.146, -93.142]];  // [[s, w], [n, e]]
+var MAP_BBOX = [[38.5268, -74.2317], [39.8108, -75.5277]];  // [[s, w], [n, e]] DELAWARE
+
+>>>>>>> upstream/master
 
 var MIN_ZOOM = 6;
 var MAX_ZOOM = 15;
@@ -79,10 +85,15 @@ var SEARCHOPTIONS_SEX = [  // filter values for "sex" field
     { value: 'Female', label: "Female" },
 ];
 var SEARCHOPTIONS_TIME = [  // filter values for "years" field
+<<<<<<< HEAD
     // Gerry states that the years are 2006 to 2015 (inclusive). Need to confirm the year timeframes below to match dataset #CC25
     { value: '01yr', label: "1-Year: 2015"}, // added the 1 year value as initValidateDemographicDataset () was looking for 3 rows #CC25
     { value: '05yrs', label: "5-Year: 2010-2015" },
     { value: '10yrs', label: "10-Year: 2006-2015" },
+=======
+    { value: '05yrs', label: "5-Year: 2015-2019" },
+    { value: '10yrs', label: "10-Year: 2010-2019" },
+>>>>>>> upstream/master
 ];
 var SEARCHOPTIONS_RACE = [  // field prefix for AAIR, LCI, UCI fields within the incidence row
     { value: '', label: "All Ethnicities" },
@@ -299,6 +310,7 @@ var GEOCODE_CACHE = {};
 // INIT
 //
 var main = {}
+<<<<<<< HEAD
  main.stateName = "New Jersey" // #CC25
  main.numOfCancerSites = "25" // #CC25
  main.numOfZones = "150" // #CC25
@@ -316,6 +328,25 @@ var main = {}
  main.aboutBlurb = "This is your about blurb" // #CC25
 
 main.ctaid = 34 // starting state for site to start up #CC25
+=======
+// main.stateName = "Delaware"
+// main.numOfCancerSites = "25"
+// main.numOfZones = "14"
+// main.minZonePop = "50,000"
+// main.maxZonePop = "150,000"
+// main.minTractsPerZone = "1,000"
+// main.maxTractsPerZone = "100,000"
+// main.raceList = [ "non-Hispanic White", "non-Hispanic Black", "non-Hispanic Asian/Pacific Islander", "non-Hispanic American Indian/Alaska Native", "Hispanic"]
+// main.reportingMinCases = "1000"
+// main.registry = "test"
+// main.registryLink = "https://www.google.com"
+// main.fundingSource = "This is supported through funding"
+// main.citationInfo = "This is where you put your citation info"
+// main.nationalCancerDataSource = "this is your national cancer data source info"
+// main.aboutBlurb = "This is your about blurb"
+main.startingLocation = "2 The Circle, Georgetown, DE 19947" // Replace with your desired default location
+main.ctaid = 10 // starting state for site to start up
+>>>>>>> upstream/master
 
 $(document).ready(function () {
     // promises, a much nicer way to fetch, fetch, fetch
@@ -402,7 +433,11 @@ $(document).ready(function () {
         // initFixPlaceOverlay();
         initDemographicTables();
         initMapAndPolygonData();
+<<<<<<< HEAD
         initDataFilters();
+=======
+        initDataFilters(main.startingLocation);
+>>>>>>> upstream/master
         initTooltips();
         initPrintPage();
         initDownloadButtons();
@@ -415,6 +450,31 @@ $(document).ready(function () {
     });
 });
 
+<<<<<<< HEAD
+=======
+window.onload = function () {
+    const select = document.querySelector(".leaflet-choroplethlegend-select");
+    const legendgradient = document.querySelector(".leaflet-choroplethlegend-legendgradient");
+
+    function adjustWidth() {
+        let temp = document.createElement("span");
+        document.body.appendChild(temp);
+        let maxWidth = 200;
+        let selectedOption = select.options[select.selectedIndex];
+        temp.textContent = selectedOption.text;
+        if (temp.offsetWidth > maxWidth){
+            maxWidth = temp.offsetWidth;
+        }
+        document.body.removeChild(temp);
+        select.style.width = `${maxWidth + 10}px`;
+        legendgradient.style.width = `${maxWidth + 10}px`;
+    }
+
+    adjustWidth();
+    select.addEventListener("change", adjustWidth);
+};
+
+>>>>>>> upstream/master
 
 function initUrlParamUpdater () {
     setInterval(() => {
@@ -608,11 +668,19 @@ function initLoadInitialState () {
 
     // on page load, fill in the address box too BUT ALSO set its hasbeenchanged attribute so that performSearch() will zoom to the CTA Zone
     // there is behavior not to re-zoom the map if a non-address field was the cause, e.g. changing sex should not re-zoom the map
+<<<<<<< HEAD
     if (params.get('address')) {
         const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
         const $addrbox = $searchwidgets.filter('[name="address"]');
         $addrbox.data('hasbeenchanged', true);
     }
+=======
+    // if (params.get('address')) {
+    //     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
+    //     const $addrbox = $searchwidgets.filter('[name="address"]');
+    //     $addrbox.data('hasbeenchanged', true);
+    // }
+>>>>>>> upstream/master
 
     // map overlays and chorpopleth choice, are managed via map controls
     if (params.get('overlays')) {
@@ -855,7 +923,11 @@ function initPrintPage () {
         $mapdomnode.className = 'col-12';
         MAP.invalidateSize();
         $printbutton.html( $printbutton.data('busy-html') );
+<<<<<<< HEAD
 
+=======
+        $incidencebarchart.css('width', '100%');
+>>>>>>> upstream/master
         $incidencebarchart.addClass('printing');
         window.dispatchEvent(new Event('resize'));
     });
@@ -1095,7 +1167,11 @@ function initMapAndPolygonData () {
 }
 
 
+<<<<<<< HEAD
 function initDataFilters () {
+=======
+function initDataFilters (location) {
+>>>>>>> upstream/master
     // part 1: fill in the SELECT options from the configurable constants
     const $searchwidgets_site = $('div.data-filters select[name="site"]');
     const $searchwidgets_sex = $('div.data-filters select[name="sex"]');
@@ -1122,6 +1198,11 @@ function initDataFilters () {
     if (getOptionCount('time') < 2) {  // some datasets have only 1 option, sop  showing this is silly
         $searchwidgets_time.closest('div.input-group').hide();
     }
+<<<<<<< HEAD
+=======
+    
+    $('#data-filters-address').val(location);
+>>>>>>> upstream/master
 
     // part 2: add actions to the search widgets
     // the search widgets: select race/sex/cancer/time and trigger a search
@@ -1430,7 +1511,11 @@ function performSearchReally (searchparams) {
     performSearchIncidenceReadout(searchparams);
     performSearchIncidenceBarChart(searchparams);
     // performSearchMap(searchparams);
+<<<<<<< HEAD
     performSearchUpdateDataDownloadLinks(searchparams);
+=======
+    // performSearchUpdateDataDownloadLinks(searchparams); // commented out until file downloads addressed
+>>>>>>> upstream/master
 }
 
 
