@@ -1,6 +1,8 @@
 // require these so they get webpacked
 require('./index.html');
 require('./index.scss');
+
+// require leaflets
 require('./leaflet-topojson.js');
 require('./leaflet-choroplethlegend.scss');
 require('./leaflet-choroplethlegend.js');
