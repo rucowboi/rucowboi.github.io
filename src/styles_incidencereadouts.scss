@@ -12,16 +12,19 @@
                 font-size: 16px;
                 line-height: 16px;
                 text-align: center;
+                color: #000;
+                font-weight: bold;
             }
         }
 
         tbody {
+           
             td, th[scope] {  /* this table is weird: not striped, with white separation; tip: border-collapse applies to first+last too, throwing off pixel-perfect alignment to other stuff */
                 background-color: #e6eaff;
                 line-height: 20px;
                 font-size: 16px;
                 font-weight: 400;
-
+                color: #000;
                 border-bottom: 5px solid white;
                 &:first-child, &:nth-child(2) {
                     border-right: 5px solid white;
@@ -29,7 +32,8 @@
             }
 
             span[data-statistic="lciuci"] {  /* exception: subtext in a cell, with special colors */
-                color: #666666;
+                // color: #666666;
+                color: #000;
                 font-size: 16px;
             }
         }

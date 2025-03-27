@@ -5,6 +5,7 @@
 #filters-and-aairbarchart {
     margin-top: 30px;
     margin-bottom: 30px;
+    // padding-right: 100px;
 
     div.data-filters-summary {
         margin-bottom: 0.75em;
@@ -39,16 +40,16 @@
     }
 
     #incidence-barchart-section {
+        page-break-before: auto;
+        overflow: visible !important;
     }
 
     #incidence-barchart {
-        height: 350px;  /* overridden in XXX based on the options in SEARCHOPTIONS_RACE, to achieve ideal spacing and height */
-        width: 100%;
-        margin-top: 10px;  /* spacing from the title above */
-
-        &.printing {
-            width: 475px; /* see initPrintPage() where we have hacks such as triggering a resize event to reflow the chart */
-        }
+        width: 970px;
+        // height: auto !important;
+        height: 300px !important;
+        overflow: visible !important;
+        margin-top: 10px;  
     }
 
     /* cities/counties location readout */
