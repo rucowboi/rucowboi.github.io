@@ -68,12 +68,12 @@ You will need to provide a number of data tables and geographic boundary files t
 
 ### 2. Replace files
 - the shapefile format is WGS84 (plain latitude-longitude / unprojected) SRS, which is a collection of files of different formats that work together
-1. Replace /datascript/inputs/CTAZones.shp and associated CTAZones files with your zone boundaries files
-2. Replace /datascript/inputs/cities.shp and associated cities files with your cities boundaries files
-3. Replace /datascript/inputs/counties.shp and associated counties files with your county boundaries files
+1. Replace **/datascript/inputs/CTAZones.shp** and associated **CTAZones files** with your **zone boundaries files**
+2. Replace **/datascript/inputs/cities.shp** and associated **cities files** with your **cities boundaries files**
+3. Replace **/datascript/inputs/counties.shp** and associated **counties files** with your **county boundaries files**
  
 ### 3. Run Python Scripts
-- run the data-preparation scripts under `datascripts/`
+- run the data-preparation scripts under the `datascripts/` folder
 1. 
    ```bash
    python make_ctageofile.py
@@ -94,12 +94,13 @@ You will need to provide a number of data tables and geographic boundary files t
    - `static/data/counties_by_cta.csv`
    - `static/data/cities_by_cta.csv`
 
-### 4. Update JavaScript Files
-1. Replace main.ctaid with your state's FIPS code number. (`src/index.js` line 316)
-2. Uncomment and replace the 13 `main.[name]` values (`src/index.js` lines 300-314). These mostly replace text on the page that say `[REPLACE ...]`.
-3. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
-4. Replace main.startingLocation with Location Search starting location. (src/index.js line 315)
-   - location format can be an address("2 The Circle, Georgetown, DE 19947") or coordinates ("38.64707,-75.59814")
+### 4. Update SITE_CONSTANTS values (src/index.js line 17)
+1. Replace `startingLocation` value with a Location Search starting location.
+   - location format can be an address("2 The Circle, Georgetown, DE 19947") or coordinates ("38.64707,-75.59814") or even a ctaid zone ("A9007")
+2. Replace `ctaid` value with your state's FIPS code number.
+3. Uncomment and change the rest of the values to match your state's site. These mostly replace text on the page that say `[REPLACE ...]`.
+4. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` values to position the map.
+
 
 ## 5. Testing and Building
 1. Test the updated code by running:
@@ -337,6 +338,8 @@ A list of such replacements is:
 * `[REPLACE FUNDING URL]` -- A hyperlink URL to the agency which funded this website. Displayed in the FAQ alongside the FUNDING SOURCE.
 * `[REPLACE FUNDING SOURCE]` -- A statement/description of who funded the website. Displayed in the FAQ alongside the FUNDING URL.
 * `[REPLACE ABOUT BLURB]` -- A statement/description of the website, in "What is the XXX Registry" section of the FAQ.
+* `[REPLACE INCIDENCE DATA DATE]` -- The year that the cancer incidence data is only available through.
+* `[REPLACE SOCIODEMOGRAPHIC DATA DATE RANGE]` -- The year ranges of the sociodemographic data.
 * `[REPLACE CITATION INFO]` -- A statement/description of how this website should be cited in literature.
 * `[REPLACE NATIONAL CANCER DATA SOURCE INFO]` -- A statement/description of the national cancer data source, including data years. This should be reviewed with subsequent data updates to verify whether it needs to be updated as well (e.g., during annual data updates). An example of this statement applicable to national cancer data through 2018 is: "National incidence data come from the National Program of Cancer Registries and Surveillance, Epidemiology, and End Results SEER*Stat Database: U.S. Cancer Statistics Incidence Analytic file - 1998-2018. United States Department of Health and Human Services, Centers for Disease Control and Prevention. Released June 2021, based on the 2020 submission."
 

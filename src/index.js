@@ -1,6 +1,8 @@
 // require these so they get webpacked
 require('./index.html');
 require('./index.scss');
+
+// require leaflets
 require('./leaflet-topojson.js');
 require('./leaflet-choroplethlegend.scss');
 require('./leaflet-choroplethlegend.js');
@@ -9,32 +11,50 @@ require('./leaflet-layerpicker.js');
 require('./leaflet-boxzoom.scss');
 require('./leaflet-boxzoom.js');
 require('./leaflet-singleclick.js');
-
 require('./printing-leaflet-easyPrint.js');
 
 
-// CONSTANTS
-// for reasons unknown, can't use "const" here; Webpack 4...
-//
+const SITE_CONSTANTS = {
+    startingLocation: "2 The Circle, Georgetown, DE 19947", // Replace with your desired default location
+    ctaid: 10, // Starting state for site to start up
+    // stateName: "Delaware",
+    // numOfCancerSites: "25",
+    // numOfZones: "14",
+    // minZonePop: "50,000",
+    // maxZonePop: "150,000",
+    // minTractsPerZone: "1,000",
+    // maxTractsPerZone: "100,000",
+    // raceList: [
+    //     "non-Hispanic White",
+    //     "non-Hispanic Black",
+    //     "non-Hispanic Asian/Pacific Islander",
+    //     "non-Hispanic American Indian/Alaska Native",
+    //     "Hispanic"
+    // ],
+    // reportingMinCases: "1000",
+    // registry: "test",
+    // registryLink: "https://www.google.com",
+    // fundingSource: "This is supported through funding",
+    // citationInfo: "This is where you put your citation info",
+    // nationalCancerDataSource: "this is your national cancer data source info",
+    // aboutBlurb: "This is your about blurb",
+    // incidenceDataDate: "2016",
+    // sociodemographicDataDateRange: "2012-2016",
+    MAP_BBOX: [[38.5268, -74.2317], [39.8108, -75.5277]],  // [[s, w], [n, e]] Starting Location
+    MIN_ZOOM: 6,
+    MAX_ZOOM: 15,
+};
 
-// the map and some constants
 var MAP;
-// var MAP_BBOX = [[32.092, -94.438], [33.146, -93.142]];  // [[s, w], [n, e]]
-var MAP_BBOX = [[38.5268, -74.2317], [39.8108, -75.5277]];  // [[s, w], [n, e]] DELAWARE
-
-
-var MIN_ZOOM = 6;
-var MAX_ZOOM = 15;
 
 // for the geocoder: our Bing API key
 var BING_API_KEY = 'AqmUJHuT9QJE5A0m1Kf48g2vxBND3cJ0_jJI3jJQIv9oE11VIG9WZbhq2owRSUZK';
 
-// URLs of our data files, storage for them in memory for filtering and querying, and raw copies for exporting
-// These are you main two sets of data to use. You provide this data of the cancer and cancer demographic information for your State or District
+// Our data
 var DATA_URL_CANCER = 'static/data/allCancerRatesData.csv';
 var DATA_URL_DEMOGS = 'static/data/allDemographics.csv';
 
-// These are the JSON files used for the maps and creating the CTACOUNTY and CTACITY files. These files are updated by running the python scripts
+// Our JSON files
 var DATA_URL_CTAGEOM = 'static/data/cta.json'; // zones
 var DATA_URL_COUNTYGEOM = 'static/data/countybounds.json'; // counties
 
@@ -42,34 +62,39 @@ var DATA_URL_COUNTYGEOM = 'static/data/countybounds.json'; // counties
 var DATA_URL_CTACITY = 'static/data/cities_by_cta.csv'; // zones
 var DATA_URL_CTACOUNTY = 'static/data/counties_by_cta.csv'; // counties
 
-// the set of options for search filters: cancer site, race, and time period
-// each definition is the field value from the incidence CSV, mapped onto a human-readable label
-// remember that cancer site and sex and time period, are used to find a specific row in cancerincidence.csv
-// while race determines which column/field to use within that row
-// e.g. CTA + sex + cancersite + timeperiod = filter to 1 incidence row, then race=B means to use B_AAIR, B_LCI, B_UCI
+var SEARCHOPTIONS_TYPE = [ // filter values for zone or county
+    { value: 'Zone', label: "Zone" },
+    { value: 'County', label: "County" },
+]
+
+var SEARCHOPTIONS_TIME = [  // filter values for "years" field
+    { value: '05yrs', label: "5-Year: 2015-2019" },
+    { value: '10yrs', label: "10-Year: 2010-2019" },
+];
+
 var SEARCHOPTIONS_CANCERSITE = [  // filter values for "cancer" field
     { value: 'AllSite', label: "All Cancer Sites" },
-    { value: 'Prostate', label: "Prostate Cancer" },
-    { value: 'Lung', label: "Lung Cancer" },
-    { value: 'Breast', label: "Breast Cancer" },
-    { value: 'CRC', label: "Colonrectal Cancer" },
-    { value: 'Kidney', label: "Kidney and Renal Pelvis Cancer" },
+    { value: 'Prostate', label: "Prostate" },
+    { value: 'Lung', label: "Lung and Bronchus" },
+    { value: 'Breast', label: "Female Breast" },
+    { value: 'CRC', label: "Colon and Rectum" },
+    { value: 'Kidney', label: "Kidney and Renal Pelvis" },
     { value: 'NHL', label: "Non-Hodgkin Lymphoma" },
-    { value: 'Urinary', label: "Urinary Bladder Cancer" },
+    { value: 'Urinary', label: "Urinary Bladder" },
     { value: 'Mela', label: "Melanoma of the Skin" },
-    { value: 'Pancreas', label: "Pancreatic Cancer" },
+    { value: 'Pancreas', label: "Pancreas" },
     { value: 'Leuks', label: "Leukemias" },
-    { value: 'Oral', label: "Oral Cavity and Pharynx Cancer" },
-    { value: 'Thyroid', label: "Thyroid Cancer" },
-    { value: 'Uterine', label: "Uterine Corpus Cancer" },
-    { value: 'Liver', label: "Liver Cancer" },
-    { value: 'Stomach', label: "Stomach Cancer" },
+    { value: 'Oral', label: "Oral Cavity and Pharynx" },
+    { value: 'Thyroid', label: "Thyroid" },
+    { value: 'Uterine', label: "Corpus and Uterus, NOS" },
+    { value: 'Liver', label: "Liver and Intrahepatic Bile Duct" },
+    { value: 'Stomach', label: "Stomach" },
     { value: 'Myeloma', label: "Myeloma" },
-    { value: 'Brain', label: "Brain Cancer" },
-    { value: 'Larynx', label: "Larynx Cancer" },
-    { value: 'Ovary', label: "Ovarian Cancer" },
-    { value: 'Esoph', label: "Esophagian Cancer" },
-    { value: 'Cervix', label: "Cervix Uteri" },
+    { value: 'Brain', label: "Brain and Other Nervous System" },
+    { value: 'Larynx', label: "Larynx" },
+    { value: 'Ovary', label: "Ovary" },
+    { value: 'Esoph', label: "Esophagus" },
+    { value: 'Cervix', label: "Cervix" },
     { value: 'HL', label: "Hodgkin Lymphoma" },
     { value: 'Testis', label: "Testis" },
 ];
@@ -78,20 +103,14 @@ var SEARCHOPTIONS_SEX = [  // filter values for "sex" field
     { value: 'Male', label: "Male" },
     { value: 'Female', label: "Female" },
 ];
-var SEARCHOPTIONS_TIME = [  // filter values for "years" field
-    { value: '05yrs', label: "5-Year: 2015-2019" },
-    { value: '10yrs', label: "10-Year: 2010-2019" },
-];
+
 var SEARCHOPTIONS_RACE = [  // field prefix for AAIR, LCI, UCI fields within the incidence row
     { value: '', label: "All Ethnicities" },
     { value: 'W', label: "Non-Hispanic White" },
     { value: 'B', label: "Non-Hispanic Black" },
     { value: 'H', label: "Hispanic" },
 ];
-var SEARCHOPTIONS_TYPE = [
-    { value: 'Zone', label: "Zone" },
-    { value: 'County', label: "County" },
-]
+
 
 // if any of the cancer sites should apply to only one sex, you may define that here
 // the left-hand side (key) here is a cancer site value from SEARCHOPTIONS_CANCERSITE
@@ -106,7 +125,6 @@ var CANCER_SEXES = {
     'Testis': 'Male',
 };
 
-// the demographics and incidence readouts will show stats for the CTA Zone, as well as Statewide and Nationwide stats for comparison
 // if your data will not have Nationwide stats, you may set either/both of these to false to turn that off
 var NATIONWIDE_DEMOGRAPHICS = true;
 var NATIONWIDE_INCIDENCE = true;
@@ -143,8 +161,7 @@ var DEMOGRAPHIC_TABLES = [
     {
         title: "Income",
         rows: [
-            // { field: 'PctBelowPov', label: "% Below Poverty", format: 'percent', tooltip_id: 'PctBelowPov' }, // cht comment out because not in data causes error
-            { field: 'Pct100Pov', label: "% Below Poverty", format: 'percent', tooltip_id: 'PctBelowPov' }, // field changed from PctBelowPov to Pct100Pov
+            { field: 'Pct100Pov', label: "% Below Poverty", format: 'percent', tooltip_id: 'PctBelowPov' }, 
             { field: 'PctNoHealthIns', label: "% Without Health Insurance", format: 'percent', tooltip_id: 'PctNoHealthIns' },
         ],
     },
@@ -158,15 +175,9 @@ var DEMOGRAPHIC_TABLES = [
     {
         title: "Disability Status",
         rows: [
-            { field: 'PctDisabled', label: "% With a Disability", format: 'percent', tooltip_id: 'PctDisabled' }, // cht comment out because not in data causes error
+            { field: 'PctDisabled', label: "% With a Disability", format: 'percent', tooltip_id: 'PctDisabled' }, 
         ],
-    },
-    // {
-    //     title: "Nativity in US",
-    //     rows: [
-    //         { field: 'Pct_forborn', label: "% Foreign Born", format: 'percent', tooltip_id: 'Pct_forborn' },
-    //     ],
-    // },
+    }
 ];
 
 // the Leaflet styles for those choropleth options defined in CHOROPLETH_OPTIONS below
@@ -176,9 +187,6 @@ var DEMOGRAPHIC_TABLES = [
 // see performSearchMap() which calculates scoring and uses these color ramps, to implement the choropleth behavior
 var CHOROPLETH_STYLE_NODATA = { fillOpacity: 0.25, fillColor: '#cccccc', color: 'black', opacity: 0.2, weight: 1 };
 var CHOROPLETH_STYLE_NODATA_CLEAR = { fillOpacity: 0, fillColor: '#cccccc', color: 'black', opacity: 0, weight: 0 };
-
-
-// var CHOROPLETH_BORDER_DEFAULT = { color: '#b3b3b3', opacity: 1, weight: 1, fill: false };
 var CHOROPLETH_BORDER_DEFAULT = { color: 'black', opacity: 1, weight: 1, fill: false };
 var CHOROPLETH_BORDER_SELECTED = { color: '#293885', opacity: 1, weight: 5, fill: false };
 var CHOROPLETH_BORDER_NONE = { color: null, opacity: 100, weight: 0, fill: false };
@@ -277,14 +285,6 @@ var MAP_LAYERS = [
     // },
 ];
 
-
-//
-// STORAGE
-// these are declarations, and not onstants that you should need to modify
-//
-
-// storage for the parsed TopoJSON document, the parsed CSV rows, etc.
-// these are mutated during the init functions to become constants
 var CTATOPOJSONDATA, COUNTYTOPOJSONDATA;
 var DATA_CANCER, DATA_DEMOGS, DATA_CTACITY, DATA_CTACOUNTY;
 
@@ -292,31 +292,7 @@ var DATA_CANCER, DATA_DEMOGS, DATA_CTACITY, DATA_CTACOUNTY;
 // saves big on API keys, e.g. we don't need to hit Bing if someone changes the cancer site filter
 var GEOCODE_CACHE = {};
 
-
-//
-// INIT
-//
-var main = {}
-// main.stateName = "Delaware"
-// main.numOfCancerSites = "25"
-// main.numOfZones = "14"
-// main.minZonePop = "50,000"
-// main.maxZonePop = "150,000"
-// main.minTractsPerZone = "1,000"
-// main.maxTractsPerZone = "100,000"
-// main.raceList = [ "non-Hispanic White", "non-Hispanic Black", "non-Hispanic Asian/Pacific Islander", "non-Hispanic American Indian/Alaska Native", "Hispanic"]
-// main.reportingMinCases = "1000"
-// main.registry = "test"
-// main.registryLink = "https://www.google.com"
-// main.fundingSource = "This is supported through funding"
-// main.citationInfo = "This is where you put your citation info"
-// main.nationalCancerDataSource = "this is your national cancer data source info"
-// main.aboutBlurb = "This is your about blurb"
-main.startingLocation = "2 The Circle, Georgetown, DE 19947" // Replace with your desired default location
-main.ctaid = 10 // starting state for site to start up
-
 $(document).ready(function () {
-    // promises, a much nicer way to fetch, fetch, fetch
     const waitforparsing = [
         new Promise(function(resolve) {
             $.get(DATA_URL_CTAGEOM, (data) => { resolve(data); }, 'json');
@@ -324,75 +300,35 @@ $(document).ready(function () {
         new Promise(function(resolve) {
             $.get(DATA_URL_COUNTYGEOM, (data) => { resolve(data); }, 'json');
         }),
-        new Promise(function(resolve) {
-            Papa.parse(DATA_URL_DEMOGS, {
-                download: true,
-                header: true,
-                skipEmptyLines: 'greedy',
-                dynamicTyping: true,
-                complete: function (csvdata) {
-                    resolve(csvdata.data);
-                },
-            });
-        }),
-        new Promise(function(resolve) {
-            Papa.parse(DATA_URL_CANCER, {
-                download: true,
-                header: true,
-                skipEmptyLines: 'greedy',
-                dynamicTyping: true,
-                complete: function (csvdata) {
-                    resolve(csvdata.data);
-                },
-            });
-        }),
-        new Promise(function(resolve) {
-            Papa.parse(DATA_URL_CTACOUNTY, {
-                download: true,
-                header: true,
-                skipEmptyLines: 'greedy',
-                dynamicTyping: true,
-                complete: function (csvdata) {
-                    resolve(csvdata.data);
-                },
-            });
-        }),
-        new Promise(function(resolve) {
-            Papa.parse(DATA_URL_CTACITY, {
-                download: true,
-                header: true,
-                skipEmptyLines: 'greedy',
-                dynamicTyping: true,
-                complete: function (csvdata) {
-                    resolve(csvdata.data);
-                },
-            });
-        }),
+        Papa.parsePromise(DATA_URL_DEMOGS),
+        Papa.parsePromise(DATA_URL_CANCER),
+        Papa.parsePromise(DATA_URL_CTACOUNTY),
+        Papa.parsePromise(DATA_URL_CTACITY),
     ];
 
-    Promise.all(waitforparsing).then(function (datasets) {
-        // save these to the globals that we'll read/filter/display
-        // then send them to postprocessing for data fixes
-        CTATOPOJSONDATA = datasets[0];
-        COUNTYTOPOJSONDATA = datasets[1];
-        DATA_DEMOGS = datasets[2];
-        DATA_CANCER = datasets[3];
-        DATA_CTACOUNTY = datasets[4];
-        DATA_CTACITY = datasets[5];
-        initRenameState(main.stateName);
-        initNumberOfCancerSites(main.numOfCancerSites);
-        initNumberOfZones(main.numOfZones);
-        initMinZonePop(main.minZonePop);
-        initMaxZonePop(main.maxZonePop);
-        initMinTractsPerZone(main.minTractsPerZone);
-        initMaxTractsPerZone(main.maxTractsPerZone);
-        initRaceList(main.raceList);
-        initReportingMinCases(main.reportingMinCases);
-        initStateRegistry(main.registry, main.registryLink);
-        initFundingSource(main.fundingSource);
-        initCitationInfo(main.citationInfo);
-        initNationalCancerDataSourceInfo(main.nationalCancerDataSource);
-        initAboutBlurb(main.aboutBlurb);
+    Promise.all(waitforparsing).then(function (data) {
+        CTATOPOJSONDATA = data[0];
+        COUNTYTOPOJSONDATA = data[1];
+        DATA_DEMOGS = data[2];
+        DATA_CANCER = data[3];
+        DATA_CTACOUNTY = data[4];
+        DATA_CTACITY = data[5];
+        initRenameState(SITE_CONSTANTS.stateName);
+        initNumberOfCancerSites(SITE_CONSTANTS.numOfCancerSites);
+        initNumberOfZones(SITE_CONSTANTS.numOfZones);
+        initMinZonePop(SITE_CONSTANTS.minZonePop);
+        initMaxZonePop(SITE_CONSTANTS.maxZonePop);
+        initMinTractsPerZone(SITE_CONSTANTS.minTractsPerZone);
+        initMaxTractsPerZone(SITE_CONSTANTS.maxTractsPerZone);
+        initRaceList(SITE_CONSTANTS.raceList);
+        initReportingMinCases(SITE_CONSTANTS.reportingMinCases);
+        initStateRegistry(SITE_CONSTANTS.registry, SITE_CONSTANTS.registryLink);
+        initFundingSource(SITE_CONSTANTS.fundingSource);
+        initCitationInfo(SITE_CONSTANTS.citationInfo);
+        initNationalCancerDataSourceInfo(SITE_CONSTANTS.nationalCancerDataSource);
+        initAboutBlurb(SITE_CONSTANTS.aboutBlurb);
+        initIncidenceDataDate(SITE_CONSTANTS.incidenceDataDate);
+        initSociodemographicDataDateRange(SITE_CONSTANTS.sociodemographicDataDateRange);
         initValidateDemographicDataset();
         initValidateIncidenceDataset();
         initFixCountyOverlay();
@@ -400,7 +336,7 @@ $(document).ready(function () {
         // initFixPlaceOverlay();
         initDemographicTables();
         initMapAndPolygonData();
-        initDataFilters(main.startingLocation);
+        initDataFilters(SITE_CONSTANTS.startingLocation);
         initTooltips();
         initPrintPage();
         initDownloadButtons();
@@ -410,8 +346,20 @@ $(document).ready(function () {
         initLoadInitialState();
         performSearch();
         initUrlParamUpdater();
-    });
+    });   
 });
+
+Papa.parsePromise = function (url) {
+    return new Promise(resolve => {
+        Papa.parse(url, {
+            download: true,
+            header: true,
+            skipEmptyLines: 'greedy',
+            dynamicTyping: true,
+            complete: csvdata => resolve(csvdata.data),
+        });
+    });
+};
 
 window.onload = function () {
     const select = document.querySelector(".leaflet-choroplethlegend-select");
@@ -443,201 +391,105 @@ function initUrlParamUpdater () {
 }
 
 function initRenameState(name) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.stateName');
-
-    // Iterate through each element
-    if (name){
-   
-    elements.forEach(element => {
-            element.innerText = name;
-    });
+    if (name){ elements.forEach(element => { element.innerText = name })
     }
 }
 
 function initNumberOfCancerSites(num) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.numOfCancerSites');
-
-    // Iterate through each element
-    if (num){
-    elements.forEach(element => {
-            element.innerText = num;
-    });
-    }
+    if (num){ elements.forEach(element => { element.innerText = num })}
 }
 
 function initNumberOfZones(num) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.numZones');
-
-    // Iterate through each element
-    if (num){
-    elements.forEach(element => {
-            element.innerText = num;
-    });
-}
+    if (num){ elements.forEach(element => { element.innerText = num})}
 }
 
 function initMinZonePop(num) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.minZonePop');
-
-    // Iterate through each element
-    if (num){
-    elements.forEach(element => {
-            element.innerText = num;
-    });
-}
+    if (num){ elements.forEach(element => { element.innerText = num })}
 }
 
 function initMaxZonePop(num) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.maxZonePop');
-
-    // Iterate through each element
-    if (num){
-    elements.forEach(element => {
-            element.innerText = num;
-    });
-}
+    if (num){ elements.forEach(element => { element.innerText = num })}
 }
 
 function initMinTractsPerZone(num) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.minTractsPerZone');
-
-    // Iterate through each element
-    if (num){
-    elements.forEach(element => {
-            element.innerText = num;
-    });
-}
+    if (num){ elements.forEach(element => { element.innerText = num })}
 }
 
 function initMaxTractsPerZone(num) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.maxTractsPerZone');
-
-    // Iterate through each element
-    if (num){
-    elements.forEach(element => {
-            element.innerText = num;
-    });
-}
+    if (num){ elements.forEach(element => { element.innerText = num })}
 }
 
 function initRaceList(list) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.confirmRaceList');
-
-    // Iterate through each element
-    if (list){
-    elements.forEach(element => {
-            element.innerText = list.slice(0, -1).join(', ') + ', and ' + list[list.length - 1];
-    });
-}
+    if (list){ elements.forEach(element => { element.innerText = list.slice(0, -1).join(', ') + ', and ' + list[list.length - 1] })}
 }
 
 function initReportingMinCases(num) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.reportingMinCases');
-
-    // Iterate through each element
-    if (num){
-    elements.forEach(element => {
-            element.innerText = num;
-    });
-}
+    if (num){ elements.forEach(element => { element.innerText = num })}
 }
 
 function initStateRegistry(registry, link) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.stateRegistry');
-
-    // Iterate through each element
     if (registry && link){
-    elements.forEach(element => {
+        elements.forEach(element => {
             element.innerText = registry;
             element.parentElement.href = link;
-    });
-}
+        });
+    }
 }
 
 function initFundingSource(text) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.fundingSource');
-
-    // Iterate through each element
-    if (text){
-    elements.forEach(element => {
-            element.innerText = text;
-    });
-}
+    if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
 function initCitationInfo(text) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.citationInfo');
-
-    // Iterate through each element
-    if (text){
-    elements.forEach(element => {
-            element.innerText = text;
-    });
-}
+    if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
 function initNationalCancerDataSourceInfo(text) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.nationalCancerDataSource');
-
-    // Iterate through each element
-    if (text){
-    elements.forEach(element => {
-            element.innerText = text;
-    });
-}
+    if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
 function initAboutBlurb(text) {
-    // Find all elements with class "stateName"
     const elements = document.querySelectorAll('.aboutBlurb');
-
-    // Iterate through each element
-    if (text){
-    elements.forEach(element => {
-            element.innerText = text;
-    });
+    if (text){ elements.forEach(element => { element.innerText = text })}
 }
+
+function initIncidenceDataDate(text) {
+    const elements = document.querySelectorAll('.incidenceDateDate');
+    if (text){ elements.forEach(element => { element.innerText = text })}
+}
+
+function initSociodemographicDataDateRange(text) {
+    const elements = document.querySelectorAll('.sociodemographicDataDateRange');
+    if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
 function initLoadInitialState () {
     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
     const params = new URLSearchParams(window.location.search);
 
-    // a very simple model: params are named same as their widget, and are straight-up values
     ['address', 'site', 'sex', 'race', 'time'].forEach((fieldname) => {
         const $widget = $searchwidgets.filter(`[name="${fieldname}"]`);
         const value = params.get(fieldname);
-
         if (value) {
             $widget.val(value);
         }
     });
 
-    // on page load, fill in the address box too BUT ALSO set its hasbeenchanged attribute so that performSearch() will zoom to the CTA Zone
-    // there is behavior not to re-zoom the map if a non-address field was the cause, e.g. changing sex should not re-zoom the map
-    // if (params.get('address')) {
-    //     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
-    //     const $addrbox = $searchwidgets.filter('[name="address"]');
-    //     $addrbox.data('hasbeenchanged', true);
-    // }
-
-    // map overlays and chorpopleth choice, are managed via map controls
     if (params.get('overlays')) {
         const enablethese = params.get('overlays').split(',');
-
         MAP.layerpicker.getLayerStates().forEach(function (layerinfo) {
             const turnon = enablethese.indexOf(layerinfo.id) != -1;
             MAP.layerpicker.toggleLayer(layerinfo.id, turnon);
@@ -653,8 +505,6 @@ function initLoadInitialState () {
 
 
 function initTooltips () {
-    // tooltip I icons, are I with data-tooltip attribute, correcponding to #tooltip_contents DIVs
-
     $('i[data-tooltip]').each(function () {
         const $trigger = $(this);
         const tooltipid = $(this).attr('data-tooltip');
@@ -682,16 +532,10 @@ function initTooltips () {
 
 
 function initValidateIncidenceDataset () {
-    // check the fields and domain values in the DATA_CANCER versus the settings in SEARCHOPTIONS_XXX et al.
     const errors = [];
-    console.log('DATA_CANCER[0]', DATA_CANCER[0])
-    // the basic identifying fields, make sure they exist
-    // if (! DATA_CANCER[0].GeoID) errors.push("Field not found: Zone");
     if (! DATA_CANCER[0].Sex) errors.push("Field not found: sex");
     if (! DATA_CANCER[0].Cancer) errors.push("Field not found: cancer");
     if (! DATA_CANCER[0].Years) errors.push("Field not found: years");
-
-    // the basic incidence fields then the race incidence fields, make sure they exist
     if (! DATA_CANCER[0].PopTot) errors.push("Field not found: PopTot");
     if (! DATA_CANCER[0].Cases) errors.push("Field not found: Cases");
     if (! DATA_CANCER[0].AAIR) errors.push("Field not found: AAIR");
@@ -706,7 +550,7 @@ function initValidateIncidenceDataset () {
         if (! DATA_CANCER[0][`${option.value}_UCI`]) errors.push(`Field not found: ${option.value}_UCI`);
     });
 
-    // the filter fields: make sure all of the stated domain values in fact match any rows; if not, it's surely a typo
+    // the filter fields: make sure all of the stated values in fact match any rows; if not, it's surely a typo
     // it only makes sense to check these if we did not encounter a "this field doesn't exist" error above
     if (DATA_CANCER[0].Cancer) {
         SEARCHOPTIONS_CANCERSITE.forEach(function (option) {
@@ -751,7 +595,7 @@ function initValidateIncidenceDataset () {
                     });
                     const hasstatewide = matchesthiscombo.filter(function (row) {
                         // return row.GeoID == 'Statewide';
-                        return row.GeoID == main.ctaid;
+                        return row.GeoID == SITE_CONSTANTS.ctaid;
                     });
                     if (! matchesthiscombo.length) errors.push(`No data rows would match ${timeoption.value}/${siteoption.value}/${sexoption.value}`);
                     else if (! hasstatewide.length) errors.push(`No Statewide data rows for ${timeoption.value}/${siteoption.value}/${sexoption.value}`);
@@ -800,7 +644,7 @@ function initValidateDemographicDataset () {
     // there should be as many Statewide demographics rows as there are options in SEARCHOPTIONS_TIME; that is, one per time period
     // same goes for Nationwide: 1 per time period
     if (DATA_DEMOGS[0].GeoID) {
-        const hasstatewide = DATA_DEMOGS.filter(function (row) { return row.GeoID == main.ctaid; });
+        const hasstatewide = DATA_DEMOGS.filter(function (row) { return row.GeoID == SITE_CONSTANTS.ctaid; });
         if (hasstatewide.length != SEARCHOPTIONS_TIME.length) errors.push(`Found ${hasstatewide.length} demographic rows for Statewide`);
 
         if (NATIONWIDE_DEMOGRAPHICS) {
@@ -856,36 +700,35 @@ function initFixZoneOverlay () {
 
 
 function initPrintPage () {
-    // with a map it's never simple to change sizes, and with them in table cells side-by-side it's even weirder
-    // entering print mode, we want the left-side content hidden (it is, via nopprint) then to expand the map's cell to full-width, then trigger Leaflet resize
-    // leaving print mode, need to undo all of that
-    // also, have the Print button change text, so folks don't get impatient waiting for that delay as we redraw the map
-    // also, the chart is now on the edge so gets clipped, so try to resize it and not do that
-
     const $printbutton = $('#printpagebutton');
     const $mapdomnode = $('#map').parent('div').get(0);
     const originalclasslist = $mapdomnode.className;
-
     const $incidencebarchart = $('#incidence-barchart');
+    let hiddenMarkers = [];
 
-    $printbutton.data('ready-html', $printbutton.html() );  // fetch whatever the HTML is when the page loads, so we don't have to repeat ourselves here
+    $printbutton.data('ready-html', $printbutton.html() );
     $printbutton.data('busy-html', '<i class="fa fa-clock"></i> Printing');
 
     window.addEventListener('beforeprint', function () {
         $mapdomnode.className = 'col-12';
         MAP.invalidateSize();
         $printbutton.html( $printbutton.data('busy-html') );
-        $incidencebarchart.css('width', '100%');
-        $incidencebarchart.addClass('printing');
-        window.dispatchEvent(new Event('resize'));
+        hiddenMarkers = [];
+        MAP.eachLayer(function (layer) {
+            if (layer instanceof L.Marker) {
+                hiddenMarkers.push(layer);
+                MAP.removeLayer(layer);
+            }
+        });
     });
 
     window.addEventListener('afterprint', function () {
         $incidencebarchart.removeClass('printing');
-
         $mapdomnode.className = originalclasslist;
         MAP.invalidateSize();
         $printbutton.html( $printbutton.data('ready-html') );
+        hiddenMarkers.forEach(marker => MAP.addLayer(marker));
+        hiddenMarkers = [];
     });
 }
 
@@ -1005,10 +848,10 @@ function initMapAndPolygonData () {
     // the map basics
     // a scale bar
     MAP = L.map('map', {
-        minZoom: MIN_ZOOM,
-        maxZoom: MAX_ZOOM,
+        minZoom: SITE_CONSTANTS.MIN_ZOOM,
+        maxZoom: SITE_CONSTANTS.MAX_ZOOM,
     })
-    .fitBounds(MAP_BBOX);
+    .fitBounds(SITE_CONSTANTS.MAP_BBOX);
 
     L.control.scale().addTo(MAP);
 
@@ -1139,7 +982,7 @@ function initDataFilters (location) {
         $(`<option value="${option.value}">${option.label}</option>`).appendTo($searchwidgets_type);
     });
 
-    if (getOptionCount('time') < 2) {  // some datasets have only 1 option, sop  showing this is silly
+    if (getOptionCount('time') < 2) {  // since some datasets have only 1 option
         $searchwidgets_time.closest('div.input-group').hide();
     }
     
@@ -1329,78 +1172,49 @@ function initGoogleAnalyticsHooks () {
 //
 
 function performSearch () {
-    console.log('performseach called')
-    // clear these validation and markers; we may put them back in just a moment
     toggleAddressSearchFailure(false);
     MAP.addressmarker.setLatLng([0, 0]).removeFrom(MAP);
-
-    // was this search due to a manual address change? this affects some results handlers, e.g. zoom to selected area
     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
     const $addrbox = $searchwidgets.filter('[name="address"]');
     const causedbyaddresschange = $addrbox.data('hasbeenchanged');
     $addrbox.data('hasbeenchanged', false);
 
-    // get the search params so we can filter to the specific row
-    // if we have an address to geocode, then do that as well
-    const singleParams = compileType();
-    console.log('singleParams: ', singleParams)
     const params = compileParams();
     console.log('params: ', params)
-    // the CTA ID and CTA Name are figured here, since we need to find the CTA just to proceed to performSearchReally()
-    // may as well just capture it here and include it into the searchparams
-    // params.ctaid = '10';
-    // params.ctaname = 'Delaware';
-    params.ctaid = main.ctaid;
-    params.ctaname = main.stateName;
+    params.ctaid = SITE_CONSTANTS.ctaid;
+    params.ctaname = SITE_CONSTANTS.stateName;
     if (params.address) {
-        // address search can never be easy  :)
-        // the address may be a latlng string, or a CTA ID, or a CTA ID buried inside a longer string, ... or maybe even an address!
         const isctaid = params.address.match(/^\s*((A|B)\d\d\d\d)\s*$/);
         const conainsctaid = params.address.match(/\(((A|B)\d\d\d\d)\)/);
-        console.log('isctaid', isctaid)
-        console.log('conainsctaid', conainsctaid)
-
         if (isctaid || conainsctaid) {
-            // this isn't an address but a CTA ID; search for it, then do simialrly to what we would do for an address hit
             const ctaid = isctaid ? isctaid[1] : conainsctaid[1];
             const cta = findCTAById(ctaid);
-
             if (cta) {
-                // now do the search
-                params.ctaid = cta.feature.properties.GeoID;
-                params.ctaname = cta.feature.properties.GeoName.replace(/\_\d+$/, '');  // trim off the end
+                params.ctaid = cta.feature.properties.ZoneIDOrig;
+                params.ctaname = cta.feature.properties.ZoneName.replace(/\_\d+$/, '');
                 params.bbox = causedbyaddresschange ? cta.getBounds() : null;
-                console.log('params if cta: ', params)
                 performSearchReally(params);
             }
             else {
-                // show an address error
                 toggleAddressSearchFailure('Could not find that CTA');
             }
         }
         else {
-            // some other address (including latlng, whch Bing just returns instantly), I guess go ahead and geocode it
             geocodeAddress(params.address, function (latlng) {
-                console.log('params if geocodeAddress: ', params)
                 if (! latlng) return toggleAddressSearchFailure('Could not find that address');
-                console.log('latlng: ', latlng)
-                // find the CTA containing this point, if any
-                // if there isn't one, a popup alert is super annoying; we have a special UI thing when that happens
                 const searchlatlng = [ latlng[0], latlng[1] ];
-                const cta = findCTAContainingLatLng(searchlatlng);
-                console.log('cta: ', cta)
-                if (cta) {
-                    // now do the search
-                    // params.ctaid = cta.feature.properties.Zone;
-                    params.ctaid = cta.feature.properties.ZoneIDOrig;
-                    params.ctaname = cta.feature.properties.ZoneName.replace(/\_\d+$/, '');  // trim off the end
+                const zone = findCTAContainingLatLng(searchlatlng);
+                const county = findCountyContainingLatLng(searchlatlng)
+                if (zone) {
+                    params.ctaid = zone.feature.properties.ZoneIDOrig;
+                    params.ctaname = zone.feature.properties.ZoneName.replace(/\_\d+$/, '');
                     params.latlng = searchlatlng;
-                    params.bbox = causedbyaddresschange ? cta.getBounds() : null;
-                    params.test = "test"
+                    params.bbox = causedbyaddresschange ? zone.getBounds() : null;
+                    params.countyId = county.feature.properties.GEOID
+                    params.countyName = county.feature.properties.Name
                     performSearchReally(params);
                 }
                 else {
-                    // show an address error
                     MAP.addressmarker.setLatLng(searchlatlng).addTo(MAP);
                     toggleAddressSearchFailure('Data not available for that location');
                     performSearchReally(params);
@@ -1409,14 +1223,12 @@ function performSearch () {
         }
     }
     else {
-        // now do the search
         performSearchReally(params);
     }
 }
 
 
 function performSearchReally (searchparams) {
-    console.log('performSearchReally searchparams: ', searchparams)
     const typeNames = $('.typeName')
     if(searchparams.type == 'Zone'){
         for (let i=0; i < typeNames.length; i++){
@@ -1427,122 +1239,29 @@ function performSearchReally (searchparams) {
         for (let i=0; i < typeNames.length; i++){
             typeNames[i].innerHTML = "County"
         }
-        const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
-        console.log('countiesCode: ', countiesCode)
-        searchparams.countyCode = countiesCode[0]
     }
-    
-    // typeNames.innerHTML = "test"
-    // performSearch() was a wrapper to figure out what CTA to focus
-    // ultimately they come here for the real data filtering and display
-
-    // the incidence readout, the map, the demog chart, the bar chart, ... all display something completely different
-    // - incidence chart is the one selected CTA filtered by cancer, sex, race
-    // - demogs are the one selected CTA but have no connection to cancer type, sex, etc.
-    // - map is of all CTAs, filtered for the given cancer types and race
-    // - bar chart is of the one selected CTA but of all sexes and races
-    // so really they're all different at the most basic levels, and have completely different needs from the site data
-    // and it doesn't make sense to try our usual design pattern of filtering data then handing off to a renderer
-
-    performSearchShowFilters(searchparams);
     performSearchMap(searchparams);
-
     performSearchDemographics(searchparams);
     performSearchPlaces(searchparams);
     performSearchIncidenceReadout(searchparams);
     performSearchIncidenceBarChart(searchparams);
-    // performSearchMap(searchparams);
     // performSearchUpdateDataDownloadLinks(searchparams); // commented out until file downloads addressed
 }
 
-
-function performSearchShowFilters (searchparams) {
-    // the filter reiteration, with little Xs to clear a single filter
-    // we show all the filters all the time, e.g. even "Statewide" and "Both" sexes
-    // but of course Statewide/Both/All options doesn't make sense to have an X
-    // also, some filters need TLC to remap their values onto the text labels displayed in the selector, so again each filter is a snowflake
-    // see initDataFilters() for delegated event handler when these are clicked
-
-    const $filtersummary = $('div.data-filters-summary');
-    $filtersummary.empty();
-
-    {
-        if (searchparams.type == "Zone"){
-         
-        let text = searchparams.ctaname == main.ctaid ? searchparams.ctaname : `${searchparams.ctaname} (${searchparams.ctaid})`;
-        const $box = $('<span data-filter="address"></span>').text(text).appendTo($filtersummary);
-        if (searchparams.ctaname != main.ctaid) {
-            $box.prop('tabindex', '0').addClass('data-filter-clear').append('<div class="summary-close"><i class="fa fa-times noprint" tabindex="0" aria-label="Click to clear this filter"></i></div>');
-        }
-        } else {
-            $('<span data-filter="address" style="display: none;"></span>').appendTo($filtersummary);
-    }
-    }
-
-    {
-        const text = getLabelFor('time', searchparams.time);
-        if (getOptionCount('time') > 1) {  // some datasets have only 1 option, so reiterating it with an X to clear it, is silly
-            const $box = $('<span data-filter="time"></span>').text(text).appendTo($filtersummary);
-            // no X for this one, since time is a selection and not a filter, and a value is always present
-        }
-    }
-
-    {
-        const text = getLabelFor('site', searchparams.site);
-        const $box = $('<span data-filter="site"></span>').text(text).appendTo($filtersummary);
-        if (searchparams.site != 'AllSite') {
-            $box.prop('tabindex', '0').addClass('data-filter-clear').append('<div class="summary-close"><i class="fa fa-times noprint" tabindex="0" aria-label="Click to clear this filter"></i></div>');
-        }
-    }
-
-    {
-        const text = getLabelFor('sex', searchparams.sex);
-        const $box = $('<span data-filter="sex"></span>').text(text).appendTo($filtersummary);
-        if (searchparams.sex != 'Both') {
-            $box.prop('tabindex', '0').addClass('data-filter-clear').append('<div class="summary-close"><i class="fa fa-times noprint" tabindex="0" aria-label="Click to clear this filter"></i></div>');
-        }
-    }
-
-    {
-        const text = getLabelFor('race', searchparams.race);
-        const $box = $('<span data-filter="race"></span>').text(text).appendTo($filtersummary);
-        if (searchparams.race != "") {
-            $box.prop('tabindex', '0').addClass('data-filter-clear').append('<div class="summary-close"><i class="fa fa-times noprint" tabindex="0" aria-label="Click to clear this filter"></i></div>');
-        }
-    }
-}
-
-
 function performSearchDemographics (searchparams) {
-    console.log('searchparams: ', searchparams)
-    console.log('DATA_DEMOGS: ', DATA_DEMOGS)
-    // distill demographic data for the selected CTA
-    // ths has no connection to the cancer dataset at all
-    // see DEMOGRAPHIC_TABLES and initDemographicTables() which created these tables during setup
-    console.log('searchparams.ctaid', searchparams.ctaid)
-    console.log('searchparams.time', searchparams.time)
     let demogdata_cta = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.ctaid && row.Years == searchparams.time; })[0];
-    console.log('demogdata_cta: ', demogdata_cta)
     if (searchparams.type == 'County'){
-        const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
-        console.log('countiesCode: ', countiesCode)
-        searchparams.countyCode = countiesCode[0]
-        const demogdata_county = DATA_DEMOGS.filter(function (row) { return row.GeoID == countiesCode && row.Years == searchparams.time; })[0];
-        console.log('demogdata_county: ', demogdata_county)
+        const demogdata_county = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.countyId && row.Years == searchparams.time; })[0];
         demogdata_cta = demogdata_county
     }
-    
-    
-    const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.GeoID == main.ctaid && row.Years == searchparams.time; })[0];
+    const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.GeoID == SITE_CONSTANTS.ctaid && row.Years == searchparams.time; })[0];
     const demogdata_nation = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US' && row.Years == searchparams.time; })[0];
-    console.log('demogdata_state: ', demogdata_state)
-    console.log('demogdata_nation: ', demogdata_nation)
     const $demographics_section = $('#demographic-tables');
     const $ctastats = $demographics_section.find('[data-region="cta"]');
     const $nationstats = $demographics_section.find('[data-region="nation"]');
 
     // show/hide the CTA Zone content, depending whether a CTA Zone was selected (that is, not Statewide)
-    if (searchparams.ctaid == main.ctaid) {
+    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) {
         $ctastats.hide();
     }
     else {
@@ -1560,10 +1279,9 @@ function performSearchDemographics (searchparams) {
     // fill in the blanks: the CTA name and ID
     let ctanametext = searchparams.ctaname;
     if (searchparams.type == 'County'){
-        const counties = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.County} County`);
-        ctanametext = counties[0]
+        ctanametext = searchparams.countyName + ' County'
     }
-    const ctaidtext = searchparams.ctaid == main.ctaid ? '' : `(${demogdata_cta.GeoID})`;
+    const ctaidtext = searchparams.ctaid == SITE_CONSTANTS.ctaid ? '' : `(${demogdata_cta.GeoID})`;
     $demographics_section.find('span[data-statistics="ctaname"]').text(ctanametext);
     // $demographics_section.find('span[data-statistics="ctaid"]').text(ctaidtext);
     $demographics_section.find('span[data-statistics="ctaname"]').closest('span.subtitle').prop('aria-label', ctanametext + ' ' + ctaidtext);
@@ -1592,41 +1310,73 @@ function performSearchDemographics (searchparams) {
 
 
 function performSearchPlaces (searchparams) {
-    console.log('performSearchPlaces searchparams: ', searchparams)
-    // fetch a list of places (cities and counties) in the selected CTA, display it into its list(s)
-
-    // statewide, we don't display a list at all; bail
-    if (searchparams.ctaid == main.ctaid) return;
-
-    // find the cities and counties here from our preared data
-    console.log('DATA_CTACOUNTY: ', DATA_CTACOUNTY)
+    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) return;
     const counties = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.County} County`);
-    console.log('counties: ', counties)
-    const countiesCodes = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.CountyCode}`);
-    console.log('countiesCodes: ', countiesCodes)
-    console.log('DATA_CTACITY: ', DATA_CTACITY)
     const cities = DATA_CTACITY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.City);
-    console.log('cities: ', cities)
     counties.sort();
     cities.sort();
+    const $putafterthisone = $('div.places-area');
+    $putafterthisone.empty()
+    $("<h3 class='title'></h3>").text('Location Details').appendTo($putafterthisone);
 
-    // create the target area and position it
-    // design is that it comes in the middle of the data-filters-summary, which is kind of brittle if we change that layout, and also weird UX, but that was the decision
-    const $filtersummary = $('div.data-filters-summary');
-    const $putafterthisone = $filtersummary.find('span[data-filter="address"]');
-    const $box = $('<span data-statistic="locations"></span>').insertAfter($putafterthisone);
-
+    if (searchparams.type == 'Zone') {
+        const text = searchparams.ctaname + ' (' + searchparams.ctaid + ')'
+        const $block = $("<div ></div>").html(`<b class='subtitle'>Zone: </b>`).appendTo($putafterthisone);
+        $("<span></span>").text(text).appendTo($block);
+    }
     if (counties.length) {
         const text = counties.join(', ');
-        const $block = $('<div></div>').html(`<b>Counties: </b>`).appendTo($box);
+        const $block = $('<div></div>').html(`<b class='subtitle'>Counties: </b>`).appendTo($putafterthisone);
         $('<span></span>').text(text).appendTo($block);
     }
     if (cities.length && searchparams.type == "Zone") {
         const text = cities.join(', ');
-        const $block = $('<div></div>').html(`<b>Places: </b>`).appendTo($box);
+        const $block = $('<div></div>').html(`<b class='subtitle'>Places: </b>`).appendTo($putafterthisone);
         $('<span></span>').text(text).appendTo($block);
     }
+
+    updateFilterSummary(searchparams)
+    
 }
+
+function updateFilterSummary(searchparams) {
+    const $summaryContainer = $('#data-filters-summary');
+    $summaryContainer.find('.filters-list').remove(); // Clear previous summary
+
+    let summaryHtml = '<div class="filters-list" style="margin-top: 10px;">';
+
+    // Loop through each select/input field in .data-filters
+    $('.data-filters .input-group').each(function () {
+        let label = $(this).find('label').text().trim(); // Get label text
+        const input = $(this).find('select, input'); // Get input/select element
+        let value = input.val() ? input.val().trim() : 'Not Selected';
+
+        if (input.is('select')) {
+            value = input.find('option:selected').text().trim(); // Get selected option text
+        }
+
+        if (label.includes('Location Search') && searchparams.type == "Zone") {
+            label = "Location"
+            value = searchparams.ctaname + ' (' + searchparams.ctaid + ')';
+        }
+
+        if (label.includes('Location Search') && searchparams.type == "County") {
+            label = "Location"
+            value = searchparams.countyName + " County";
+        }
+
+        // Append each filter as its own row
+        summaryHtml += `<div style="margin-bottom: 5px;">
+                            <span style="font-weight: bold;">${label}:</span> ${value}
+                        </div>`;
+    });
+
+    summaryHtml += '</div>';
+
+    $summaryContainer.append(summaryHtml);
+}
+
+
 
 
 function performSearchIncidenceReadout (searchparams) {
@@ -1637,14 +1387,12 @@ function performSearchIncidenceReadout (searchparams) {
     // we could also end up with null values for some data, e.g. low sample sizes so they chose not to report a value
     let cancerdata_cta = DATA_CANCER.filter(row => row.GeoID == searchparams.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
     if (searchparams.type == 'County'){
-        const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
-        console.log('countiesCode: ', countiesCode)
-        const cancerdata_county = DATA_CANCER.filter(row => row.GeoID == countiesCode && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
+        const cancerdata_county = DATA_CANCER.filter(row => row.GeoID == searchparams.countyId && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
         console.log('cancerdata_county: ', cancerdata_county)
         cancerdata_cta = cancerdata_county
     }
 
-    const cancerdata_state = DATA_CANCER.filter(row => row.GeoID == main.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
+    const cancerdata_state = DATA_CANCER.filter(row => row.GeoID == SITE_CONSTANTS.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
     const cancerdata_nation = DATA_CANCER.filter(row => row.GeoID == 'US' && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
 
     let cta_lci, cta_uci, cta_aair;
@@ -1732,7 +1480,7 @@ function performSearchIncidenceReadout (searchparams) {
     }
 
     // show/hide the CTA columns (well, actually, each individual cell)
-    if (searchparams.ctaid == main.ctaid) {
+    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) {
         $('#incidence-readouts [data-region="cta"]').hide();
     }
     else {
@@ -1775,23 +1523,20 @@ function performSearchIncidenceReadout (searchparams) {
     //maxuci *= 1.2;  // but if course, this REALLY broadens the range a bit too much
 
     updateCandleChart($candlechart_cta, 'Selected Area', cta_aair, cta_lci, cta_uci, minlci, maxuci);
-    updateCandleChart($candlechart_state, main.ctaid, state_aair, state_lci, state_uci, minlci, maxuci);
+    updateCandleChart($candlechart_state, SITE_CONSTANTS.ctaid, state_aair, state_lci, state_uci, minlci, maxuci);
     updateCandleChart($candlechart_nation, 'US', nation_aair, nation_lci, nation_uci, minlci, maxuci);
 }
 
 
 function performSearchIncidenceBarChart (searchparams) {
-    // fill in text areas e.g. CTA Zone name
     const $chart_section  = $('#incidence-barchart-section');
     $chart_section.find('span[data-statistic="cancersite"]').text( getLabelFor('site', searchparams.site) );
     $chart_section.find('span[data-statistics="ctaname"]').text(searchparams.ctaname);
-    // $chart_section.find('span[data-statistics="ctaid"]').text(searchparams.ctaid ? `(${searchparams.ctaid})` : '');
     if (searchparams.type == 'County'){
-        const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
-        const county = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.County);
+        // const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
+        // const county = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.County);
 
-        $chart_section.find('span[data-statistics="ctaname"]').text(county + ' County');
-        // $chart_section.find('span[data-statistics="ctaid"]').text(countiesCode ? `(${countiesCode})` : '');
+        $chart_section.find('span[data-statistics="ctaname"]').text(searchparams.countyName + ' County');
     }
 
     // incidence chart is multiple rows: filter by CTA+cancer+time, but keep data for all sexes
@@ -1881,6 +1626,10 @@ function performSearchIncidenceBarChart (searchparams) {
             bar: {
                 dataLabels: {
                     enabled: true,
+                    style: {
+                        fontSize: '14px', // Increase data label size
+                        fontWeight: 'bold',
+                    }
                 },
             },
         },
@@ -1888,14 +1637,23 @@ function performSearchIncidenceBarChart (searchparams) {
             layout: 'horizontal',
             floating: true,
             verticalAlign: 'top',
-            y: -16,
+            y: -20,
             symbolRadius: 0,  // square swatches
+            itemStyle: {
+                fontSize: '18px', // Increase legend font size
+                fontWeight: 'bold',
+            }
         },
         title: null,
         xAxis: {
             categories: barchart_categories,
             title: {
                 text: null
+            },
+            labels: {
+                style: {
+                    fontSize: '16px', // Increase x-axis labels size
+                }
             }
         },
         yAxis: {
@@ -1903,6 +1661,11 @@ function performSearchIncidenceBarChart (searchparams) {
             title: {
                 text: null,
             },
+            labels: {
+                style: {
+                    fontSize: '13px', // Increase x-axis labels size
+                }
+            }
         },
         tooltip: false,
         credits: {
@@ -1914,11 +1677,6 @@ function performSearchIncidenceBarChart (searchparams) {
 
 
 function performSearchMap (searchparams) {
-    console.log('performSearchMap searchparams: ', searchparams)
-    //
-    // PART 1: zoom map, highlight selected area
-    //
-    // Resest Map
     MAP.ctapolygonbounds.eachLayer((layer) => {
         layer.setStyle(CHOROPLETH_BORDER_DEFAULT);
     })
@@ -1936,7 +1694,6 @@ function performSearchMap (searchparams) {
     })
 
     if (searchparams.type == 'Zone'){
-        console.log('performSearchMap ZONES! ')
 
     // if we were given a bbox, zoom to it
     if (searchparams.bbox) {
@@ -1945,11 +1702,8 @@ function performSearchMap (searchparams) {
 
     // highlight the selected CTA
     MAP.ctapolygonbounds.eachLayer((layer) => {
-        console.log('layer.feature.properties', layer.feature.properties)
-        // const ctaid = layer.feature.properties.Zone;
         const ctaid = layer.feature.properties.ZoneIDOrig;
         const istheone = ctaid == searchparams.ctaid;
-
         if (istheone) {
             layer.setStyle(CHOROPLETH_BORDER_SELECTED);
             layer.bringToFront();
@@ -1987,7 +1741,7 @@ function performSearchMap (searchparams) {
     if (['Cases', 'AAIR'].indexOf(rankthemby) != -1) {  // the special case for AAIR/Cases incidence data
         DATA_CANCER
         .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != main.ctaid)
+        .filter(row => row.GeoID != SITE_CONSTANTS.ctaid)
         .filter(row => row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)
         .forEach((row) => {
             let choropleth_score;
@@ -2005,7 +1759,7 @@ function performSearchMap (searchparams) {
     else {  // demographic data
         DATA_DEMOGS
         .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != main.ctaid)  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
+        .filter(row => row.GeoID != SITE_CONSTANTS.ctaid)  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
         .forEach((row) => {
             const choropleth_score = row[rankthemby];  // the control's selected value = a CHOROPLETH_OPTIONS "field" = a literal CSV column name
             ctascores[row.GeoID] = choropleth_score;
@@ -2065,7 +1819,6 @@ function performSearchMap (searchparams) {
         layer.setStyle(style);
     });
     } else if (searchparams.type == "County") {
-        console.log('performSearchMap COUNTIES! ')
         
     // if we were given a bbox, zoom to it
     if (searchparams.bbox) {
@@ -2079,16 +1832,10 @@ function performSearchMap (searchparams) {
 
     // highlight the selected CTA
     MAP.countypolygonbounds.eachLayer((layer) => {
-        console.log('layer.feature.properties', layer.feature.properties)
-        console.log('searchparams', searchparams)
         // const ctaid = layer.feature.properties.Zone;
         // const ctaid = layer.feature.properties.ZoneIDOrig;
         const ctaid = layer.feature.properties.GEOID;
-        const istheone = ctaid == searchparams.countyCode +'';
-        console.log('ctaid 234: ', ctaid)
-        console.log('searchparams.countyCode 234: ', searchparams.countyCode)
-        console.log('istheone 234: ', istheone)
-
+        const istheone = ctaid == searchparams.countyId;
         if (istheone) {
             layer.setStyle(CHOROPLETH_BORDER_SELECTED);
             layer.bringToFront();
@@ -2126,7 +1873,7 @@ function performSearchMap (searchparams) {
     if (['Cases', 'AAIR'].indexOf(rankthemby) != -1) {  // the special case for AAIR/Cases incidence data
         DATA_CANCER
         .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != main.ctaid)
+        .filter(row => row.GeoID != SITE_CONSTANTS.ctaid)
         .filter(row => row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)
         .forEach((row) => {
             let choropleth_score;
@@ -2144,7 +1891,7 @@ function performSearchMap (searchparams) {
     else {  // demographic data
         DATA_DEMOGS
         .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != main.ctaid)  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
+        .filter(row => row.GeoID != SITE_CONSTANTS.ctaid)  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
         .forEach((row) => {
             const choropleth_score = row[rankthemby];  // the control's selected value = a CHOROPLETH_OPTIONS "field" = a literal CSV column name
             ctascores[row.GeoID] = choropleth_score;
@@ -2215,7 +1962,7 @@ function performSearchMap (searchparams) {
 function performSearchUpdateDataDownloadLinks (searchparams) {
     const $downloadlink = $('#downloadoptions a[data-export="zonedata"]');
 
-    if (searchparams.ctaid == main.ctaid) {
+    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) {
         $downloadlink.hide().prop('href', 'javascript:void(0);');
     }
     else {
@@ -2284,15 +2031,6 @@ function getOptionCount (fieldname) {
     return $options.length;
 }
 
-function compileType () {
-    console.log('compileType')
-    const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
-    console.log('compileType $searchwidgets: ', $searchwidgets)
-    const type = $searchwidgets.filter('[name="type"]').val()
-    console.log('compileType type: ', type)
-    return type;
-}
-
 
 function compileParams (addextras=false) {
     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
@@ -2331,13 +2069,15 @@ function updateUrlParams () {
 
 
 function findCTAContainingLatLng (inputlatlng) {
-    // accept a [lat,lng] or a L.LatLng, and standardize on one... let's go with L.LatLng object
     const latlng = inputlatlng.hasOwnProperty('length') ? L.latLng(inputlatlng[0], inputlatlng[1]) : inputlatlng;
-    console.log('latlng in find: ', latlng)
-    // yay Leaflet-PIP
     const containingcta = leafletPip.pointInLayer(latlng, MAP.ctapolygonfills);
-
     return containingcta[0];
+}
+
+function findCountyContainingLatLng (inputlatlng) {
+    const latlng = inputlatlng.hasOwnProperty('length') ? L.latLng(inputlatlng[0], inputlatlng[1]) : inputlatlng;
+    const containingCounty = leafletPip.pointInLayer(latlng, MAP.countypolygonfills);
+    return containingCounty[0];
 }
 
 

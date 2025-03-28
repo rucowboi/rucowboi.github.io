@@ -14,15 +14,33 @@
 
         tr:nth-child(odd) {
             td, th[scope] {
+                color: #000000;
                 background-color: #feecd4;
+            }
+        }
+        tr {
+            td, th[scope] {
+                color: #000000;
             }
         }
 
         td:nth-child(2), td:nth-child(3) {  /* CTA, Statewide, not Nation */
             border-right: 5px solid white;
         }
+        th[data-region="cta"] {
+            font-weight: bold;
+        }
+        th[data-region="cta"], td[data-region="cta"] {
+            color: #000000;
+        }
+        th[data-region="state"] {
+            font-weight: bold;
+        }
         th[data-region="state"], td[data-region="state"] {
             color: #000000;
+        }
+        th[data-region="nation"] {
+            font-weight: bold;
         }
         th[data-region="nation"], td[data-region="nation"] {
             color: #000000;
