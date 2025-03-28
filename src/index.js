@@ -15,6 +15,8 @@ require('./printing-leaflet-easyPrint.js');
 
 
 const SITE_CONSTANTS = {
+    startingLocation: "2 The Circle, Georgetown, DE 19947", // Replace with your desired default location
+    ctaid: 10, // Starting state for site to start up
     // stateName: "Delaware",
     // numOfCancerSites: "25",
     // numOfZones: "14",
@@ -36,14 +38,14 @@ const SITE_CONSTANTS = {
     // citationInfo: "This is where you put your citation info",
     // nationalCancerDataSource: "this is your national cancer data source info",
     // aboutBlurb: "This is your about blurb",
-    startingLocation: "2 The Circle, Georgetown, DE 19947", // Replace with your desired default location
-    ctaid: 10 // Starting state for site to start up
+    // incidenceDataDate: "2016",
+    // sociodemographicDataDateRange: "2012-2016",
+    MAP_BBOX: [[38.5268, -74.2317], [39.8108, -75.5277]],  // [[s, w], [n, e]] Starting Location
+    MIN_ZOOM: 6,
+    MAX_ZOOM: 15,
 };
 
 var MAP;
-var MAP_BBOX = [[38.5268, -74.2317], [39.8108, -75.5277]];  // [[s, w], [n, e]] Starting Location
-var MIN_ZOOM = 6;
-var MAX_ZOOM = 15;
 
 // for the geocoder: our Bing API key
 var BING_API_KEY = 'AqmUJHuT9QJE5A0m1Kf48g2vxBND3cJ0_jJI3jJQIv9oE11VIG9WZbhq2owRSUZK';
@@ -325,6 +327,8 @@ $(document).ready(function () {
         initCitationInfo(SITE_CONSTANTS.citationInfo);
         initNationalCancerDataSourceInfo(SITE_CONSTANTS.nationalCancerDataSource);
         initAboutBlurb(SITE_CONSTANTS.aboutBlurb);
+        initIncidenceDataDate(SITE_CONSTANTS.incidenceDataDate);
+        initSociodemographicDataDateRange(SITE_CONSTANTS.sociodemographicDataDateRange);
         initValidateDemographicDataset();
         initValidateIncidenceDataset();
         initFixCountyOverlay();
@@ -459,6 +463,16 @@ function initNationalCancerDataSourceInfo(text) {
 
 function initAboutBlurb(text) {
     const elements = document.querySelectorAll('.aboutBlurb');
+    if (text){ elements.forEach(element => { element.innerText = text })}
+}
+
+function initIncidenceDataDate(text) {
+    const elements = document.querySelectorAll('.incidenceDateDate');
+    if (text){ elements.forEach(element => { element.innerText = text })}
+}
+
+function initSociodemographicDataDateRange(text) {
+    const elements = document.querySelectorAll('.sociodemographicDataDateRange');
     if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
@@ -834,10 +848,10 @@ function initMapAndPolygonData () {
     // the map basics
     // a scale bar
     MAP = L.map('map', {
-        minZoom: MIN_ZOOM,
-        maxZoom: MAX_ZOOM,
+        minZoom: SITE_CONSTANTS.MIN_ZOOM,
+        maxZoom: SITE_CONSTANTS.MAX_ZOOM,
     })
-    .fitBounds(MAP_BBOX);
+    .fitBounds(SITE_CONSTANTS.MAP_BBOX);
 
     L.control.scale().addTo(MAP);
 
