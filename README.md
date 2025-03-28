@@ -68,12 +68,12 @@ You will need to provide a number of data tables and geographic boundary files t
 
 ### 2. Replace files
 - the shapefile format is WGS84 (plain latitude-longitude / unprojected) SRS, which is a collection of files of different formats that work together
-1. Replace /datascript/inputs/CTAZones.shp and associated CTAZones files with your zone boundaries files
-2. Replace /datascript/inputs/cities.shp and associated cities files with your cities boundaries files
-3. Replace /datascript/inputs/counties.shp and associated counties files with your county boundaries files
+1. Replace **/datascript/inputs/CTAZones.shp** and associated **CTAZones files** with your **zone boundaries files**
+2. Replace **/datascript/inputs/cities.shp** and associated **cities files** with your **cities boundaries files**
+3. Replace **/datascript/inputs/counties.shp** and associated **counties files** with your **county boundaries files**
  
 ### 3. Run Python Scripts
-- run the data-preparation scripts under `datascripts/`
+- run the data-preparation scripts under the `datascripts/` folder
 1. 
    ```bash
    python make_ctageofile.py
@@ -95,11 +95,11 @@ You will need to provide a number of data tables and geographic boundary files t
    - `static/data/cities_by_cta.csv`
 
 ### 4. Update JavaScript Files
-1. Replace main.ctaid with your state's FIPS code number. (`src/index.js` line 316)
-2. Uncomment and replace the 13 `main.[name]` values (`src/index.js` lines 300-314). These mostly replace text on the page that say `[REPLACE ...]`.
+1. Replace SITE_CONSTANTS.ctaid with your state's FIPS code number. (`src/index.js` line 40)
+2. Uncomment and replace the `SITE_CONSTANTS` values (`src/index.js` line 17). These mostly replace text on the page that say `[REPLACE ...]`.
 3. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` in the `src/index.js` file to position the map.
-4. Replace main.startingLocation with Location Search starting location. (src/index.js line 315)
-   - location format can be an address("2 The Circle, Georgetown, DE 19947") or coordinates ("38.64707,-75.59814")
+4. Replace `startingLocation` with Location Search starting location. (`src/index.js` line 39)
+   - location format can be an address("2 The Circle, Georgetown, DE 19947") or coordinates ("38.64707,-75.59814") or even a ctaid ("A9007")
 
 ## 5. Testing and Building
 1. Test the updated code by running:
