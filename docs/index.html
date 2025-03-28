@@ -68,8 +68,8 @@
         gtag('config', 'UA-XXXXXXXXX-1');
     </script>
 
-    <link rel="stylesheet" type="text/css" href="index.css?Fri_Mar_28_2025_16_05_30_GMT_0400__Eastern_Daylight_Time_" />
-    <script type="text/javascript" src="index.js?Fri_Mar_28_2025_16_05_30_GMT_0400__Eastern_Daylight_Time_"></script>
+    <link rel="stylesheet" type="text/css" href="index.css?Fri_Mar_28_2025_16_34_31_GMT_0400__Eastern_Daylight_Time_" />
+    <script type="text/javascript" src="index.js?Fri_Mar_28_2025_16_34_31_GMT_0400__Eastern_Daylight_Time_"></script>
 </head>
 
 <body>
@@ -81,7 +81,7 @@
                 <div style="display:block">
                     <h1 class="site-title-1" aria-label="Health Maps" tabindex="0"><span class="stateName">[REPLACE
                             STATE/REGISTRY]</span></h1>
-                    <h1 class="site-title-2" aria-hidden="true">Health Maps</h1>
+                    <h1 class="site-title-2" >Health Maps</h1>
                 </div>
             </div>
             <!-- <div id="logo-img">
@@ -89,11 +89,11 @@
             </div> -->
         </nav>
     </div>
-    <div class=" container printonly" id="logo-img-print" aria-hidden="true">
+    <div class=" container printonly" id="logo-img-print" >
         <img src="./static/ribbon_purple.png" alt="Health Maps Logo" />
         <div style="display:block">
             <h1 class="site-title-1" aria-label="Health Maps" tabindex="0"><span class="stateName">[REPLACE STATE/REGISTRY]</span></h1>
-            <h1 class="site-title-2" aria-hidden="true">Health Maps</h1>
+            <h1 class="site-title-2" >Health Maps</h1>
         </div>
     </div>
 
@@ -119,7 +119,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h2 class="nomargin" tabindex="0">Cancer Incidence
-                    <i class="fa fa-info-circle" aria-hidden="true" data-tooltip="cases"></i>
+                    <i class="fa fa-info-circle"  data-tooltip="cases"></i>
                 </h2>
             </div>
             <div class="col-md-8 right">
@@ -152,7 +152,7 @@
                     </div>
                     <div class="input-group">
                         <label for="data-filters-address">Location Search
-                            <i class="fa fa-info-circle" aria-hidden="true" data-tooltip="location"></i>
+                            <i class="fa fa-info-circle"  data-tooltip="location"></i>
                             <span class="warnmessage d-none"
                                 style="padding: 1px 5px; display: block; margin: 0 0 5px 0;"></span>
                         </label>
@@ -174,13 +174,13 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="data-filters-sex">Sex <i class="fa fa-info-circle" aria-hidden="true"
+                        <label for="data-filters-sex">Sex <i class="fa fa-info-circle" 
                                 data-tooltip="sex"></i></label>
                         <select name="sex" id="data-filters-sex" aria-label="Select the sex to report">
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="data-filters-race">Race/Ethnicity <i class="fa fa-info-circle" aria-hidden="true"
+                        <label for="data-filters-race">Race/Ethnicity <i class="fa fa-info-circle" 
                                 data-tooltip="race"></i></label>
                         <select name="race" id="data-filters-race" aria-label="Select the race/ethnicity to report">
                         </select>
@@ -190,7 +190,7 @@
 
             </div>
             <div class="col-md-7 col-lg-8">
-                <div class="map" id="map" aria-hidden="true"></div>
+                <div class="map" id="map" ></div>
             </div>
         </div>
     </div>
@@ -209,10 +209,10 @@
             <thead>
                 <tr>
                     <th class="left"><span class="title" tabindex="0">Cancer Statistics <i class="fa fa-info-circle"
-                                aria-hidden="true" data-tooltip="source"></i></span></th>
+                                 data-tooltip="source"></i></span></th>
                     <th scope="col">Cases</th>
                     <th scope="col" colspan="2">Age Adjusted Incidence Rate (95% LCI, 95% UCI) <i
-                            class="fa fa-info-circle" aria-hidden="true" data-tooltip="aaircitable"></i></th>
+                            class="fa fa-info-circle"  data-tooltip="aaircitable"></i></th>
                 </tr>
             </thead>
             <tbody>
@@ -687,7 +687,7 @@
     -->
     <div id="tooltip_contents" tabindex="-1">
 
-        <div aria-hidden="true" data-tooltip="source">
+        <div  data-tooltip="source">
             Zone and statewide incidence data come from <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer
             Registry. National Program of Cancer Registries and Surveillance, Epidemiology and End Results Program
             SEER*Stat Database: NPCR and SEER Incidence - U.S. Cancer Statistics Public Use Research Database, 2021
@@ -695,27 +695,27 @@
             and Prevention and National Cancer Institute. Released June 2022. Accessed at <a target="_blank"
                 href="https://www.cdc.gov/cancer/uscs/public-use">www.cdc.gov/cancer/uscs/public-use</a>.
         </div>
-        <div aria-hidden="true" data-tooltip="race">
+        <div  data-tooltip="race">
             Race/ethnicity is categorized as: <span class="confirmRaceList">[CONFIRM RACE LIST]</span>. "All races"
             includes all of the above, as well as other and unknown race/ethnicity and American Indian/Alaska Native.
             The latter two groups are not reported separately due to small numbers for many cancer sites.
         </div>
-        <div aria-hidden="true" data-tooltip="location">
+        <div  data-tooltip="location">
             To be able to accurately search for an address, please include components of an address including street
             name and number and city, at a minimum. For example, “258 Chapman Rd, Newark".
         </div>
-        <div aria-hidden="true" data-tooltip="sex">
+        <div  data-tooltip="sex">
             <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Maps defines this field as the sex or gender
             of the cancer patient, and codes available are male, female, intersex, transsexual, and transgender (natal
             male, natal female, or not specified). However, categories beyond male and female are not consistently coded
             by medical reporting facilities, and population estimates for gender categories beyond male and female are
             not available. Thus, cancer incidence data are reported for only male and female sex at this time.
         </div>
-        <div aria-hidden="true" data-tooltip="cases">
+        <div  data-tooltip="cases">
             To ensure confidentiality and stable statistical rates, cancer incidence rates are not reported if based on
             fewer than <span class="reportingMinCases">[REPLACE REPORTING MIN CASES]</span> cancer cases.
         </div>
-        <div aria-hidden="true" data-tooltip="aaircitable">
+        <div  data-tooltip="aaircitable">
             <b>Age-Adjusted Incidence Rate (AAIR):</b> Age-adjustment is a statistical method that allows comparisons of
             incidence rates to be made between populations with different age distributions. This is important since the
             incidence of most cancers increases with age. An age-adjusted cancer incidence (or death) rate is defined as
@@ -730,27 +730,27 @@
             confidence interval (LCI) and upper confidence interval (UCI) provide a range within which the true rate is
             thought to be with 95% confidence. Rates based on larger numbers of cases are subject to less variation.
         </div>
-        <div aria-hidden="true" data-tooltip="PctMinority">
+        <div  data-tooltip="PctMinority">
             Percent of residents whose race/ethnicity is not non-Hispanic White.<br>
             <span class="source">Source: US Census, 2010.</span>
         </div>
-        <div aria-hidden="true" data-tooltip="PctHispanic">
+        <div  data-tooltip="PctHispanic">
             Percent of residents whose race/ethnicity is Hispanic of any race.<br>
             <span class="source">Source: US Census, 2010.</span>
         </div>
-        <div aria-hidden="true" data-tooltip="PctBlackNH">
+        <div  data-tooltip="PctBlackNH">
             Percent of residents whose race/ethnicity is non-Hispanic Black.<br>
             <span class="source">Source: US Census, 2010.</span>
         </div>
-        <div aria-hidden="true" data-tooltip="PctAPI">
+        <div  data-tooltip="PctAPI">
             Percent of residents whose race/ethnicity is non-Hispanic Asian/Pacific Islander.<br>
             <span class="source">Source: US Census, 2010.</span>
         </div>
-        <div aria-hidden="true" data-tooltip="PctRural">
+        <div  data-tooltip="PctRural">
             Percent of residents who reside in blocks that are designated as rural.<br>
             <span class="source">Source: US Census, 2010.</span>
         </div>
-        <div aria-hidden="true" data-tooltip="PctNoHealthIns">
+        <div  data-tooltip="PctNoHealthIns">
             Percent of population without health insurance.<br>
             <span class="source">Sources:
                 <ul>
@@ -759,7 +759,7 @@
                 </ul>
             </span>
         </div>
-        <div aria-hidden="true" data-tooltip="PctBelowPov">
+        <div  data-tooltip="PctBelowPov">
             Percent of population below poverty level in the past 12 months.<br>
             <span class="source">Sources:
                 <ul>
@@ -769,7 +769,7 @@
             </span>
         </div>
 
-        <div aria-hidden="true" data-tooltip="PctEducBchPlus">
+        <div  data-tooltip="PctEducBchPlus">
             Percent of population with a bachelor’s degree or higher.<br>
             <span class="source">Sources:
                 <ul>
@@ -779,7 +779,7 @@
             </span>
         </div>
 
-        <div aria-hidden="true" data-tooltip="PctEducLHS">
+        <div  data-tooltip="PctEducLHS">
             Percent of population with less than a high school graduate education.<br>
             <span class="source">Sources:
                 <ul>
@@ -789,7 +789,7 @@
             </span>
         </div>
 
-        <div aria-hidden="true" data-tooltip="PctDisabled">
+        <div  data-tooltip="PctDisabled">
             Percent of population with a disability.<br>
             <span class="source">Sources:
                 <ul>
@@ -799,7 +799,7 @@
             </span>
         </div>
 
-        <div aria-hidden="true" data-tooltip="Pct_forborn">
+        <div  data-tooltip="Pct_forborn">
             Percent of population that is foreign born.<br>
             <span class="source">Sources:
                 <ul>
