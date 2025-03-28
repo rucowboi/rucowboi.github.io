@@ -101,8 +101,10 @@ You will need to provide a number of data tables and geographic boundary files t
 3. Uncomment and change the rest of the values to match your state's site. These mostly replace text on the page that say `[REPLACE ...]`.
 4. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` values to position the map.
 
+## 5. Delete DISCLAIMER
+1. Delete the red disclaimer in the `src/index.html` file (lines 111-116)
 
-## 5. Testing and Building
+## 6. Testing and Building
 1. Test the updated code by running:
    ```bash
    npm start
@@ -370,7 +372,7 @@ Since this is free-form narrative text, you may choose to rewrite or rephrase wh
 
 * *Glossary* -- Look in `src/index.html` for the `learn-glossary`.
 
-* *Tooltip i icons* -- Within `src/index.html` you may create tooltip I icons, with HTML such as this: `<i class="fa fa-info-circle" aria-hidden="true" data-tooltip="yourtermhere"></i>` The tooltip HTML for each such tooltip, is provided in `tooltip_contents` Each DIV has a `data-tooltip` attribute corresponding to the `data-tooltip` used in the `<i>` element. For the Demographics table, be sure to cross reference to the `DEMOGRAPHICS_TABLE` element in `src/index.js`.
+* *Tooltip i icons* -- Within `src/index.html` you may create tooltip I icons, with HTML such as this: `<i class="fa fa-info-circle"  data-tooltip="yourtermhere"></i>` The tooltip HTML for each such tooltip, is provided in `tooltip_contents` Each DIV has a `data-tooltip` attribute corresponding to the `data-tooltip` used in the `<i>` element. For the Demographics table, be sure to cross reference to the `DEMOGRAPHICS_TABLE` element in `src/index.js`.
 
 ### Downloadable Data Files
 

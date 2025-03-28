@@ -815,9 +815,9 @@ function initDemographicTables () {
                 <thead>
                     <tr>
                         <th class="nowrap left"><span class="subtitle" tabindex="0">${tableinfo.title}</span></th>
-                        <th class="nowrap right typeName" data-region="cta" aria-hidden="true">Zone</th>
-                        <th class="nowrap right" data-region="state" aria-hidden="true">Statewide</th>
-                        <th class="nowrap right" data-region="nation" aria-hidden="true">Nationwide</th>
+                        <th class="nowrap right typeName" data-region="cta" >Zone</th>
+                        <th class="nowrap right" data-region="state" >Statewide</th>
+                        <th class="nowrap right" data-region="nation" >Nationwide</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -827,7 +827,7 @@ function initDemographicTables () {
 
         const $tbody = $table.children('tbody');
         tableinfo.rows.forEach(function (tablerowinfo) {
-            const tooltiphtml = tablerowinfo.tooltip_id ? `<i class="fa fa-info-circle" aria-hidden="true" data-tooltip="${tablerowinfo.tooltip_id}"></i>` : '';
+            const tooltiphtml = tablerowinfo.tooltip_id ? `<i class="fa fa-info-circle"  data-tooltip="${tablerowinfo.tooltip_id}"></i>` : '';
 
             $(`
                 <tr>
