@@ -1359,18 +1359,16 @@ function performSearchPlaces (searchparams) {
 
 function updateFilterSummary(searchparams) {
     const $summaryContainer = $('#data-filters-summary');
-    $summaryContainer.find('.filters-list').remove(); // Clear previous summary
-
+    $summaryContainer.find('.filters-list').remove();
     let summaryHtml = '<div class="filters-list" style="margin-top: 10px;">';
 
-    // Loop through each select/input field in .data-filters
     $('.data-filters .input-group').each(function () {
-        let label = $(this).find('label').text().trim(); // Get label text
-        const input = $(this).find('select, input'); // Get input/select element
+        let label = $(this).find('label').text().trim();
+        const input = $(this).find('select, input');
         let value = input.val() ? input.val().trim() : 'Not Selected';
 
         if (input.is('select')) {
-            value = input.find('option:selected').text().trim(); // Get selected option text
+            value = input.find('option:selected').text().trim();
         }
 
         if (label.includes('Location Search') && searchparams.type == "Zone") {
@@ -1383,9 +1381,13 @@ function updateFilterSummary(searchparams) {
             value = searchparams.countyName + " County";
         }
 
-        // Append each filter as its own row
+        let valueStyle = 'background-color: #e6eaff;; padding: 5px;';
+        if (label === 'Location') {
+            valueStyle = 'background-color: #feecd4; padding: 5px;';
+        }
+
         summaryHtml += `<div style="margin-bottom: 15px;">
-                            <span class="subtitle" >${label}:</span> <span style="font-weight: bold;">${value}</span>
+                            <span class="subtitle" >${label}:</span> <span style="font-weight: bold; ; ${valueStyle}">${value}</span>
                         </div>`;
     });
 
