@@ -17,29 +17,29 @@ require('./printing-leaflet-easyPrint.js');
 const SITE_CONSTANTS = {
     startingLocation: "2 The Circle, Georgetown, DE 19947", // Replace with your desired default location
     ctaid: 10, // Starting state for site to start up
-    // stateName: "Delaware",
-    // numOfCancerSites: "25",
-    // numOfZones: "14",
-    // minZonePop: "50,000",
-    // maxZonePop: "150,000",
-    // minTractsPerZone: "1,000",
-    // maxTractsPerZone: "100,000",
+    // stateName: "Delaware", // The name of your state, project, or cancer registry. Commonly used with the phrase "Cancer Maps" after it, indicating the name of this website.
+    // numOfCancerSites: "25", // The number of cancer sites by which data may be searched. Usually the same as the number of SEARCHOPTIONS_CANCERSITE entries.
+    // numOfZones: "14", // The number of zones for your state.
+    // minZonePop: "50,000", // The minimum population of a zone in your state/registry catchment area. Used in a statement describing zones.
+    // maxZonePop: "150,000", // The maximum population of a zone in your state/registry catchment area. Used in a statement describing zones.
+    // minTractsPerZone: "1,000", // The minimum number of census tracts forming any zone. Used in a statement describing zones.
+    // maxTractsPerZone: "100,000", // The maximum number of census tracts forming any zone. Used in a statement describing zones.
     // raceList: [
     //     "non-Hispanic White",
     //     "non-Hispanic Black",
     //     "non-Hispanic Asian/Pacific Islander",
     //     "non-Hispanic American Indian/Alaska Native",
     //     "Hispanic"
-    // ],
-    // reportingMinCases: "1000",
-    // registry: "test",
-    // registryLink: "https://www.google.com",
-    // fundingSource: "This is supported through funding",
-    // citationInfo: "This is where you put your citation info",
-    // nationalCancerDataSource: "this is your national cancer data source info",
-    // aboutBlurb: "This is your about blurb",
-    // incidenceDataDate: "2016",
-    // sociodemographicDataDateRange: "2012-2016",
+    // ], // A list of the races/ethnicities by which data may be displayed. This should reflect the SEARCHOPTIONS_RACE entries.
+    // reportingMinCases: "16", // The minimum number of cancer cases in a zone to be reported (i.e., suppression threshold).
+    // registry: "test", //Name of registry that will be listed under “Project Team” in the About section.
+    // registryLink: "https://www.google.com", //A hyperlink URL to this website's parent agency, cancer registry, etc. The URL associated with the text specified in ‘registry’ field above.
+    // fundingSource: "This is supported through funding", //A statement/description of who funded the website. Displayed in the About section.
+    // citationInfo: "This is where you put your citation info", //A statement/description of how this website should be cited in literature.
+    // nationalCancerDataSource: "this is your national cancer data source info", //A statement/description of the national cancer data source, including data years. This should be reviewed with subsequent data updates to verify whether it needs to be updated as well (e.g., during annual data updates). An example of this statement applicable to national cancer data through 2018 is: "National incidence data come from the National Program of Cancer Registries and Surveillance, Epidemiology, and End Results SEER*Stat Database: U.S. Cancer Statistics Incidence Analytic file - 1998-2018. United States Department of Health and Human Services, Centers for Disease Control and Prevention. Released June 2021, based on the 2020 submission."
+    // aboutBlurb: "This is your about blurb", //A statement/description of the website, in "What is the XXX Cancer Registry" section of the FAQ.
+    // incidenceDataDate: "2016", //Last year of available incidence data. Used in one of the FAQs.
+    // sociodemographicDataDateRange: "2012-2016", //Data range for ACS data used. Used in one of the FAQs.
     MAP_BBOX: [[38.5268, -74.2317], [39.8108, -75.5277]],  // [[s, w], [n, e]] Starting Location
     MIN_ZOOM: 6,
     MAX_ZOOM: 15,
@@ -131,9 +131,9 @@ var NATIONWIDE_INCIDENCE = true;
 
 // colors for the incidence bar chart; these mirror the SEARCHOPTIONS_SEX options
 var BARCHART_COLORS_SEX = {
-    'Both': '#446374',
-    'Female': '#8caec0',
-    'Male': '#c4deec',
+    'Both': '#4f629a',       // Same as before for 'Both'
+    'Female': '#7a89d7',     // Darker and slightly more purple for 'Female'
+    'Male': '#8faed2',
 };
 
 // definitions for the table(s) of demographic info to show beneath the map and incidence table
@@ -1563,10 +1563,7 @@ function performSearchIncidenceBarChart (searchparams) {
     // note that we could end up with 0 rows for some of these, e.g. Male Uterine nor Female Prostate, so undefined is a condition to handle
     let incidencedata = DATA_CANCER.filter(row => row.GeoID == searchparams.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site);
     if (searchparams.type == 'County'){
-        const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
-        console.log('countiesCode: ', countiesCode)
-        const incidencedata_county = DATA_CANCER.filter(row => row.GeoID == countiesCode && row.Years == searchparams.time && row.Cancer == searchparams.site);
-        incidencedata = incidencedata_county
+        incidencedata = DATA_CANCER.filter(row => row.GeoID == searchparams.countyId && row.Years == searchparams.time && row.Cancer == searchparams.site);
     }
     const incidencebysex = {};
     SEARCHOPTIONS_SEX.forEach(function (sexoption) {
