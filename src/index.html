@@ -118,7 +118,7 @@
     <div class="container noprint" id="above-map">
         <div class="row">
             <div class="col-md-4">
-                <h2 class="nomargin" tabindex="0">Cancer Incidence
+                <h2 class="nomargin" tabindex="0"><span class="title">Cancer Incidence</span>
                     <i class="fa fa-info-circle"  data-tooltip="cases"></i>
                 </h2>
             </div>
@@ -143,15 +143,15 @@
 
     <div class="container" id="search-and-map">
         <div class="row">
-            <div class="col-md noprint">
+            <div class="col-4 noprint">
                 <div class="data-filters">
                     <div class="input-group">
-                        <label for="data-filters-type">Area Type</label>
+                        <label class="subtitle" for="data-filters-type">Area Type</label>
                         <select name="type" id="data-filters-type" aria-label="Select area type to report">
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="data-filters-address">Location Search
+                        <label class="subtitle" for="data-filters-address">Location Search
                             <i class="fa fa-info-circle"  data-tooltip="location"></i>
                             <span class="warnmessage d-none"
                                 style="padding: 1px 5px; display: block; margin: 0 0 5px 0;"></span>
@@ -164,39 +164,36 @@
                         </div>
                     </div>
                     <div class="input-group">
-                        <label for="data-filters-site">Time Period</label>
+                        <label class="subtitle" for="data-filters-site">Time Period</label>
                         <select name="time" id="data-filters-time" aria-label="Select the time period to report">
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="data-filters-site">Cancer Site/Type</label>
+                        <label class="subtitle" for="data-filters-site">Cancer Site/Type</label>
                         <select name="site" id="data-filters-site" aria-label="Select the cancer site to report">
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="data-filters-sex">Sex <i class="fa fa-info-circle" 
+                        <label class="subtitle" for="data-filters-sex">Sex <i class="fa fa-info-circle" 
                                 data-tooltip="sex"></i></label>
                         <select name="sex" id="data-filters-sex" aria-label="Select the sex to report">
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="data-filters-race">Race/Ethnicity <i class="fa fa-info-circle" 
+                        <label class="subtitle" for="data-filters-race">Race/Ethnicity <i class="fa fa-info-circle" 
                                 data-tooltip="race"></i></label>
                         <select name="race" id="data-filters-race" aria-label="Select the race/ethnicity to report">
                         </select>
                     </div>
                 </div>
-                <div class="places-area" role="heading"></div>
-
+                <div class="places-area" style="margin-top: 20px; padding: 5px 5px;" role="heading"></div>
             </div>
-            <div class="col-md-7 col-lg-8">
+            <div class="col-4 printonly" id="data-filters-summary">
+            </div>
+            <div class="col">
                 <div class="map" id="map" ></div>
             </div>
         </div>
-    </div>
-    
-    <div class="container printonly" id="data-filters-summary">
-        <span class="title" tabindex="0">Filters</span>
     </div>
 
     <div class="container" id="filters-and-aairbarchart">
@@ -491,12 +488,11 @@
                     <h2 class="usa-accordion__heading">
                         <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq9">
                             Why are data not available for other or more granular racial/ethnic groups (e.g., American
-                            Indians, Asian or Latinx ethnic groups) or non-binary genders?
+                            Indians, Asian or Latinx ethnic groups)?
                         </button>
                     </h2>
                     <div id="faq9" class="usa-accordion__content" hidden="">
-                        We have not reported small-area level cancer incidence data for smaller racial/ethnic groups or
-                        non-binary genders due to small cancer case counts and population estimates at the zone levels
+                        We have not reported small-area level cancer incidence data for smaller racial/ethnic groups due to small cancer case counts and population estimates at the zone levels
                         to ensure confidentiality and stable statistical rates. In addition, at this time, some of these
                         data are not consistently collected within the <span class="stateName">[REPLACE
                             STATE/REGISTRY]</span> Cancer Registry nor available in population estimate data.

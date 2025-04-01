@@ -39,7 +39,7 @@
     }
 
     #logo-img-print {
-        position: absolute;
+        // position: absolute;
         top: 0;
         left: 15px;
         z-index: 100000;
@@ -73,6 +73,12 @@
 
     #incidence-barchart.printing {
         /* see initPrintPage() and styles_datareadouts.scss for crazy hacks to resize the chart before printing */
+    }
+
+    .filters-list {
+        margin-top: 20px;
+        // padding: 5px 5px;
+        // border: solid 1px gray;
     }
 }
 
