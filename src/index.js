@@ -711,7 +711,6 @@ function initPrintPage () {
 
     let leafletControls = [];
 
-
     window.addEventListener('beforeprint', function () {
         leafletControls = [
             document.querySelector('.leaflet-control-attribution'),
