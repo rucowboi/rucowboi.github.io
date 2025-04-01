@@ -709,9 +709,22 @@ function initPrintPage () {
     $printbutton.data('ready-html', $printbutton.html() );
     $printbutton.data('busy-html', '<i class="fa fa-clock"></i> Printing');
 
+    let leafletControls = [];
+
+
     window.addEventListener('beforeprint', function () {
-        $mapdomnode.className = 'col-12';
-        MAP.invalidateSize();
+        leafletControls = [
+            document.querySelector('.leaflet-control-attribution'),
+            document.querySelector('.leaflet-control-zoom'),
+            document.querySelector('.leaflet-control-boxzoom'),
+            document.querySelector('.leaflet-control-scale'),
+            document.querySelector('.leaflet-layerpicker-control')
+        ];
+        leafletControls.forEach(control => {
+            if (control) {
+                control.style.display = 'none';
+            }
+        });
         $printbutton.html( $printbutton.data('busy-html') );
         hiddenMarkers = [];
         MAP.eachLayer(function (layer) {
@@ -720,9 +733,15 @@ function initPrintPage () {
                 MAP.removeLayer(layer);
             }
         });
+        MAP.invalidateSize();
     });
 
     window.addEventListener('afterprint', function () {
+        leafletControls.forEach(control => {
+            if (control) {
+                control.style.display = '';
+            }
+        });
         $incidencebarchart.removeClass('printing');
         $mapdomnode.className = originalclasslist;
         MAP.invalidateSize();
@@ -1366,8 +1385,8 @@ function updateFilterSummary(searchparams) {
         }
 
         // Append each filter as its own row
-        summaryHtml += `<div style="margin-bottom: 5px;">
-                            <span style="font-weight: bold;">${label}:</span> ${value}
+        summaryHtml += `<div style="margin-bottom: 15px;">
+                            <span class="subtitle" >${label}:</span> <span style="font-weight: bold;">${value}</span>
                         </div>`;
     });
 
