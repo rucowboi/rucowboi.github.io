@@ -1644,8 +1644,7 @@ function performSearchIncidenceBarChart (searchparams) {
                 dataLabels: {
                     enabled: true,
                     style: {
-                        fontSize: '14px', // Increase data label size
-                        fontWeight: 'bold',
+                        fontSize: '10px',
                     }
                 },
             },
