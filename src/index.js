@@ -15,7 +15,7 @@ require('./printing-leaflet-easyPrint.js');
 
 
 const SITE_CONSTANTS = {
-    startingLocation: "120 Albany, New Brunswick, NJ 08901" , // Replace with your desired default location
+    startingLocation: "120 Albany Street, New Brunswick, NJ 08901" , // Replace with your desired default location
     ctaid: 34, // Starting state for site to start up
      stateName: "New Jersey", // The name of your state, project, or cancer registry. Commonly used with the phrase "Cancer Maps" after it, indicating the name of this website.
      numOfCancerSites: "25", // The number of cancer sites by which data may be searched. Usually the same as the number of SEARCHOPTIONS_CANCERSITE entries.
@@ -70,32 +70,32 @@ var SEARCHOPTIONS_TYPE = [ // filter values for zone or county
 var SEARCHOPTIONS_TIME = [  // filter values for "years" field
     { value: '01yr', label: "1-Year: 2015"}, // added the 1 year value as initValidateDemographicDataset () was looking for 3 rows #CC25
     { value: '05yrs', label: "5-Year: 2010-2015" },
-    { value: '10yrs', label: "10-Year: 2006-2015" }
+    { value: '10yrs', label: "10-Year: 2006-2015" },
 ];
 
 var SEARCHOPTIONS_CANCERSITE = [  // filter values for "cancer" field
     { value: 'AllSite', label: "All Cancer Sites" },
-    { value: 'Prostate', label: "Prostate" },
-    { value: 'Lung', label: "Lung and Bronchus" },
-    { value: 'Breast', label: "Female Breast" },
-    { value: 'CRC', label: "Colon and Rectum" },
-    { value: 'Kidney', label: "Kidney and Renal Pelvis" },
+    { value: 'Prostate', label: "Prostate Cancer" },
+    { value: 'Lung', label: "Lung Cancer" },
+    { value: 'Breast', label: "Breast Cancer" },
+    { value: 'CRC', label: "Colonrectal Cancer" },
+    { value: 'Kidney', label: "Kidney and Renal Pelvis Cancer" },
     { value: 'NHL', label: "Non-Hodgkin Lymphoma" },
-    { value: 'Urinary', label: "Urinary Bladder" },
+    { value: 'Urinary', label: "Urinary Bladder Cancer" },
     { value: 'Mela', label: "Melanoma of the Skin" },
-    { value: 'Pancreas', label: "Pancreas" },
+    { value: 'Pancreas', label: "Pancreatic Cancer" },
     { value: 'Leuks', label: "Leukemias" },
-    { value: 'Oral', label: "Oral Cavity and Pharynx" },
-    { value: 'Thyroid', label: "Thyroid" },
-    { value: 'Uterine', label: "Corpus and Uterus, NOS" },
-    { value: 'Liver', label: "Liver and Intrahepatic Bile Duct" },
-    { value: 'Stomach', label: "Stomach" },
+    { value: 'Oral', label: "Oral Cavity and Pharynx Cancer" },
+    { value: 'Thyroid', label: "Thyroid Cancer" },
+    { value: 'Uterine', label: "Uterine Corpus Cancer" },
+    { value: 'Liver', label: "Liver Cancer" },
+    { value: 'Stomach', label: "Stomach Cancer" },
     { value: 'Myeloma', label: "Myeloma" },
-    { value: 'Brain', label: "Brain and Other Nervous System" },
-    { value: 'Larynx', label: "Larynx" },
-    { value: 'Ovary', label: "Ovary" },
-    { value: 'Esoph', label: "Esophagus" },
-    { value: 'Cervix', label: "Cervix" },
+    { value: 'Brain', label: "Brain Cancer" },
+    { value: 'Larynx', label: "Larynx Cancer" },
+    { value: 'Ovary', label: "Ovarian Cancer" },
+    { value: 'Esoph', label: "Esophagian Cancer" },
+    { value: 'Cervix', label: "Cervix Uteri" },
     { value: 'HL', label: "Hodgkin Lymphoma" },
     { value: 'Testis', label: "Testis" },
 ];
@@ -127,8 +127,8 @@ var CANCER_SEXES = {
 };
 
 // if your data will not have Nationwide stats, you may set either/both of these to false to turn that off
-var NATIONWIDE_DEMOGRAPHICS = true;
-var NATIONWIDE_INCIDENCE = true;
+var NATIONWIDE_DEMOGRAPHICS = false;
+var NATIONWIDE_INCIDENCE = false;
 
 // colors for the incidence bar chart; these mirror the SEARCHOPTIONS_SEX options
 var BARCHART_COLORS_SEX = {
