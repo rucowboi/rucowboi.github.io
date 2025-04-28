@@ -78,7 +78,7 @@ var SEARCHOPTIONS_CANCERSITE = [  // filter values for "cancer" field
     { value: 'Prostate', label: "Prostate Cancer" },
     { value: 'Lung', label: "Lung Cancer" },
     { value: 'Breast', label: "Breast Cancer" },
-    { value: 'CRC', label: "Colonrectal Cancer" },
+    { value: 'CRC', label: "Colorectal Cancer" },
     { value: 'Kidney', label: "Kidney and Renal Pelvis Cancer" },
     { value: 'NHL', label: "Non-Hodgkin Lymphoma" },
     { value: 'Urinary', label: "Urinary Bladder Cancer" },
