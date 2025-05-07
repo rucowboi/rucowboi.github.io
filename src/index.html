@@ -284,18 +284,21 @@
                         class="maxTractsPerZone">[REPLACE MAXIMUM TRACTS PER ZONE]</span>.
                 </p>
                 <p>
-                    <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Maps include 5-year and 10-year
+                    <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Maps include 1-year, 5-year and 10-year
                     cancer incidence rates based on the most current data for the <span
                         class="numOfCancerSites">[REPLACE NUM_CANCER_SITES]</span> most common invasive cancer sites and
                     for all sites combined by sex and race/ethnicity (<span class="confirmRaceList">[CONFIRM RACE
-                        LIST]</span>). It also includes selected population demographic data based on 2010 Census and
-                    2015-2019 American Community Survey data. Cancer incidence rates will be updated annually as more
-                    current data become available.
+                        LIST]</span>). Cancer incidence rates will be updated  as more current data become available.
+                </p>
+                <p>
+                    These maps also include selected population demographic data based on 2010 Census and 2015-2019 American Community Survey data.
                 </p>
                 <p class="title">Project Team</p>
                 <p>
                     <!-- <a target="_blank" href="https://dhss.delaware.gov/dph/dcr/home.html">Delaware Cancer Registry</a> -->
-                    <a target="_blank" href=""><span class="stateRegistry">[REPLACE REGISTRY]</span></a>
+                    <a target="_blank" href="https://www.nj.gov/health/ces/reporting-entities/njscr/"><span class="stateRegistry">[REPLACE REGISTRY]</span></a>
+                    <br />
+                    <a traget="_blank" href="http://www.cinj.org">Rutgers Cancer Institute</a>
                     <br />
                     <a target="_blank" href="http://seer.cancer.gov">National Cancer Institute</a>
                     <br />
@@ -303,24 +306,27 @@
                         href="https://www.westat.com/project/using-gis-interpret-spatial-context-and-cancer-risk">Westat,
                         Inc.</a>
                 </p>
+                <p class ="title"> Techical Notes</p>
+                <p>
+                    <a target="_blank" href="https://www.nj.gov/health/ces/documents/njscr_data_guidelines_v1.6.2020.pdf">Data Guidelines</a>
+                    <br />
+                </p>
                 <p class="title">Funding</p>
                 <p class="fundingSource">[REPLACE FUNDING SOURCE]</p>
-                <p>National Cancer Institute</p>
+                <!--<p>National Cancer Institute</p>-->
             </div><!--/tab-pane -->
             <div class="tab-pane container" id="learn-method">
                 <p>
-                    On this website, data are shown by cancer reporting zone. These zones have been designed so that
-                    they have a minimum population, have similar demographic and socioeconomic characteristics, and are
-                    geographically compact (they minimize the distance between different parts of the zone). The minimum
-                    population for each zone is 50,000 people.
+                    On this website, data are shown by cancer reporting zone. These zones have been designed so that they have a minimum population, have similar demographic and socioeconomic characteristics, and are geographically compact (they minimize the distance between different parts of the zone). The minimum population for each zone is 50,000 people.
                 </p>
                 <p>
-                    Counties with larger populations (more than 100,000 people) were divided into multiple zones by
-                    combining adjacent census tracts. For the rest of the state, adjacent counties and parts of counties
-                    were combined to form zones. Three demographic and socioeconomic characteristics were used to
-                    determine similarity: the percent minority population (percent of the population who are not
-                    non-Hispanic White), percent of the population with incomes below poverty, and the proportion of the
-                    population living in urban and rural areas.
+                    Counties with larger populations (more than 100,000 people) were divided into multiple Zones by combining adjacent census tracts. Three demographic and socioeconomic characteristics were used to determine similarity: the percent of the population who are not non-Hispanic White, percent of the population with incomes below poverty, and the proportion of the population living in urban and rural areas.
+                </p>
+                <p>
+                    Newark is treated as if it were a county. The census tracts within Newark are partitioned into 5 Zones. The remainder of Essex County is partitioned without consideration of Newark.
+                </p>
+                <p>
+                    For counties Cape May and Salem, which have between 50,000 and 100,000 people, the county is the Zone.
                 </p>
                 <p>
                     We used population data from Census 2010 and Census 2010 tract geographies to construct the zones.
@@ -330,11 +336,155 @@
                     optimize the three objectives: a target population of 50,000, geographic compactness, and similarity
                     in terms of minority population, poverty, and urbanicity characteristics
                 </p>
+                <p class="title">Zone Names</p>
+                <p>
+                    CTAZ names are given by the largest municipality in the Zone by population followed by the County name and number of the Zone within the County. Should a municipality straddle one or more CTAZs, then the population of the municipality was portioned by the area within each CTAZ. For a hypothetical example, if Springfield in Washington county had a population of 100,000 and 60% was in Zone A and 40% in Zone B, then 60,000 Springfield residents were assigned to Zone A (the 3rd CTAZ in Washington County) and 40,000 residents to Zone B. If 60,000 was the largest municipality by population in Zone A then Zone A would be named Springfield – Washington 3.
+                </p>
             </div><!--/tab-pane -->
             <div class="tab-pane container" id="learn-faq">
                 <div class="faqs_toggle"><button class="pointer">Expand all FAQs</button></div>
-
+                <p>
+                    More Detailed information about the New Jersey Cancer Registry (NJSCR) and the cancer data can be found through the following links:
+                    <br />
+                    <p>
+                        <a href="https://www.nj.gov/health/ces/reporting-entities/njscr/" target="_blank">Department of Health | Cancer | NJ State Cancer Registry</a>
+                        <br />
+                    </p>
+                    <p>
+                        <a href="https://www.nj.gov/health/ces/documents/njscr_data_guidelines_v1.6.2020.pdf" target="_blank">NJSCR Data Guidelines</a>
+                    </p>
+                    <p>
+                        Below are some frequently asked questions.
+                    </p>
+                </p>
                 <div class="usa-accordion">
+                <!-- RUBRIC
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq1">
+                            
+                        </button>
+                    </h2>
+                    <div id="faq1" class="usa-accordion__content" hidden="">
+                        
+                    </div>
+                -->
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq1">
+                            What is the New Jersey State Cancer Registry?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="usa-accordion__content" hidden="">
+                        <p>The New Jersey State Cancer Registry (NJSCR) is a population-based registry and includes all cancer cases diagnosed in New Jersey residents since October 1, 1978. The NJSCR serves the entire State of New Jersey, which includes a population of approximately 9.3 million people.</p>
+                        <p>The purpose of the NJSCR is to track cancer in New Jersey supporting efforts to promote the following activities: scientific research; public and professional education programs; and planning and implementation of cancer control and prevention activities. The NJSCR strives to improve the quality and enhance the usefulness of its data. </p>
+                        <p>The NJSCR was established by legislation (NJSA 26:2-104 et. seq.) in 1977 in response to concern that New Jersey was suffering from the highest cancer incidence and mortality rates in the country. New Jersey regulations require the reporting of all newly diagnosed cancer cases to the NJSCR within six months of diagnosis.</p>
+                        <p>The NJSCR participates in the National Program of Cancer Registries (NPCR). The NJSCR is also a member of the North American Association of Central Cancer Registries (NAACCR). The NJSCR is also a member of the International Association of Cancer Registries (IACR).</p>
+                        <p>The New Jersey State Cancer Registry (NJSCR), under the direction of the State Department of Health in partnership with Rutgers Cancer Institute of New Jersey, was awarded a seven-year contract from the National Cancer Institute (NCI) in 2021 to support core infrastructure and research activities as part of the Surveillance, Epidemiology, and End Results (SEER) Program. The SEER Program is considered the most authoritative source of information on cancer incidence and survival in the United States, collecting data accounting for the diverse demographics covering approximately 48% of the US population. The NJSCR is one of 28 population-based CORE registries as well as 10 SEER Research Support registries in the country that are part of the SEER Program. </p>
+                        <p>The NJSCR has been awarded the NAACCR Gold Standard, the highest standard possible.</p>
+                       
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq2">
+                            How did you choose which cancer sites to include?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="usa-accordion__content" hidden="">
+                        We used the cancer sites reported on by the CDC’s <a target="_blank" href ="https://www.cdc.gov/united-states-cancer-statistics/index.html">United States Cancer Statistics</a> (USCS, “The Official Federal Cancer Statistics”).
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq3">
+                            Why are cancer incidence data available only through 2016? Why are population sociodemographic data only reported for 2012-2016?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="usa-accordion__content" hidden="">
+                        <p>In order to estimate cancer incidence rates, estimates of the population size from which the cancers are diagnosed must be used. At the time of this writing (April 2025), population size estimates at the Census Tract Aggregation Zone level were only available through 2016. Population data through 2022 are expected in the near future and the additional years of incidence data will be updated then.</p>
+                        <p>Selected population sociodemographic data and population estimates for calculating cancer incidence rates are from the SEER census tract estimates by race/origin. Additional sociodemographic data are from the Census 2010 and American Community Survey 2015-2019 for zones and counties.</p>
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq4">
+                            Will the cancer incidence data be updated?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="usa-accordion__content" hidden="">
+                        We plan to update New Jersey Cancer Maps to include the most current cancer incidence data as they become available, typically in the Spring of each year.
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq5">
+                            What is a census tract aggregation zone?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="usa-accordion__content" hidden="">
+                        <p><strong>Census Tracts</strong> are small, relatively permanent statistical subdivisions of a county with between 1,200 and 8,000 people and an optimum size of 4,000 people. The primary purpose of census tracts is to provide a stable set of geographic units for the presentation of statistical data. However, in order to protect citizen confidentiality, the NJSCR does not release data to the general public at the Census Tract-level. By combining data over longer periods of time or wider areas, larger numbers of cases are included, reducing the threat of identification of individual cases. Additionally, larger numbers of cases results in more stable estimates of cancer incidence.</p>
+                        <p>Here we combine Census Tracts to form Census Tract Aggregation Zones based on adjacency and similarity in population sociodemographic characteristics: poverty, rurality, and racial/ethnic minority (i.e., non-White) composition. Zones are required to have a minimum population of 50,000. There are 150 Zones in New Jersey which vary in population size from 50,676 to 97,265 and are composed of between 11 and 32 Census Tracts. Zones are generally smaller than a county and larger than a census tract to help provide additional options for understanding disease burden and better facilitate public health and policy planning.</p>
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq6">
+                            Who developed the census tract aggregation zones?
+                        </button>
+                    </h2>
+                    <div id="faq6" class="usa-accordion__content" hidden="">
+                        The Zones were developed by the New Jersey State Cancer Registry including partners at Westat and the National Cancer Institute as part of a collaborative effort to provide cancer data at areas generally smaller than county. Stakeholder input was gathered and incorporated in the development process.
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq7">
+                            What are the benefits of using these census tract aggregation zones?
+                        </button>
+                    </h2>
+                    <div id="faq7" class="usa-accordion__content" hidden="">
+                        Counties in New Jersey can span up to hundreds of miles and include large and diverse populations or cover sparsely populated rural areas. Surveillance of cancer burden at these large geographic scales may not be meaningful nor adequate for identifying areas with higher disease rates. This information can be used by cancer centers, healthcare organizations, community organizations, and policy makers better serve cancer control, public health, and policy efforts.
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq8">
+                            What is the source of the cancer incidence data?
+                        </button>
+                    </h2>
+                    <div id="faq8" class="usa-accordion__content" hidden="">
+                        <p>New Jersey State Cancer Registry (NJSCR) provides zone and statewide cancer incidence data collected from various sources, including hospitals and non-hospital reporting sites such as physicians, and laboratories. This data contains comprehensive demographic and medical records for each reported cancer case, following strict reporting guidelines. Patients are monitored annually, with updates on their vital status and relevant cancer information, including cause of death for those who have passed.</p>
+                        <p>Age-adjusted incidence rates for all invasive cancers, including specific in situ bladder cancers, are calculated using SEER*Stat. These rates are standardized to the 2000 U.S. population and reported as cases per 100,000 people per year. Population estimates are derived from the U.S. Census Bureau and adjusted for consistency across different demographics and geographic areas by the National Cancer Institute (NCI). Data compilation and public reporting are further managed by the NCI’s SEER Program and the Centers for Disease Control and Prevention’s National Program of Cancer Registries (NPCR). For detailed methodology, please refer to the Methodology section.</p>
+
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq9">
+                            What are the Census and American Community Survey data?
+                        </button>
+                    </h2>
+                    <div id="faq9" class="usa-accordion__content" hidden="">
+                        For the purposes of determining voting districts and congressional Representation, the U.S. Census is required by the Constitution to count everyone in the country every 10 years, but they do a lot more than that. The <a target="_blank" href="https://www.census.gov/programs-surveys/acs">American Community Survey</a> (ACS) has been conducted annually by the U.S. Census Bureau since 2005 and provides detailed population and housing information replacing data previously collected on the Census long form. The ACS is based on a sample of about 1% (or 3.5 million addresses) of the overall US population while the Census strives to sample all of the US population.
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq10">
+                            Why do some zones not have incidence rates?
+                        </button>
+                    </h2>
+                    <div id="faq10" class="usa-accordion__content" hidden="">
+                        NJ Department of Health ensures confidentiality by law. Incidence rates are suppressed if based on fewer than 15 cancer cases for privacy and statistical stability.
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq11">
+                            Why are data not available for other or more granular racial/ethnic groups (e.g., American Indians, Asian or Latinx ethnic groups) or non-binary genders?
+                        </button>
+                    </h2>
+                    <div id="faq11" class="usa-accordion__content" hidden="">
+                        We have not reported Census Tract Aggregation Zone-level cancer incidence data for smaller racial/ethnic groups or non-binary genders due to small cancer case counts and population estimates to ensure confidentiality and stable statistical rates. In addition, currently, some of these data are not consistently collected within the New Jersey Cancer Registry nor available in population estimate data.
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq12">
+                            Does my neighborhood influence my cancer risk? What factors in my neighborhood contribute to the cancer incidence rate?
+                        </button>
+                    </h2>
+                    <div id="faq12" class="usa-accordion__content" hidden="">
+                        <p>Studies have shown that where we live (and work and learn) affects our opportunities for physical activity, social engagement and support, access to healthy and affordable food, and exposure to stress and harmful chemicals. These factors can influence opportunities for health promotion and disease prevention.</p>
+                        <p>Cancer is a group of diseases with many possible causes including genetic and environmental factors as well as social determinants of health. Common risk factors for cancer include smoking and tobacco use, diet and physical activity, sun and other types of radiation, viruses (e.g., HPV, Hepatitis B and C), chronic inflammation, and environmental exposures. Neighborhoods may influence cancer through multiple pathways including material deprivation, psychosocial mechanisms, health behaviors, and access to resources.</p>
+                    </div>
+                    <h2 class="usa-accordion__heading">
+                        <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq13">
+                            Why are neighborhood data on population sociodemographic factors provided? Do they cause cancer?
+                        </button>
+                    </h2>
+                    <div id="faq13" class="usa-accordion__content" hidden="">
+                        <p>The neighborhood data are provided to characterize the Zones based on several key social and built environment attributes. These are unrelated measures of neighborhood characteristics and cancer incidence, so inferences regarding causes of cancer cannot be made. We have provided these data for the Zones to help provide additional context for the observed cancer incidence rates. For example, if a Zone has high colorectal cancer incidence rates, understanding the population-level characteristics of that Zone can help community organizations and healthcare facilities target their screening and prevention programs toward the predominant populations within the Zone.</p>
+                        <p>Neighborhood measures were developed using data from census tracts. We used the tract-level count data from the Census and American Community Survey to calculate measures for each Zone.</p>
+                    </div>
+                <!--
                     <h2 class="usa-accordion__heading">
                         <button class="usa-accordion__button" aria-expanded="false" aria-controls="faq1">
                             What is a census tract aggregation zone?
@@ -530,7 +680,7 @@
                         Neighborhood measures were developed using data from census tracts. We used the tract-level
                         count data from the Census and American Community Survey to calculate measures for each zone.
                     </div>
-
+                -->
                 </div><!--/accordion-->
             </div><!--/tab-pane -->
             <div class="tab-pane container" id="learn-glossary">
@@ -539,32 +689,24 @@
                 because some terms do not have a tooltip and some terms have slightly different text, they are maintained separately
                 -->
                 <p>
-                    <b>Aggregation:</b> Collections of smaller units grouped together for the purposes of statistical
-                    reporting. See Methodology for more information.
+                    <b>Aggregation:</b> The process of combining smaller units into a single, summarized value  for statistical reporting. See Methodology for more information.
                 </p>
                 <p>
-                    <b>Age-Adjusted Incidence Rate (AAIR):</b> Age-adjustment is a statistical method that allows
-                    comparisons of incidence rates to be made between populations with different age distributions. This
-                    is important since the incidence of most cancers increases with age. An age-adjusted cancer
-                    incidence (or death) rate is defined as the number of new cancers (or deaths) per 100,000 population
-                    that would occur in a certain period of time if that population had a ‘standard’ age distribution.
+                    <b>Age-Adjusted Incidence Rate (AAIR):</b> The rate of new cancers (or deaths) per 100,000 population that would occur in a certain period of time if that population had a ‘standard’ age distribution. 
                     In the <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Maps, incidence rates are
                     age-adjusted using the <a href="https://www.census.gov/census2000/states/us.html"
-                        target="_blank">U.S. 2000 Standard Population</a>.
+                        target="_blank">U.S. 2000 Standard Population</a>. This statistical measure allows for the fair comparison of incidence rates between populations with different age structures, reducing the impact of age as a confounder. This is important because the incidence of most cancers increases with age. 
                 </p>
-                <p>
+                <!--<p>
                     <b>% Below Poverty:</b> Percent of population below poverty level in the past 12 months.<br>
                     <span class="source">Sources:</span>
                 </p>
                 <ul class="source">
                     <li>5-year time period: American Community Survey, 2015-2019</li>
                     <li>10-year time period: American Community Survey, 2010-2014 and 2015-2019</li>
-                </ul>
+                </ul>-->
                 <p>
-                    <b>Confidence Interval:</b> A statistical measure of the precision of the observed incidence rate.
-                    The lower confidence interval (LCI) and upper confidence interval (UCI) provide a range within which
-                    the true rate is thought to be with 95% confidence. Rates based on larger numbers of cases are
-                    subject to less variation.
+                    <b>Confidence Interval:</b> A statistical measure of the precision of the observed incidence rate. The lower confidence interval (LCI) and upper confidence interval (UCI) provide a range within which the true rate is thought to be with 95% confidence. Rates based on larger numbers of cases are subject to narrower, more precise, confidence intervals.
                 </p>
                 <p>
                     <b>Data Suppression:</b> To ensure confidentiality and stable statistical rates, cancer incidence
@@ -572,9 +714,9 @@
                         CASES]</span> cancer cases.
                 </p>
                 <p>
-                    <b>Demographics:</b> Statistical data relating to the population and particular groups within it.
+                    <b>Demographics:</b> Statistical data relating to the population and particular groups within it. Demographic variables such as race, sex, and education are generally thought to influence many outcomes of interest, including cancer incidence.
                 </p>
-                <p>
+                <!--<p>
                     <b>% Did Not Finish High School:</b> Percent of population with less than a high school graduate
                     education.<br>
                     <span class="source">Sources:</span>
@@ -590,16 +732,16 @@
                 <ul class="source">
                     <li>5-year time period: American Community Survey, 2015-2019</li>
                     <li>10-year time period: American Community Survey, 2010-2014 and 2015-2019</li>
-                </ul>
+                </ul>-->
                 <p>
                     <b>Incidence:</b> The number of new cases of cancer diagnosed in the selected time period.
                 </p>
                 <p>
-                    <b>Race/Ethnicity:</b> Race/Ethnicity: Race/ethnicity is categorized as: All races/ethnicities,
-                    Non-Hispanic (NH) White, NH Black, or Hispanic. "All races" includes all of the above, as well as
-                    other and unknown race/ethnicity, Asian/Pacific Islander, and American Indian/Alaska Native. The
-                    latter two groups are not reported separately due to small numbers for many cancer sites in <span
-                        class="stateName">[REPLACE STATE/REGISTRY]</span>.
+                    <b>Invasive Cancer:</b> Cancer that has spread beyond the layer of tissue in which it developed and is growing into surrounding, healthy tissues. Also called infiltrating cancer.
+                </p>
+                <p>
+                    <b>Race/Ethnicity:</b> :  Race/ethnicity is categorized as: All races/ethnicities, Non-Hispanic (NH) White, NH Black, NH Asian or Pacific Islander or Hispanic. "All race/ethnicity" includes all of the above, as well as other and unknown race/ethnicity, and American Indian/Alaska Native. The  American Indian/Alaska Nativegroup isnot reported separately due to small numbers for many cancer sites in 
+                    <span class="stateName">[REPLACE STATE/REGISTRY]</span>.
                 </p>
                 <p>
                     <b>Racial/Ethnic Composition:</b> Distribution of residents’ race/ethnicity (e.g., % Hispanic, %
@@ -611,14 +753,9 @@
                     <span class="source">Source: US Census, 2010.</span>
                 </p>
                 <p>
-                    <b>Sex:</b> <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Registry defines this
-                    field as the sex or gender of the cancer patient, and codes available are male, female, intersex,
-                    transsexual, and transgender (natal male, natal female, or not specified). However, categories
-                    beyond male and female are not consistently coded by medical reporting facilities, and population
-                    estimates for gender categories beyond male and female are not available. Thus, cancer incidence
-                    data are reported for only male and female sex at this time.
+                    <b>Sex:</b> <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer Registry defines this field as the sex or gender of the cancer patient, and codes available are male, female, intersex, transsexual, and transgender (natal male, natal female, or not specified). However, categories beyond male and female are not consistently coded by medical reporting facilities, and population estimates for gender categories beyond male and female are not available. Thus, cancer incidence data are reported for only male and female sex at this time.
                 </p>
-                <p>
+                <!--<p>
                     <b>% With Bachelors Degree:</b> Percent of population with a bachelor’s degree or higher.<br>
                     <span class="source">Sources:</span>
                 </p>
@@ -641,7 +778,7 @@
                 <ul class="source">
                     <li>5-year time period: American Community Survey, 2015-2019</li>
                     <li>10-year time period: American Community Survey, 2010-2014 and 2015-2019</li>
-                </ul>
+                </ul>-->
                 <!-- end of Definitions P items -->
             </div><!--/tab-pane -->
         </div><!--/tab-content-->
