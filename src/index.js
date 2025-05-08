@@ -362,26 +362,31 @@ Papa.parsePromise = function (url) {
 };
 
 window.onload = function () {
-    const select = document.querySelector(".leaflet-choroplethlegend-select");
-    const legendgradient = document.querySelector(".leaflet-choroplethlegend-legendgradient");
+    setTimeout(() => {
+        const select = document.querySelector(".leaflet-choroplethlegend-select");
+        if (!select) return;
 
-    function adjustWidth() {
-        let temp = document.createElement("span");
-        document.body.appendChild(temp);
-        let maxWidth = 200;
-        let selectedOption = select.options[select.selectedIndex];
-        temp.textContent = selectedOption.text;
-        if (temp.offsetWidth > maxWidth){
-            maxWidth = temp.offsetWidth;
+        const legendgradient = document.querySelector(".leaflet-choroplethlegend-legendgradient");
+
+        function adjustWidth() {
+            let temp = document.createElement("span");
+            document.body.appendChild(temp);
+            let maxWidth = 200;
+            let selectedOption = select.options[select.selectedIndex];
+            temp.textContent = selectedOption.text;
+            if (temp.offsetWidth > maxWidth){
+                maxWidth = temp.offsetWidth;
+            }
+            document.body.removeChild(temp);
+            select.style.width = `${maxWidth + 10}px`;
+            legendgradient.style.width = `${maxWidth + 10}px`;
         }
-        document.body.removeChild(temp);
-        select.style.width = `${maxWidth + 10}px`;
-        legendgradient.style.width = `${maxWidth + 10}px`;
-    }
 
-    adjustWidth();
-    select.addEventListener("change", adjustWidth);
+        adjustWidth();
+        select.addEventListener("change", adjustWidth);
+    }, 100);
 };
+
 
 
 function initUrlParamUpdater () {
