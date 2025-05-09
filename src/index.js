@@ -1170,13 +1170,13 @@ function initGoogleAnalyticsHooks () {
     $('#downloadoptions a[data-export="map"]').click(function () {
         logGoogleAnalyticsEvent('export', 'mapimage');
     });
-    $('#downloadoptions a[data-export="zonedata"]').click(function () {
-        const value = $(this).attr('data-ctaid');
-        logGoogleAnalyticsEvent('export', 'zonedata', value);
-    });
-    $('#downloadoptions a[data-export="alldata"]').click(function () {
-        logGoogleAnalyticsEvent('export', 'alldata');
-    });
+    // $('#downloadoptions a[data-export="zonedata"]').click(function () {
+    //     const value = $(this).attr('data-ctaid');
+    //     logGoogleAnalyticsEvent('export', 'zonedata', value);
+    // });
+    // $('#downloadoptions a[data-export="alldata"]').click(function () {
+    //     logGoogleAnalyticsEvent('export', 'alldata');
+    // });
 
     // switching tab sections in the bottom Learn area
     $('#learn-text ul.nav a[data-toggle="tab"]').on('shown.bs.tab', function () {
@@ -2215,3 +2215,41 @@ function updateCandleChart($candlediv, subtitle, aair, lci, uci, minlci, maxuci)
     const charttooltip = `${subtitle} LCI ${lci}, UCI ${uci}, AAIR ${aair}`;
     $candlediv.attr('aria-label', charttooltip).prop('title', charttooltip);
 }
+
+function downloadDataAsZip() {
+    const zip = new JSZip();
+
+    // List of data files you want to zip
+    const files = [
+        'allCancerRatesData.csv',
+        'allDemographics.csv',
+        'cities_by_cta.csv', 
+        'counties_by_cta.csv'
+    ];
+
+    const filePromises = files.map(filename => {
+        return fetch(`./static/data/${filename}`)
+            .then(response => response.blob())
+            .then(blob => {
+                zip.file(filename, blob);
+            });
+    });
+
+    Promise.all(filePromises).then(() => {
+        zip.generateAsync({ type: "blob" }).then(function (content) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = "data-files.zip"; // Name of the zip file
+            link.click();
+        });
+    });
+}
+
+// Attach event listener to the download link
+document.addEventListener("DOMContentLoaded", function () {
+    const downloadLink = document.querySelector('[data-export="data"]');
+
+    downloadLink.addEventListener("click", function () {
+        downloadDataAsZip();
+    });
+});

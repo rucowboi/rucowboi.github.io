@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "python3": "^0.0.1"
   },
   "devDependencies": {

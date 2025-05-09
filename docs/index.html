@@ -20,6 +20,9 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/jszip@3.7.1/dist/jszip.min.js"></script>
+
+
     <!-- Leaflet and TopoJSON -->
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
     <script type="text/javascript" src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
@@ -68,8 +71,8 @@
         gtag('config', 'UA-XXXXXXXXX-1');
     </script>
 
-    <link rel="stylesheet" type="text/css" href="index.css?Thu_May_08_2025_15_49_01_GMT_0400__Eastern_Daylight_Time_" />
-    <script type="text/javascript" src="index.js?Thu_May_08_2025_15_49_01_GMT_0400__Eastern_Daylight_Time_"></script>
+    <link rel="stylesheet" type="text/css" href="index.css?Fri_May_09_2025_15_06_16_GMT_0400__Eastern_Daylight_Time_" />
+    <script type="text/javascript" src="index.js?Fri_May_09_2025_15_06_16_GMT_0400__Eastern_Daylight_Time_"></script>
 </head>
 
 <body>
@@ -125,14 +128,12 @@
             <div class="col-md-8 right">
                 <button class="btn" id="downloadbutton" aria-label="Show options for downloading the map and data"
                     aria-haspopup="true" aria-controls="downloadoptions">
-                    <i class="fa fa-download"></i> Download <i class="fa fa-caret-down"></i>
+                    <i class="fa fa-download"></i> Downloads <i class="fa fa-caret-down"></i>
                 </button>
 
                 <div id="downloadoptions" class="d-none" aria-expanded="false">
-                    <a href="javascript:void(0);" data-export="map" title="Download a PNG image of the map"><i
-                            class="fa fa-download"></i> Download Map</a>
-                    <!-- <a href="javascript:void(0);" target="_blank" data-export="zonedata" title="Download data for the selected CTA Zone"><i class="fa fa-download"></i> Zone Data</a> -->
-                    <!-- <a href="./static/downloads/all_zones.zip" target="_blank" data-export="alldata" title="Download data for all CTA Zones"><i class="fa fa-download"></i> All Data</a> -->
+                    <a href="javascript:void(0);" data-export="map" title="Download a PNG image of the map"><i class="fa fa-map"></i> Map</a>
+                    <a href="javascript:void(0);" data-export="data" title="data"><i class="fa fa-table"></i> Data</a>
                 </div>
 
                 <button class="btn btn-alternate" id="printpagebutton" onClick="window.print();"><i
