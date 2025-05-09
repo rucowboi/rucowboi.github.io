@@ -102,18 +102,28 @@ You will need to provide a number of data tables and geographic boundary files t
 4. Alter `MAP_BBOX`, `MIN_ZOOM`, and `MAX_ZOOM` values to position the map.
 
 ## 5. Delete DISCLAIMER
-1. Delete the red disclaimer in the `src/index.html` file (lines 111-116)
+1. Delete the red disclaimer in the `src/index.html` file (lines 114-119)
+
 
 ## 6. Testing and Building
-1. Test the updated code by running:
-   ```bash
-   npm start
-   ```
-2. To update the `docs` with the latest `src` code, run:
+1. Test
+   - Start the updated code by running:
+      ```bash
+      npm start
+      ```
+   - Test interactions
+      - Change inputs and click on the highlighted sections of the map.
+      - Data tables and graphics should change accordingly.
+   - Test Downloads and Print Page buttons
+      - the `downloadDataAsZip()` function in `src/index.js` (lines 2219-2246) creates a ZIP file from the data files located in `src/static/data`
+   - Address errors:
+      - Follow the error suggestions if any occur. Ensure that certain fields and data match exactly, as custom adjustments may be necessary.
+
+2. Build
+- To update the `docs` with the latest `src` code, run:
    ```bash
    npm run build
    ```
-3. Follow errors suggestions if they occur. Certain fields and data have to match excatly. Custom changes may be required.
 
 ### Notes
 - The provided notes below offer additional details associated with the original template. Some names may have been updated or are outdated.
