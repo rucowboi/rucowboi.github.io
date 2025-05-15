@@ -18,7 +18,7 @@ const SITE_CONSTANTS = {
     startingLocation: "120 Albany Street, New Brunswick, NJ 08901" , // Replace with your desired default location
     ctaid: 34, // Starting state for site to start up
      stateName: "New Jersey", // The name of your state, project, or cancer registry. Commonly used with the phrase "Cancer Maps" after it, indicating the name of this website.
-     numOfCancerSites: "25", // The number of cancer sites by which data may be searched. Usually the same as the number of SEARCHOPTIONS_CANCERSITE entries.
+     numOfCancerSites: "23", // The number of cancer sites by which data may be searched. Usually the same as the number of SEARCHOPTIONS_CANCERSITE entries.
      numOfZones: "150", // The number of zones for your state.
      minZonePop: "50,676", // The minimum population of a zone in your state/registry catchment area. Used in a statement describing zones.
      maxZonePop: "97,265", // The maximum population of a zone in your state/registry catchment area. Used in a statement describing zones.
@@ -35,7 +35,7 @@ const SITE_CONSTANTS = {
      registry: "New Jersey State Cancer Registry", //Name of registry that will be listed under “Project Team” in the About section.
      registryLink: "https://www.cinj.org", //A hyperlink URL to this website's parent agency, cancer registry, etc. The URL associated with the text specified in ‘registry’ field above.
      fundingSource: "Cancer data used in this study were provided by the New Jersey State Cancer Registry, Cancer Epidemiology Services, New Jersey Department of Health, which is funded by the National Cancer Institute under contract #75N91021D00009, the National Program of Cancer Registries (NPCR), Centers for Disease Control and Prevention under grant #5NU58DP007117, as well as the State of New Jersey and the Rutgers Cancer Institute.", //A statement/description of who funded the website. Displayed in the About section.
-     citationInfo: "This is where you put your citation info", //A statement/description of how this website should be cited in literature.
+     citationInfo: "", //A statement/description of how this website should be cited in literature.
      nationalCancerDataSource: "this is your national cancer data source info", //A statement/description of the national cancer data source, including data years. This should be reviewed with subsequent data updates to verify whether it needs to be updated as well (e.g., during annual data updates). An example of this statement applicable to national cancer data through 2018 is: "National incidence data come from the National Program of Cancer Registries and Surveillance, Epidemiology, and End Results SEER*Stat Database: U.S. Cancer Statistics Incidence Analytic file - 1998-2018. United States Department of Health and Human Services, Centers for Disease Control and Prevention. Released June 2021, based on the 2020 submission."
      aboutBlurb: "This is your about blurb", //A statement/description of the website, in "What is the XXX Cancer Registry" section of the FAQ.
      incidenceDataDate: "2016", //Last year of available incidence data. Used in one of the FAQs.
@@ -69,14 +69,14 @@ var SEARCHOPTIONS_TYPE = [ // filter values for zone or county
 
 var SEARCHOPTIONS_TIME = [  // filter values for "years" field
     { value: '01yr', label: "1-Year: 2015"}, // added the 1 year value as initValidateDemographicDataset () was looking for 3 rows #CC25
-    { value: '05yrs', label: "5-Year: 2010-2015" },
+    { value: '05yrs', label: "5-Year: 2011-2015" },
     { value: '10yrs', label: "10-Year: 2006-2015" },
 ];
 
 var SEARCHOPTIONS_CANCERSITE = [  // filter values for "cancer" field
     { value: 'AllSite', label: "All Cancer Sites" },
     { value: 'Prostate', label: "Prostate Cancer" },
-    { value: 'Lung', label: "Lung Cancer" },
+    { value: 'Lung', label: "Lung and Bronchus Cancer" },
     { value: 'Breast', label: "Breast Cancer" },
     { value: 'CRC', label: "Colorectal Cancer" },
     { value: 'Kidney', label: "Kidney and Renal Pelvis Cancer" },
@@ -94,19 +94,19 @@ var SEARCHOPTIONS_CANCERSITE = [  // filter values for "cancer" field
     { value: 'Brain', label: "Brain Cancer" },
     { value: 'Larynx', label: "Larynx Cancer" },
     { value: 'Ovary', label: "Ovarian Cancer" },
-    { value: 'Esoph', label: "Esophagian Cancer" },
+    { value: 'Esoph', label: "Esophageal Cancer" },
     { value: 'Cervix', label: "Cervix Uteri" },
     { value: 'HL', label: "Hodgkin Lymphoma" },
     { value: 'Testis', label: "Testis" },
 ];
 var SEARCHOPTIONS_SEX = [  // filter values for "sex" field
-    { value: 'Both', label: "All Sexes" },
+    { value: 'Both', label: "Male and Female" },
     { value: 'Male', label: "Male" },
     { value: 'Female', label: "Female" },
 ];
 
 var SEARCHOPTIONS_RACE = [  // field prefix for AAIR, LCI, UCI fields within the incidence row
-    { value: '', label: "All Ethnicities" },
+    { value: '', label: "All Races/Ethnicities" },
     { value: 'W', label: "Non-Hispanic White" },
     { value: 'B', label: "Non-Hispanic Black" },
     { value: 'H', label: "Hispanic" },
@@ -145,7 +145,7 @@ var BARCHART_COLORS_SEX = {
 // see formatFieldValue() for a list of supported format types
 var DEMOGRAPHIC_TABLES = [
     {
-        title: "Population & Income",
+        title: "Population",
         rows: [
             { field: 'TotalPop', label: "Total Population", format: 'integer', tooltip_id: undefined },
             { field: 'PctRural', label: "% Living in Rural Area", format: 'percent', tooltip_id: 'PctRural' },

@@ -710,8 +710,8 @@
                 </p>
                 <p>
                     <b>Data Suppression:</b> To ensure confidentiality and stable statistical rates, cancer incidence
-                    rates are not reported if based on fewer than <span class="reportingMinCases">[REPLACE REPORTING MIN
-                        CASES]</span> cancer cases.
+                    rates are suppressed and reported as “0” or “No Data” when there are <span class="reportingMinCases">[REPLACE REPORTING MIN
+                        CASES]</span> or fewer cancer cases.
                 </p>
                 <p>
                     <b>Demographics:</b> Statistical data relating to the population and particular groups within it. Demographic variables such as race, sex, and education are generally thought to influence many outcomes of interest, including cancer incidence.
@@ -814,7 +814,7 @@
     <div id="tooltip_contents" tabindex="-1">
 
         <div  data-tooltip="source">
-            Zone and statewide incidence data come from <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer
+            Zone and statewide incidence data come from <span class="stateName">[REPLACE STATE/REGISTRY]</span>State Cancer
             Registry. National Program of Cancer Registries and Surveillance, Epidemiology and End Results Program
             SEER*Stat Database: NPCR and SEER Incidence - U.S. Cancer Statistics Public Use Research Database, 2021
             Submission (2001-2019). United States Department of Health and Human Services, Centers for Disease Control
@@ -822,9 +822,12 @@
                 href="https://www.cdc.gov/cancer/uscs/public-use">www.cdc.gov/cancer/uscs/public-use</a>.
         </div>
         <div  data-tooltip="race">
-            Race/ethnicity is categorized as: <span class="confirmRaceList">[CONFIRM RACE LIST]</span>. "All races"
+            Race/ethnicity is categorized as: non-Hispanic White, non-Hispanic Black, and Hispanic. “All races/ethnicities” 
+            includes all of the above as well as non-Hispanic Asian/Pacific Island, non-Hispanic American Indian/Alaskan 
+            Native, and other or unknown race/ethnicity.
+            <!--Race/ethnicity is categorized as: <span class="confirmRaceList">[CONFIRM RACE LIST]</span>. "All races"
             includes all of the above, as well as other and unknown race/ethnicity and American Indian/Alaska Native.
-            The latter two groups are not reported separately due to small numbers for many cancer sites.
+            The latter two groups are not reported separately due to small numbers for many cancer sites.-->
         </div>
         <div  data-tooltip="location">
             To be able to accurately search for an address, please include components of an address including street
