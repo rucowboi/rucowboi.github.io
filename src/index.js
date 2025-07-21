@@ -1268,6 +1268,7 @@ function performSearchReally (searchparams) {
     performSearchPlaces(searchparams);
     performSearchIncidenceReadout(searchparams);
     performSearchIncidenceBarChart(searchparams);
+    
     // performSearchUpdateDataDownloadLinks(searchparams); // commented out until file downloads addressed
 }
 
@@ -1405,6 +1406,13 @@ function updateFilterSummary(searchparams) {
 
 
 function performSearchIncidenceReadout (searchparams) {
+    const $incidence_section = $('#incidence-title');
+    let ctanametext = searchparams.ctaname;
+    if (searchparams.type == 'County'){
+        ctanametext = searchparams.countyName + ' County'
+    }
+    $incidence_section.find('span[data-statistics="ctaname"]').text(ctanametext);
+
     // incidence data is three rows: cases & incidence rate, for the selected Zone, the Statewide, and Nationwide
     // the race does not filter a row, but rather determines which fields are the relevant incidence/MOE numbers
     //
@@ -1554,7 +1562,7 @@ function performSearchIncidenceReadout (searchparams) {
 
 
 function performSearchIncidenceBarChart (searchparams) {
-    const $chart_section  = $('#incidence-barchart-section');
+    const $chart_section  = $('#filters-and-aairbarchart');
     $chart_section.find('span[data-statistic="cancersite"]').text( getLabelFor('site', searchparams.site) );
     $chart_section.find('span[data-statistics="ctaname"]').text(searchparams.ctaname);
     if (searchparams.type == 'County'){
@@ -1587,11 +1595,11 @@ function performSearchIncidenceBarChart (searchparams) {
             name: sexoption.label,
             color: BARCHART_COLORS_SEX[sexoption.value],
             data: SEARCHOPTIONS_RACE.map(function (raceoption) {  // values in the series, corresponding to the barchart_categories = AAIR for each race option
-                if (! incidencedatarow) return null;  // no data for this sex = return all-0s
+                if (! incidencedatarow) return 0;  // no data for this sex = return all-0s
                 const field = raceoption.value ? `${raceoption.value}_AAIR` : 'AAIR';  // AAIR=total overall incidence; X_AAIR=incidence rate for a given race
 
                 let value = incidencedatarow[field];
-                if (! value) value = null;  // null becomes 0, for hackChartForNullValues()
+                if (! value) value = 0;  // null becomes 0, for hackChartForNullValues()
 
                 return value;
             }),
@@ -1615,22 +1623,22 @@ function performSearchIncidenceBarChart (searchparams) {
     // for this dataset, we know that 0 never happens and above we set nulls to be 0 for our purposes
     // we also have data labels so there will be a value label with the text 0 in it
     // the hack is to, after the chart draws, look for these labels that say "0" and replace their text
-    const hackChartForNullValues = function () {
-        $('#incidence-barchart g.highcharts-data-label tspan').each(function () {
-            const $this = $(this);
+    // const hackChartForNullValues = function () {
+    //     $('#incidence-barchart g.highcharts-data-label tspan').each(function () {
+    //         const $this = $(this);
 
-            if ($this.text() == '0') {
-                $this.text('Data cannot be calculated').get(0).classList.add('lighten');
-            }
-        });
-    };
+    //         if ($this.text() == '0') {
+    //             $this.text('Data cannot be calculated').get(0).classList.add('lighten');
+    //         }
+    //     });
+    // };
 
     Highcharts.chart('incidence-barchart', {
         chart: {
             type: 'bar',
-            events: {
-                load: hackChartForNullValues,
-            },
+            // events: {
+            //     load: hackChartForNullValues,
+            // },
         },
         plotOptions: {
             series: {
@@ -1648,9 +1656,17 @@ function performSearchIncidenceBarChart (searchparams) {
             bar: {
                 dataLabels: {
                     enabled: true,
-                    style: {
-                        fontSize: '10px',
-                    }
+                    allowOverlap: true,
+                    crop: false,
+                    overflow: 'none',
+                    useHTML: true,
+                    formatter: function () {
+                        if (this.y === 0 || this.y === null) {
+                        return '<span style="font-size: 15px; color: #666; position: relative; top: 5px;">*</span>';
+                        } else {
+                        return '<span style="font-size: 10px;">' + this.y + '</span>';
+                        }
+                    },
                 },
             },
         },
@@ -1688,7 +1704,19 @@ function performSearchIncidenceBarChart (searchparams) {
                 }
             }
         },
-        tooltip: false,
+        tooltip: {
+            enabled: true,
+            useHTML: true,
+            formatter: function () {
+                return this.series.name;
+            },
+            positioner: function (labelWidth, labelHeight, point) {
+                return {
+                x: point.plotX + this.chart.plotLeft + 40,
+                y: point.plotY + this.chart.plotTop - labelHeight / 2
+                };
+            }
+        },
         credits: {
             enabled: true,
         },

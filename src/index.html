@@ -198,16 +198,25 @@
     </div>
 
     <div class="container" id="filters-and-aairbarchart">
-        <span class="title" tabindex="0">Age Adjusted Incidence Rate</span>
-            <div id="incidence-barchart" aria-label="Chart of AAIR by race and sex for the selected filters"></div>
+        <span class="title" tabindex="0">Age Adjusted Incidence Rate - <span data-statistics="ctaname"></span></span>
+        
+        <div id="incidence-barchart" aria-label="Chart of AAIR by race and sex for the selected filters"></div>
+        <p>
+            * To ensure confidentiality and stable statistical rates, cancer incidence rates are not reported if based on
+            fewer than <span class="reportingMinCases">[REPLACE REPORTING MIN CASES]</span> cancer cases. 
+        </p>
     </div>
-
-    <div class="container" id="incidence-readouts" style="margin-top: 40px;">
+    <div class="container" id="incidence-title">
+        <span class="title" tabindex="0">Cancer Statistics -
+                            <span data-statistics="ctaname"></span>
+                            <i class="fa fa-info-circle" data-tooltip="source"></i>
+                        </span>
+    </div>
+    <div class="container" id="incidence-readouts">
         <table class="table-sm">
             <thead>
                 <tr>
-                    <th class="left"><span class="title" tabindex="0">Cancer Statistics <i class="fa fa-info-circle"
-                                 data-tooltip="source"></i></span></th>
+                    <th class="left"></th>
                     <th scope="col">Cases</th>
                     <th scope="col" colspan="2">Age Adjusted Incidence Rate (95% LCI, 95% UCI) <i
                             class="fa fa-info-circle"  data-tooltip="aaircitable"></i></th>
@@ -242,17 +251,19 @@
         </table>
 
         <p>
-            To ensure confidentiality and stable statistical rates, cancer incidence rates are not reported if based on
-            fewer than <span class="reportingMinCases">[REPLACE REPORTING MIN CASES]</span> cancer cases. Distributions
-            of selected population demographic factors are also provided for each zone. These data are from the
-            decennial U.S. Census or the Census’s American Community Survey.
+            * To ensure confidentiality and stable statistical rates, cancer incidence rates are not reported if based on
+            fewer than <span class="reportingMinCases">[REPLACE REPORTING MIN CASES]</span> cancer cases. 
         </p>
     </div>
 
     <div class="container" id="demographic-tables" style="margin-top: 40px;">
+        
         <span role="heading">
-            <span class="title" tabindex="0" aria-label="Name of area reported"><span
-                    data-statistics="ctaname">Statewide</span> <span data-statistics="ctaid"></span></span>
+            <span class="title" tabindex="0" aria-label="Name of area reported">
+                Demographics - <span data-statistics="ctaname"></span> 
+                <i class="fa fa-info-circle" data-tooltip="demographic"></i>
+                <span data-statistics="ctaid"></span>
+                </span>
             <br />
         </span>
     </div>
@@ -683,7 +694,9 @@
     - the data download ZIP files metadata, makedownloadzip.py
     -->
     <div id="tooltip_contents" tabindex="-1">
-
+        <div data-tooltip="demographic">
+            Distributions of selected population demographic factors are provided for the zone. These data are from the decennial U.S. Census or the Census’s American Community Survey.
+        </div>
         <div  data-tooltip="source">
             Zone and statewide incidence data come from <span class="stateName">[REPLACE STATE/REGISTRY]</span> Cancer
             Registry. National Program of Cancer Registries and Surveillance, Epidemiology and End Results Program
