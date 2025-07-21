@@ -1587,11 +1587,11 @@ function performSearchIncidenceBarChart (searchparams) {
             name: sexoption.label,
             color: BARCHART_COLORS_SEX[sexoption.value],
             data: SEARCHOPTIONS_RACE.map(function (raceoption) {  // values in the series, corresponding to the barchart_categories = AAIR for each race option
-                if (! incidencedatarow) return 0;  // no data for this sex = return all-0s
+                if (! incidencedatarow) return null;  // no data for this sex = return all-0s
                 const field = raceoption.value ? `${raceoption.value}_AAIR` : 'AAIR';  // AAIR=total overall incidence; X_AAIR=incidence rate for a given race
 
                 let value = incidencedatarow[field];
-                if (! value) value = 0;  // null becomes 0, for hackChartForNullValues()
+                if (! value) value = null;  // null becomes 0, for hackChartForNullValues()
 
                 return value;
             }),
