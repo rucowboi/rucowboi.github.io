@@ -1429,8 +1429,8 @@ function performSearchIncidenceReadout (searchparams) {
     const cancerdata_nation = DATA_CANCER.filter(row => row.GeoID == 'US' && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
 
     let cta_lci, cta_uci, cta_aair;
-    let text_cases_cta = 'no data';
-    let text_aair_cta = 'no data';
+    let text_cases_cta = '*';
+    let text_aair_cta = '*';
     let text_lciuci_cta = '';
     if (cancerdata_cta) {
         const value_cases = searchparams.race ? cancerdata_cta[`${searchparams.race}_Cases`] : cancerdata_cta.Cases;
@@ -1457,8 +1457,8 @@ function performSearchIncidenceReadout (searchparams) {
     }
 
     let state_lci, state_uci, state_aair;
-    let text_cases_state = 'no data';
-    let text_aair_state = 'no data';
+    let text_cases_state = '*';
+    let text_aair_state = '*';
     let text_lciuci_state = '';
     if (cancerdata_state) {
         const value_cases = searchparams.race ? cancerdata_state[`${searchparams.race}_Cases`] : cancerdata_state.Cases;
@@ -1485,8 +1485,8 @@ function performSearchIncidenceReadout (searchparams) {
     }
 
     let nation_lci, nation_uci, nation_aair;
-    let text_cases_nation = 'no data';
-    let text_aair_nation = 'no data';
+    let text_cases_nation = '*';
+    let text_aair_nation = '*';
     let text_lciuci_nation = '';
     if (NATIONWIDE_INCIDENCE && cancerdata_nation) {
         const value_cases = searchparams.race ? cancerdata_nation[`${searchparams.race}_Cases`] : cancerdata_nation.Cases;
