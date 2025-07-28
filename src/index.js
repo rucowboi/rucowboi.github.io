@@ -2022,42 +2022,46 @@ function performSearchUpdateDataDownloadLinks (searchparams) {
 }
 
 
-function geocodeAddress (address, callback) {
-    // if it looks like a lat,lng string then just split it up and hand it back
-    // that's used for zooming to a specific latlng point, and by clicking the map to see what zone is there
-    const islatlng = address.match(/\s*(\-?\d+\.\d+)\s*,\s*(\-?\d+\.\d+)\s*/);
-    if (islatlng) {
-        const coordinates = [parseFloat(islatlng[1]), parseFloat(islatlng[2])];
-        return callback(coordinates);
+function geocodeAddress(address, callback) {
+  const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiY2xhcmt0eXJhIiwiYSI6ImNtZG5pOHVnMDAzNDkybXBtbWlmZm96dHEifQ.H-DExpJhdYKqwQSKPR7XZA';
+
+  // If it's already lat,lng coordinates
+  const islatlng = address.match(/\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*/);
+  if (islatlng) {
+    const coordinates = [parseFloat(islatlng[1]), parseFloat(islatlng[2])];
+    return callback(coordinates);
+  }
+
+  // Cached results
+  if (GEOCODE_CACHE[address]) {
+    return callback(GEOCODE_CACHE[address]);
+  }
+
+  if (!MAPBOX_ACCESS_TOKEN) {
+    alert("Cannot look up addresses because MAPBOX_ACCESS_TOKEN has not been set.");
+    return;
+  }
+
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
+
+  $.ajax({
+    url: url,
+    dataType: 'json',
+    success: function(data) {
+      if (data.features && data.features.length > 0) {
+        const [lon, lat] = data.features[0].center;
+        const coordinates = [lat, lon];
+        GEOCODE_CACHE[address] = coordinates;
+        callback(coordinates);
+      } else {
+        callback(null);
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Error fetching geocode data:', error);
+      alert("There was a problem finding that address. Please try again.");
     }
-
-    // if this is in the cache already, just hand it back as-is
-    if (GEOCODE_CACHE[address]) {
-        return callback(GEOCODE_CACHE[address]);
-    }
-
-    // send it off to Bing geocoder
-    if (! BING_API_KEY) return alert("Cannot look up addresses because BING_API_KEY has not been set.");
-
-    const url = `https://dev.virtualearth.net/REST/v1/Locations?query=${encodeURIComponent(address)}&key=${BING_API_KEY}&s=1`;
-    $.ajax({
-        url: url,
-        dataType: "jsonp",
-        jsonp: "jsonp",
-        success: function (results) {
-            if (results.resourceSets && results.resourceSets[0].resources.length) {
-                const result = results.resourceSets[0].resources[0];
-                GEOCODE_CACHE[address] = result.point.coordinates;  // add it to the cache, this is L.LatLng compatible
-                callback(result.point.coordinates);
-            }
-            else {
-                callback(null);
-            }
-        },
-        error: function (e) {
-            return alert("There was a problem finding that address. Please try again.");
-        }
-    });
+  });
 }
 
 
