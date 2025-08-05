@@ -2023,7 +2023,7 @@ function performSearchUpdateDataDownloadLinks (searchparams) {
 
 
 function geocodeAddress(address, callback) {
-  const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiY2xhcmt0eXJhIiwiYSI6ImNtZG5pOHVnMDAzNDkybXBtbWlmZm96dHEifQ.H-DExpJhdYKqwQSKPR7XZA';
+  const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN;
 
   // If it's already lat,lng coordinates
   const islatlng = address.match(/\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*/);

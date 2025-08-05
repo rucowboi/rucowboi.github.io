@@ -1,6 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const StringReplacePlugin = require("string-replace-webpack-plugin");
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     mode: 'production', // or 'development' for production builds
@@ -75,6 +76,7 @@ module.exports = {
             filename: 'index.css',
         }),
         new StringReplacePlugin(),
+        new Dotenv(),
     ],
 
     devServer: {
