@@ -15,7 +15,7 @@ require('./printing-leaflet-easyPrint.js');
 
 
 const SITE_CONSTANTS = {
-    startingLocation: "120 Albany Street, New Brunswick, NJ 08901" , // Replace with your desired default location
+    startingLocation: [40.47593163423407, -74.42895767340794] , // Replace with your desired default location
     ctaid: 34, // Starting state for site to start up
      stateName: "New Jersey", // The name of your state, project, or cancer registry. Commonly used with the phrase "Cancer Maps" after it, indicating the name of this website.
      numOfCancerSites: "23", // The number of cancer sites by which data may be searched. Usually the same as the number of SEARCHOPTIONS_CANCERSITE entries.
