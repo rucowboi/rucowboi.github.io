@@ -20,6 +20,9 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/jszip@3.7.1/dist/jszip.min.js"></script>
+
+
     <!-- Leaflet and TopoJSON -->
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
     <script type="text/javascript" src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
@@ -68,8 +71,8 @@
         gtag('config', 'UA-XXXXXXXXX-1');
     </script>
 
-    <link rel="stylesheet" type="text/css" href="index.css?Fri_Jul_25_2025_12_46_26_GMT_0400__Eastern_Daylight_Time_" />
-    <script type="text/javascript" src="index.js?Fri_Jul_25_2025_12_46_26_GMT_0400__Eastern_Daylight_Time_"></script>
+    <link rel="stylesheet" type="text/css" href="index.css?Tue_Aug_05_2025_11_15_45_GMT_0400__Eastern_Daylight_Time_" />
+    <script type="text/javascript" src="index.js?Tue_Aug_05_2025_11_15_45_GMT_0400__Eastern_Daylight_Time_"></script>
 </head>
 
 <body>
@@ -118,14 +121,12 @@
             <div class="col-md-8 right">
                 <button class="btn" id="downloadbutton" aria-label="Show options for downloading the map and data"
                     aria-haspopup="true" aria-controls="downloadoptions">
-                    <i class="fa fa-download"></i> Download <i class="fa fa-caret-down"></i>
+                    <i class="fa fa-download"></i> Downloads <i class="fa fa-caret-down"></i>
                 </button>
 
                 <div id="downloadoptions" class="d-none" aria-expanded="false">
-                    <a href="javascript:void(0);" data-export="map" title="Download a PNG image of the map"><i
-                            class="fa fa-download"></i> Download Map</a>
-                    <!-- <a href="javascript:void(0);" target="_blank" data-export="zonedata" title="Download data for the selected CTA Zone"><i class="fa fa-download"></i> Zone Data</a> -->
-                    <!-- <a href="./static/downloads/all_zones.zip" target="_blank" data-export="alldata" title="Download data for all CTA Zones"><i class="fa fa-download"></i> All Data</a> -->
+                    <a href="javascript:void(0);" data-export="map" title="Download a PNG image of the map"><i class="fa fa-map"></i> Map</a>
+                    <a href="javascript:void(0);" data-export="data" title="Download data associated with the tool"><i class="fa fa-table"></i> Data</a>
                 </div>
 
                 <button class="btn btn-alternate" id="printpagebutton" onClick="window.print();"><i
@@ -190,18 +191,27 @@
     </div>
 
     <div class="container" id="filters-and-aairbarchart">
-        <span class="title" tabindex="0">Age Adjusted Incidence Rate</span>
-            <div id="incidence-barchart" aria-label="Chart of AAIR by race and sex for the selected filters"></div>
+        <span class="title" tabindex="0">Age-Adjusted Incidence Rates - <span data-statistics="ctaname"></span></span>
+        
+        <div id="incidence-barchart" aria-label="Chart of AAIR by race and sex for the selected filters"></div>
+        <p>
+            * To ensure confidentiality and stable statistical rates, cancer incidence rates are not reported if based on
+            fewer than <span class="reportingMinCases">[REPLACE REPORTING MIN CASES]</span> cancer cases. 
+        </p>
     </div>
-
-    <div class="container" id="incidence-readouts" style="margin-top: 40px;">
+    <div class="container" id="incidence-title">
+        <span class="title" tabindex="0">Cancer Statistics -
+                            <span data-statistics="ctaname"></span>
+                            <i class="fa fa-info-circle" data-tooltip="source"></i>
+                        </span>
+    </div>
+    <div class="container" id="incidence-readouts">
         <table class="table-sm">
             <thead>
                 <tr>
-                    <th class="left"><span class="title" tabindex="0">Cancer Statistics <i class="fa fa-info-circle"
-                                 data-tooltip="source"></i></span></th>
+                    <th class="left"></th>
                     <th scope="col">Cases</th>
-                    <th scope="col" colspan="2">Age Adjusted Incidence Rate (95% LCI, 95% UCI) <i
+                    <th scope="col" colspan="2">Age-Adjusted Incidence Rates (95% LCI, 95% UCI) <i
                             class="fa fa-info-circle"  data-tooltip="aaircitable"></i></th>
                 </tr>
             </thead>
@@ -242,13 +252,19 @@
             “0” or “No Data” when there are 15 or fewer cancer cases. Distributions
             of selected population demographic factors are also provided for each zone. These data are from the
             decennial U.S. Census or the Census’s American Community Survey.
+            * To ensure confidentiality and stable statistical rates, cancer incidence rates are not reported if based on
+            fewer than <span class="reportingMinCases">[REPLACE REPORTING MIN CASES]</span> cancer cases. 
         </p>
     </div>
 
     <div class="container" id="demographic-tables" style="margin-top: 40px;">
+        
         <span role="heading">
-            <span class="title" tabindex="0" aria-label="Name of area reported"><span
-                    data-statistics="ctaname">Statewide</span> <span data-statistics="ctaid"></span></span>
+            <span class="title" tabindex="0" aria-label="Name of area reported">
+                Demographics - <span data-statistics="ctaname"></span> 
+                <i class="fa fa-info-circle" data-tooltip="demographic"></i>
+                <span data-statistics="ctaid"></span>
+                </span>
             <br />
         </span>
     </div>
@@ -822,7 +838,9 @@
     - the data download ZIP files metadata, makedownloadzip.py
     -->
     <div id="tooltip_contents" tabindex="-1">
-
+        <div data-tooltip="demographic">
+            Distributions of selected population demographic factors are provided for the zone. These data are from the decennial U.S. Census or the Census’s American Community Survey.
+        </div>
         <div  data-tooltip="source">
             Zone and statewide incidence data come from <span class="stateName">[REPLACE STATE/REGISTRY]</span> State Cancer
             Registry. National Program of Cancer Registries and Surveillance, Epidemiology and End Results Program

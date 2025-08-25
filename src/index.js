@@ -363,26 +363,31 @@ Papa.parsePromise = function (url) {
 };
 
 window.onload = function () {
-    const select = document.querySelector(".leaflet-choroplethlegend-select");
-    const legendgradient = document.querySelector(".leaflet-choroplethlegend-legendgradient");
+    setTimeout(() => {
+        const select = document.querySelector(".leaflet-choroplethlegend-select");
+        if (!select) return;
 
-    function adjustWidth() {
-        let temp = document.createElement("span");
-        document.body.appendChild(temp);
-        let maxWidth = 200;
-        let selectedOption = select.options[select.selectedIndex];
-        temp.textContent = selectedOption.text;
-        if (temp.offsetWidth > maxWidth){
-            maxWidth = temp.offsetWidth;
+        const legendgradient = document.querySelector(".leaflet-choroplethlegend-legendgradient");
+
+        function adjustWidth() {
+            let temp = document.createElement("span");
+            document.body.appendChild(temp);
+            let maxWidth = 200;
+            let selectedOption = select.options[select.selectedIndex];
+            temp.textContent = selectedOption.text;
+            if (temp.offsetWidth > maxWidth){
+                maxWidth = temp.offsetWidth;
+            }
+            document.body.removeChild(temp);
+            select.style.width = `${maxWidth + 10}px`;
+            legendgradient.style.width = `${maxWidth + 10}px`;
         }
-        document.body.removeChild(temp);
-        select.style.width = `${maxWidth + 10}px`;
-        legendgradient.style.width = `${maxWidth + 10}px`;
-    }
 
-    adjustWidth();
-    select.addEventListener("change", adjustWidth);
+        adjustWidth();
+        select.addEventListener("change", adjustWidth);
+    }, 100);
 };
+
 
 
 function initUrlParamUpdater () {
@@ -1166,13 +1171,13 @@ function initGoogleAnalyticsHooks () {
     $('#downloadoptions a[data-export="map"]').click(function () {
         logGoogleAnalyticsEvent('export', 'mapimage');
     });
-    $('#downloadoptions a[data-export="zonedata"]').click(function () {
-        const value = $(this).attr('data-ctaid');
-        logGoogleAnalyticsEvent('export', 'zonedata', value);
-    });
-    $('#downloadoptions a[data-export="alldata"]').click(function () {
-        logGoogleAnalyticsEvent('export', 'alldata');
-    });
+    // $('#downloadoptions a[data-export="zonedata"]').click(function () {
+    //     const value = $(this).attr('data-ctaid');
+    //     logGoogleAnalyticsEvent('export', 'zonedata', value);
+    // });
+    // $('#downloadoptions a[data-export="alldata"]').click(function () {
+    //     logGoogleAnalyticsEvent('export', 'alldata');
+    // });
 
     // switching tab sections in the bottom Learn area
     $('#learn-text ul.nav a[data-toggle="tab"]').on('shown.bs.tab', function () {
@@ -1264,6 +1269,7 @@ function performSearchReally (searchparams) {
     performSearchPlaces(searchparams);
     performSearchIncidenceReadout(searchparams);
     performSearchIncidenceBarChart(searchparams);
+    
     // performSearchUpdateDataDownloadLinks(searchparams); // commented out until file downloads addressed
 }
 
@@ -1401,6 +1407,13 @@ function updateFilterSummary(searchparams) {
 
 
 function performSearchIncidenceReadout (searchparams) {
+    const $incidence_section = $('#incidence-title');
+    let ctanametext = searchparams.ctaname;
+    if (searchparams.type == 'County'){
+        ctanametext = searchparams.countyName + ' County'
+    }
+    $incidence_section.find('span[data-statistics="ctaname"]').text(ctanametext);
+
     // incidence data is three rows: cases & incidence rate, for the selected Zone, the Statewide, and Nationwide
     // the race does not filter a row, but rather determines which fields are the relevant incidence/MOE numbers
     //
@@ -1417,8 +1430,8 @@ function performSearchIncidenceReadout (searchparams) {
     const cancerdata_nation = DATA_CANCER.filter(row => row.GeoID == 'US' && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
 
     let cta_lci, cta_uci, cta_aair;
-    let text_cases_cta = 'no data';
-    let text_aair_cta = 'no data';
+    let text_cases_cta = '*';
+    let text_aair_cta = '*';
     let text_lciuci_cta = '';
     if (cancerdata_cta) {
         const value_cases = searchparams.race ? cancerdata_cta[`${searchparams.race}_Cases`] : cancerdata_cta.Cases;
@@ -1445,8 +1458,8 @@ function performSearchIncidenceReadout (searchparams) {
     }
 
     let state_lci, state_uci, state_aair;
-    let text_cases_state = 'no data';
-    let text_aair_state = 'no data';
+    let text_cases_state = '*';
+    let text_aair_state = '*';
     let text_lciuci_state = '';
     if (cancerdata_state) {
         const value_cases = searchparams.race ? cancerdata_state[`${searchparams.race}_Cases`] : cancerdata_state.Cases;
@@ -1473,8 +1486,8 @@ function performSearchIncidenceReadout (searchparams) {
     }
 
     let nation_lci, nation_uci, nation_aair;
-    let text_cases_nation = 'no data';
-    let text_aair_nation = 'no data';
+    let text_cases_nation = '*';
+    let text_aair_nation = '*';
     let text_lciuci_nation = '';
     if (NATIONWIDE_INCIDENCE && cancerdata_nation) {
         const value_cases = searchparams.race ? cancerdata_nation[`${searchparams.race}_Cases`] : cancerdata_nation.Cases;
@@ -1550,7 +1563,7 @@ function performSearchIncidenceReadout (searchparams) {
 
 
 function performSearchIncidenceBarChart (searchparams) {
-    const $chart_section  = $('#incidence-barchart-section');
+    const $chart_section  = $('#filters-and-aairbarchart');
     $chart_section.find('span[data-statistic="cancersite"]').text( getLabelFor('site', searchparams.site) );
     $chart_section.find('span[data-statistics="ctaname"]').text(searchparams.ctaname);
     if (searchparams.type == 'County'){
@@ -1611,22 +1624,22 @@ function performSearchIncidenceBarChart (searchparams) {
     // for this dataset, we know that 0 never happens and above we set nulls to be 0 for our purposes
     // we also have data labels so there will be a value label with the text 0 in it
     // the hack is to, after the chart draws, look for these labels that say "0" and replace their text
-    const hackChartForNullValues = function () {
-        $('#incidence-barchart g.highcharts-data-label tspan').each(function () {
-            const $this = $(this);
+    // const hackChartForNullValues = function () {
+    //     $('#incidence-barchart g.highcharts-data-label tspan').each(function () {
+    //         const $this = $(this);
 
-            if ($this.text() == '0') {
-                $this.text('Data cannot be calculated').get(0).classList.add('lighten');
-            }
-        });
-    };
+    //         if ($this.text() == '0') {
+    //             $this.text('Data cannot be calculated').get(0).classList.add('lighten');
+    //         }
+    //     });
+    // };
 
     Highcharts.chart('incidence-barchart', {
         chart: {
             type: 'bar',
-            events: {
-                load: hackChartForNullValues,
-            },
+            // events: {
+            //     load: hackChartForNullValues,
+            // },
         },
         plotOptions: {
             series: {
@@ -1644,9 +1657,17 @@ function performSearchIncidenceBarChart (searchparams) {
             bar: {
                 dataLabels: {
                     enabled: true,
-                    style: {
-                        fontSize: '10px',
-                    }
+                    allowOverlap: true,
+                    crop: false,
+                    overflow: 'none',
+                    useHTML: true,
+                    formatter: function () {
+                        if (this.y === 0 || this.y === null) {
+                        return '<span style="font-size: 15px; color: #666; position: relative; top: 5px;">*</span>';
+                        } else {
+                        return '<span style="font-size: 10px;">' + this.y + '</span>';
+                        }
+                    },
                 },
             },
         },
@@ -1684,7 +1705,19 @@ function performSearchIncidenceBarChart (searchparams) {
                 }
             }
         },
-        tooltip: false,
+        tooltip: {
+            enabled: true,
+            useHTML: true,
+            formatter: function () {
+                return this.series.name;
+            },
+            positioner: function (labelWidth, labelHeight, point) {
+                return {
+                x: point.plotX + this.chart.plotLeft + 40,
+                y: point.plotY + this.chart.plotTop - labelHeight / 2
+                };
+            }
+        },
         credits: {
             enabled: true,
         },
@@ -1990,42 +2023,46 @@ function performSearchUpdateDataDownloadLinks (searchparams) {
 }
 
 
-function geocodeAddress (address, callback) {
-    // if it looks like a lat,lng string then just split it up and hand it back
-    // that's used for zooming to a specific latlng point, and by clicking the map to see what zone is there
-    const islatlng = address.match(/\s*(\-?\d+\.\d+)\s*,\s*(\-?\d+\.\d+)\s*/);
-    if (islatlng) {
-        const coordinates = [parseFloat(islatlng[1]), parseFloat(islatlng[2])];
-        return callback(coordinates);
+function geocodeAddress(address, callback) {
+  const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN;
+
+  // If it's already lat,lng coordinates
+  const islatlng = address.match(/\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*/);
+  if (islatlng) {
+    const coordinates = [parseFloat(islatlng[1]), parseFloat(islatlng[2])];
+    return callback(coordinates);
+  }
+
+  // Cached results
+  if (GEOCODE_CACHE[address]) {
+    return callback(GEOCODE_CACHE[address]);
+  }
+
+  if (!MAPBOX_ACCESS_TOKEN) {
+    alert("Cannot look up addresses because MAPBOX_ACCESS_TOKEN has not been set.");
+    return;
+  }
+
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
+
+  $.ajax({
+    url: url,
+    dataType: 'json',
+    success: function(data) {
+      if (data.features && data.features.length > 0) {
+        const [lon, lat] = data.features[0].center;
+        const coordinates = [lat, lon];
+        GEOCODE_CACHE[address] = coordinates;
+        callback(coordinates);
+      } else {
+        callback(null);
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Error fetching geocode data:', error);
+      alert("There was a problem finding that address. Please try again.");
     }
-
-    // if this is in the cache already, just hand it back as-is
-    if (GEOCODE_CACHE[address]) {
-        return callback(GEOCODE_CACHE[address]);
-    }
-
-    // send it off to Bing geocoder
-    if (! BING_API_KEY) return alert("Cannot look up addresses because BING_API_KEY has not been set.");
-
-    const url = `https://dev.virtualearth.net/REST/v1/Locations?query=${encodeURIComponent(address)}&key=${BING_API_KEY}&s=1`;
-    $.ajax({
-        url: url,
-        dataType: "jsonp",
-        jsonp: "jsonp",
-        success: function (results) {
-            if (results.resourceSets && results.resourceSets[0].resources.length) {
-                const result = results.resourceSets[0].resources[0];
-                GEOCODE_CACHE[address] = result.point.coordinates;  // add it to the cache, this is L.LatLng compatible
-                callback(result.point.coordinates);
-            }
-            else {
-                callback(null);
-            }
-        },
-        error: function (e) {
-            return alert("There was a problem finding that address. Please try again.");
-        }
-    });
+  });
 }
 
 
@@ -2211,3 +2248,41 @@ function updateCandleChart($candlediv, subtitle, aair, lci, uci, minlci, maxuci)
     const charttooltip = `${subtitle} LCI ${lci}, UCI ${uci}, AAIR ${aair}`;
     $candlediv.attr('aria-label', charttooltip).prop('title', charttooltip);
 }
+
+function downloadDataAsZip() {
+    const zip = new JSZip();
+
+    // List of data files you want to zip
+    const files = [
+        'allCancerRatesData.csv',
+        'allDemographics.csv',
+        'cities_by_cta.csv', 
+        'counties_by_cta.csv'
+    ];
+
+    const filePromises = files.map(filename => {
+        return fetch(`./static/data/${filename}`)
+            .then(response => response.blob())
+            .then(blob => {
+                zip.file(filename, blob);
+            });
+    });
+
+    Promise.all(filePromises).then(() => {
+        zip.generateAsync({ type: "blob" }).then(function (content) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = "data-files.zip"; // Name of the zip file
+            link.click();
+        });
+    });
+}
+
+// Attach event listener to the download link
+document.addEventListener("DOMContentLoaded", function () {
+    const downloadLink = document.querySelector('[data-export="data"]');
+
+    downloadLink.addEventListener("click", function () {
+        downloadDataAsZip();
+    });
+});
