@@ -68,9 +68,9 @@ var SEARCHOPTIONS_TYPE = [ // filter values for zone or county
 ]
 
 var SEARCHOPTIONS_TIME = [  // filter values for "years" field
-    { value: '05yrs', label: "5-Year: 2011-2015" },
-    { value: '01yr', label: "1-Year: 2015"}, // added the 1 year value as initValidateDemographicDataset () was looking for 3 rows #CC25
-    { value: '10yrs', label: "10-Year: 2006-2015" },
+    { value: '05yrs', label: "5-Year: 2018-2022" },
+    { value: '01yr', label: "1-Year: 2022"}, // added the 1 year value as initValidateDemographicDataset () was looking for 3 rows #CC25
+    { value: '10yrs', label: "10-Year: 2013-2022" },
 ];
 
 var SEARCHOPTIONS_CANCERSITE = [  // filter values for "cancer" field
