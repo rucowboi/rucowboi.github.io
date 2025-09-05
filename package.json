@@ -12,6 +12,7 @@
   "author": "GreenInfo Network <gin@greeninfo.org>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^17.2.2",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "python3": "^0.0.1"
