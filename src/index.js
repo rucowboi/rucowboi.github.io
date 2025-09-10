@@ -109,6 +109,7 @@ var SEARCHOPTIONS_RACE = [  // field prefix for AAIR, LCI, UCI fields within the
     { value: '', label: "All Races/Ethnicities" },
     { value: 'W', label: "Non-Hispanic White" },
     { value: 'B', label: "Non-Hispanic Black" },
+    { value: 'API', label: "Non-Hispanic Asian/Pacific Islander" },
     { value: 'H', label: "Hispanic" },
 ];
 
