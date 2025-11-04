@@ -158,6 +158,7 @@ var DEMOGRAPHIC_TABLES = [
             { field: 'PctMinority', label: "% Minority (other than non-Hispanic White)", format: 'percent', tooltip_id: 'PctMinority' },
             { field: 'PctHispanic', label: "% Hispanic", format: 'percent', tooltip_id: 'PctHispanic' },
             { field: 'PctBlackNH', label: "% Black (non-Hispanic)", format: 'percent', tooltip_id: 'PctBlackNH' },
+            { field: 'PctAPINH', label: "% Asian/Pacific Islander(non-Hispanic)", format: 'percent', tooltip_id: 'PctAPINH' },
         ],
     },
     {
@@ -229,7 +230,8 @@ var CHOROPLETH_OPTIONS = [
     { field: 'PctEducBchPlus', label: "% With Bachelors Degree or Higher", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
     { field: 'PctEducLHS', label: "% Did Not Finish High School", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
     { field: 'PctDisabled', label: "% With a Disability", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // cht comment out because not in data causes error
-    { field: 'Pct_forborn', label: "% Foreign Born", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // 
+    { field: 'Pct_forborn', label: "% Foreign Born", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctAPINH', label: "% Asian/Pacific Islander (non-Hispanic)", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // 
 ];
 
 // the style to use for the MAP_LAYERS.county GeoJSON overlay
