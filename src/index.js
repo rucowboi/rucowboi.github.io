@@ -13,6 +13,7 @@ require('./leaflet-boxzoom.js');
 require('./leaflet-singleclick.js');
 require('./printing-leaflet-easyPrint.js');
 
+const CARTO_API_KEY = process.env.CARTO_API_KEY;
 
 const SITE_CONSTANTS = {
     startingLocation: [40.47593163423407, -74.42895767340794] , // Replace with your desired default location
@@ -246,7 +247,7 @@ var MAP_LAYERS = [
         id: 'basemap',
         label: "Base Map",
         checked: true,
-        layer: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+        layer: L.tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}.png?key=${CARTO_API_KEY}`, {
             pane: 'tilePane',
             zIndex: 0,
             attribution: 'Map tiles by <a target="_blank" href="http://www.mapbox.com">MapBox</a>.<br />Data &copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributings</a>',
@@ -256,7 +257,7 @@ var MAP_LAYERS = [
         id: 'labels',
         label: "Labels",
         checked: true,
-        layer: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_only_labels/{z}/{x}/{y}{r}.png', {
+        layer: L.tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/light_only_labels/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`, {
             pane: 'popupPane',
             zIndex: 999,
             attribution: 'Map tiles by <a target="_blank" href="http://www.mapbox.com">MapBox</a>.<br />Data &copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributings</a>',
