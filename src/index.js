@@ -888,7 +888,8 @@ function initDemographicTables () {
                 <thead>
                     <tr>
                         <th scope="col" class="nowrap left">${tableinfo.title}</th>
-                        <th scope="col" class="nowrap right typeName" data-region="cta" >Zone</th>
+                        <th scope="col" class="nowrap right" data-region="cta" >Zone</th>
+                        <th scope="col" class="nowrap right" data-region="county" >County</th>
                         <th scope="col" class="nowrap right" data-region="state" >Statewide</th>
                         <th scope="col" class="nowrap right" data-region="nation" >Nationwide</th>
                     </tr>
@@ -904,6 +905,7 @@ function initDemographicTables () {
                 <tr>
                     <th scope="row">${tablerowinfo.label}</th>
                     <td class="right nowrap" data-region="cta"><span data-region="cta" data-statistic="${tablerowinfo.field}"></span></td>
+                    <td class="right nowrap" data-region="county"><span data-region="county" data-statistic="${tablerowinfo.field}"></span></td>
                     <td class="right nowrap" data-region="state"><span data-region="state" data-statistic="${tablerowinfo.field}"></span></td>
                     <td class="right nowrap" data-region="nation"><span data-region="nation" data-statistic="${tablerowinfo.field}"></span></td>
                 </tr>
@@ -1455,14 +1457,6 @@ function performSearchReally (searchparams, announceResults = true) {
     const $search_results_status = $('#search-results-status');
     $search_results_status.text('');
 
-    const typeNames = $('.typeName');
-    if (searchparams.type == 'Zone') {
-        typeNames.text("Zone");
-    }
-    if (searchparams.type == 'County') {
-        typeNames.text("County");
-    }
-
     performSearchMap(searchparams);
     const search_result_summaries = [
         performSearchPlaces(searchparams),
@@ -1488,28 +1482,20 @@ function performSearchDemographics (searchparams) {
     let demogdata_zone;
     if (searchparams.ctaid) {
         demogdata_zone = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.ctaid && row.Years == searchparams.time; })[0];
-    } else if (searchparams.countyId) {
-        demogdata_zone = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.countyId && row.Years == searchparams.time; })[0];
-    } else {
-        demogdata_zone = DATA_DEMOGS.filter(function (row) { return row.GeoType == 'State' && row.Years == searchparams.time; })[0];
     }
 
     const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.GeoID == SITE_CONSTANTS.ctaid && row.Years == searchparams.time; })[0];
+    const demogdata_county = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.countyId && row.Years == searchparams.time; })[0];
     const demogdata_nation = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US' && row.Years == searchparams.time; })[0];
+
     const $demographics_section = $('#demographic-tables');
     const $ctastats = $demographics_section.find('[data-region="cta"]');
+    const $countystats = $demographics_section.find('[data-region="county"]');
     const $nationstats = $demographics_section.find('[data-region="nation"]');
+
     $demographics_section.attr('aria-busy', 'true');
 
-    // show/hide the CTA Zone content, depending whether a CTA Zone was selected (that is, not Statewide)
-    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) {
-        $ctastats.hide();
-    }
-    else {
-        $ctastats.show();
-    }
-
-    // show/hide the Nationwide cells, depending on the global setting
+    // show/hide the County, the Zone, and Nationwide cells/columns
     if (NATIONWIDE_DEMOGRAPHICS) {
         $nationstats.show();
     }
@@ -1517,31 +1503,45 @@ function performSearchDemographics (searchparams) {
         $nationstats.hide();
     }
 
+    if (searchparams.ctaid && searchparams.type == 'Zone') {
+        $ctastats.show();
+    }
+    else {
+        $ctastats.hide();
+    }
+
+    if (searchparams.countyId) {
+        $countystats.show();
+    }
+    else {
+        $countystats.hide();
+    }
+
     // fill in the blanks: the CTA name and ID
     let ctanametext = searchparams.ctaname;
     if (searchparams.countyId && searchparams.type == 'County') {
-        // ctanametext = searchparams.countyName + ' County';
         ctanametext = searchparams.countyName;
     } else if (searchparams.ctaid && searchparams.type == 'Zone') {
         ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
     } else {
         ctanametext = SITE_CONSTANTS.stateName;
     }
-    const ctaidtext = searchparams.ctaid == SITE_CONSTANTS.ctaid ? '' : `(${demogdata_zone.GeoID})`;
     $demographics_section.find('span[data-statistics="ctaname"]').text(ctanametext);
-    // $demographics_section.find('span[data-statistics="ctaid"]').text(ctaidtext);
-    $demographics_section.find('span[data-statistics="ctaname"]').closest('span.subtitle');
 
     // fill in the blanks: demographics
     // go over the DEMOGRAPHIC_TABLES which we used to construct the table, and fill in the corresponding values for CTA & Statewide demographics
     DEMOGRAPHIC_TABLES.forEach(function (tableinfo) {
         tableinfo.rows.forEach(function (tablerowinfo) {
             const $slots_cta = $demographics_section.find(`span[data-region="cta"][data-statistic="${tablerowinfo.field}"]`);
-            const value_cta = formatFieldValue(demogdata_zone[tablerowinfo.field], tablerowinfo.format);
+            const value_cta = demogdata_zone ? formatFieldValue(demogdata_zone[tablerowinfo.field], tablerowinfo.format) : "";
             $slots_cta.text(value_cta);
 
+            const $slots_county = $demographics_section.find(`span[data-region="county"][data-statistic="${tablerowinfo.field}"]`);
+            const value_county = demogdata_county ? formatFieldValue(demogdata_county[tablerowinfo.field], tablerowinfo.format) : "";
+            $slots_county.text(value_county);
+
             const $slots_state = $demographics_section.find(`span[data-region="state"][data-statistic="${tablerowinfo.field}"]`);
-            const value_state = formatFieldValue(demogdata_state[tablerowinfo.field], tablerowinfo.format);
+            const value_state = demogdata_state ? formatFieldValue(demogdata_state[tablerowinfo.field], tablerowinfo.format) : "";
             $slots_state.text(value_state);
 
             if (NATIONWIDE_DEMOGRAPHICS) {
@@ -1552,27 +1552,8 @@ function performSearchDemographics (searchparams) {
         });
     });
 
+    // done
     $demographics_section.attr('aria-busy', 'false');
-
-    const include_cta = searchparams.ctaid != SITE_CONSTANTS.ctaid;
-    const include_nation = NATIONWIDE_DEMOGRAPHICS;
-    const demographic_summary = [`Demographics updated for ${ctanametext}.`];
-    DEMOGRAPHIC_TABLES.forEach(function (tableinfo) {
-        demographic_summary.push(`${tableinfo.title}.`);
-        tableinfo.rows.forEach(function (tablerowinfo) {
-            const row_summary = [tablerowinfo.label];
-            if (include_cta) {
-                row_summary.push(`${searchparams.type}: ${formatFieldValue(demogdata_zone[tablerowinfo.field], tablerowinfo.format)}`);
-            }
-            row_summary.push(`Statewide: ${formatFieldValue(demogdata_state[tablerowinfo.field], tablerowinfo.format)}`);
-            if (include_nation) {
-                row_summary.push(`Nationwide: ${formatFieldValue(demogdata_nation[tablerowinfo.field], tablerowinfo.format)}`);
-            }
-            demographic_summary.push(`${row_summary.join(', ')}.`);
-        });
-    });
-
-    return demographic_summary.join(' ');
 }
 
 
@@ -1601,12 +1582,6 @@ function performSearchPlaces (searchparams) {
         $("<span></span>").text(text).appendTo($block);
         places_summary.push(`Zone: ${text}.`);
     }
-    if (searchparams.countyId && searchparams.type == 'County') {
-        const text = `${searchparams.countyName} County`;
-        const $block = $('<div></div>').html(`<b class='subtitle'>County: </b>`).appendTo($placesslot);
-        $('<span></span>').text(text).appendTo($block);
-        places_summary.push(`County: ${text}.`);
-    }
     if (counties.length) {
         const text = counties.join(', ');
         const $block = $('<div></div>').html(`<b class='subtitle'>County: </b>`).appendTo($placesslot);
@@ -1626,7 +1601,7 @@ function performSearchPlaces (searchparams) {
 }
 
 
-function updateFilterSummary(searchparams) {
+function updateFilterSummary (searchparams) {
     const $summaryContainer = $('#data-filters-summary');
     $summaryContainer.find('.filters-list').remove();
     let summaryHtml = '<div class="filters-list" style="margin-top: 10px;">';
@@ -1649,7 +1624,7 @@ function updateFilterSummary(searchparams) {
 
         if (label.includes('Location Search') && searchparams.type == "County") {
             label = "Location"
-            value = searchparams.countyName + " County";
+            value = searchparams.countyName;
         }
 
         let valueStyle = 'background-color: #e6eaff;; padding: 5px;';
@@ -1675,7 +1650,6 @@ function performSearchIncidenceReadout (searchparams) {
 
     let ctanametext = searchparams.ctaname;
     if (searchparams.countyId && searchparams.type == 'County') {
-        // ctanametext = searchparams.countyName + ' County';
         ctanametext = searchparams.countyName;
     } else if (searchparams.ctaid && searchparams.type == 'Zone') {
         ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
@@ -1699,6 +1673,7 @@ function performSearchIncidenceReadout (searchparams) {
     }
 
     const cancerdata_state = DATA_CANCER.filter(row => row.GeoID == SITE_CONSTANTS.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
+    const cancerdata_county = DATA_CANCER.filter(row => row.GeoID == searchparams.countyId && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
     const cancerdata_nation = DATA_CANCER.filter(row => row.GeoID == 'US' && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
 
     let cta_lci, cta_uci, cta_aair;
@@ -1757,6 +1732,34 @@ function performSearchIncidenceReadout (searchparams) {
         state_uci = value_uci;
     }
 
+    let county_lci, county_uci, county_aair;
+    let text_cases_county = '*';
+    let text_aair_county = '*';
+    let text_lciuci_county = '';
+    if (cancerdata_county) {
+        const value_cases = searchparams.race ? cancerdata_county[`${searchparams.race}_Cases`] : cancerdata_county.Cases;
+        const value_aair = searchparams.race ? cancerdata_county[`${searchparams.race}_AAIR`] : cancerdata_county.AAIR;
+        const value_lci = searchparams.race ? cancerdata_county[`${searchparams.race}_LCI`] : cancerdata_county.LCI;
+        const value_uci = searchparams.race ? cancerdata_county[`${searchparams.race}_UCI`] : cancerdata_county.UCI;
+
+        const has_cases = ! isNaN(parseInt(value_cases));
+        const has_aair = ! isNaN(parseFloat(value_cases));
+
+        if (has_cases) text_cases_county = value_cases.toLocaleString();
+        if (has_aair) text_aair_county = value_aair.toFixed(1);
+
+        if (has_cases && has_aair) {
+            const lcitext = (searchparams.race ? cancerdata_county[`${searchparams.race}_LCI`] : cancerdata_county.LCI).toFixed(1);
+            const ucitext = (searchparams.race ? cancerdata_county[`${searchparams.race}_UCI`] : cancerdata_county.UCI).toFixed(1);
+            text_lciuci_county = `(${lcitext}, ${ucitext})`;
+        }
+
+        // tacked on months later, a need to stow these for some comparison charts
+        county_aair = value_aair;
+        county_lci = value_lci;
+        county_uci = value_uci;
+    }
+
     let nation_lci, nation_uci, nation_aair;
     let text_cases_nation = '*';
     let text_aair_nation = '*';
@@ -1785,12 +1788,20 @@ function performSearchIncidenceReadout (searchparams) {
         nation_uci = value_uci;
     }
 
-    // show/hide the CTA columns (well, actually, each individual cell)
-    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) {
-        $incidence_readouts.find('[data-region="cta"]').hide();
+    // show/hide the zone columns (well, actually, each individual cell)
+    if (searchparams.ctaid && searchparams.type == 'Zone') {
+        $incidence_readouts.find('[data-region="cta"]').show();
     }
     else {
-        $incidence_readouts.find('[data-region="cta"]').show();
+        $incidence_readouts.find('[data-region="cta"]').hide();
+    }
+
+    // show/hide the county columns (well, actually, each individual cell)
+    if (cancerdata_county) {
+        $incidence_readouts.find('[data-region="county"]').show();
+    }
+    else {
+        $incidence_readouts.find('[data-region="county"]').hide();
     }
 
     // show/hide the Nationwide content based on the NATIONWIDE_INCIDENCE config setting
@@ -1810,6 +1821,10 @@ function performSearchIncidenceReadout (searchparams) {
     $incidence_readouts.find('span[data-region="state"][data-statistic="aair"]').text(text_aair_state);
     $incidence_readouts.find('span[data-region="state"][data-statistic="lciuci"]').text(text_lciuci_state);
 
+    $incidence_readouts.find('span[data-region="county"][data-statistic="cases"]').text(text_cases_county);
+    $incidence_readouts.find('span[data-region="county"][data-statistic="aair"]').text(text_aair_county);
+    $incidence_readouts.find('span[data-region="county"][data-statistic="lciuci"]').text(text_lciuci_county);
+
     $incidence_readouts.find('span[data-region="nation"][data-statistic="cases"]').text(text_cases_nation);
     $incidence_readouts.find('span[data-region="nation"][data-statistic="aair"]').text(text_aair_nation);
     $incidence_readouts.find('span[data-region="nation"][data-statistic="lciuci"]').text(text_lciuci_nation);
@@ -1819,6 +1834,7 @@ function performSearchIncidenceReadout (searchparams) {
     // but existing candle chart UIs aen't suited, as they want a really custom UI
     const $candlechart_cta = $incidence_readouts.find('span.ucilcicandlechart[data-region="cta"]');
     const $candlechart_state = $incidence_readouts.find('span.ucilcicandlechart[data-region="state"]');
+    const $candlechart_county = $incidence_readouts.find('span.ucilcicandlechart[data-region="county"]');
     const $candlechart_nation = $incidence_readouts.find('span.ucilcicandlechart[data-region="nation"]');
 
     let minlci = (nation_lci && nation_uci) ? Math.min(cta_lci, state_lci, nation_lci) : Math.min(cta_lci, state_lci);
@@ -1830,6 +1846,7 @@ function performSearchIncidenceReadout (searchparams) {
 
     updateCandleChart($candlechart_cta, 'Selected Area', cta_aair, cta_lci, cta_uci, minlci, maxuci);
     updateCandleChart($candlechart_state, SITE_CONSTANTS.ctaid, state_aair, state_lci, state_uci, minlci, maxuci);
+    updateCandleChart($candlechart_county, 'County', county_aair, county_lci, county_uci, minlci, maxuci);
     updateCandleChart($candlechart_nation, 'US', nation_aair, nation_lci, nation_uci, minlci, maxuci);
 
     // fill in some text describing the filtering applied to the data
@@ -1864,7 +1881,6 @@ function performSearchIncidenceBarChart (searchparams) {
 
     let ctanametext = searchparams.ctaname;
     if (searchparams.countyId && searchparams.type == 'County') {
-        // ctanametext = searchparams.countyName + ' County';
         ctanametext = searchparams.countyName;
     } else if (searchparams.ctaid && searchparams.type == 'Zone') {
         ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
