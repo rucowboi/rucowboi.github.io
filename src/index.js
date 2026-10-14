@@ -123,10 +123,6 @@ var CANCER_SEXES = {
     'Testis': 'Male',
 };
 
-// if your data will not have Nationwide stats, you may set either/both of these to false to turn that off
-var NATIONWIDE_DEMOGRAPHICS = false;
-var NATIONWIDE_INCIDENCE = false;
-
 // colors for the incidence bar chart; these mirror the SEARCHOPTIONS_SEX options
 var BARCHART_COLORS_SEX = {
     'Both': '#4f629a',       // Same as before for 'Both'
@@ -714,10 +710,8 @@ function initValidateDemographicDataset () {
         const hasstatewide = DATA_DEMOGS.filter(function (row) { return row.GeoID == SITE_CONSTANTS.ctaid; });
         if (hasstatewide.length != SEARCHOPTIONS_TIME.length) errors.push(`Found ${hasstatewide.length} demographic rows for Statewide`);
 
-        if (NATIONWIDE_DEMOGRAPHICS) {
-            const hasnationwide = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US'; });
-            if (hasnationwide.length != SEARCHOPTIONS_TIME.length) errors.push(`Found ${hasnationwide.length} demographic rows for Nationwide`);
-        }
+        const hasnationwide = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US'; });
+        if (hasnationwide.length != SEARCHOPTIONS_TIME.length) errors.push(`Found ${hasnationwide.length} demographic rows for Nationwide`);
     }
 
     // if we found errors, throw a tantrum and die
@@ -1496,12 +1490,7 @@ function performSearchDemographics (searchparams) {
     $demographics_section.attr('aria-busy', 'true');
 
     // show/hide the County, the Zone, and Nationwide cells/columns
-    if (NATIONWIDE_DEMOGRAPHICS) {
-        $nationstats.show();
-    }
-    else {
-        $nationstats.hide();
-    }
+    $nationstats.show();
 
     if (searchparams.ctaid && searchparams.type == 'Zone') {
         $ctastats.show();
@@ -1544,16 +1533,42 @@ function performSearchDemographics (searchparams) {
             const value_state = demogdata_state ? formatFieldValue(demogdata_state[tablerowinfo.field], tablerowinfo.format) : "";
             $slots_state.text(value_state);
 
-            if (NATIONWIDE_DEMOGRAPHICS) {
-                const $slots_nation = $demographics_section.find(`span[data-region="nation"][data-statistic="${tablerowinfo.field}"]`);
-                const value_nation = formatFieldValue(demogdata_nation[tablerowinfo.field], tablerowinfo.format);
-                $slots_nation.text(value_nation);
-            }
+            const $slots_nation = $demographics_section.find(`span[data-region="nation"][data-statistic="${tablerowinfo.field}"]`);
+            const value_nation = formatFieldValue(demogdata_nation[tablerowinfo.field], tablerowinfo.format);
+            $slots_nation.text(value_nation);
         });
     });
 
-    // done
     $demographics_section.attr('aria-busy', 'false');
+
+    const include_cta = searchparams.ctaid && searchparams.type == 'Zone';
+    const include_county = searchparams.countyId;
+    const include_nation = true;
+    const demographic_summary = [`Demographics updated for ${ctanametext}.`];
+    DEMOGRAPHIC_TABLES.forEach(function (tableinfo) {
+        demographic_summary.push(`${tableinfo.title}.`);
+        tableinfo.rows.forEach(function (tablerowinfo) {
+            const row_summary = [tablerowinfo.label];
+
+            if (include_cta) {
+                row_summary.push(`Zone: ${formatFieldValue(demogdata_zone[tablerowinfo.field], tablerowinfo.format)}`);
+            }
+
+            if (include_county) {
+                row_summary.push(`County: ${formatFieldValue(demogdata_county[tablerowinfo.field], tablerowinfo.format)}`);
+            }
+
+            row_summary.push(`Statewide: ${formatFieldValue(demogdata_state[tablerowinfo.field], tablerowinfo.format)}`);
+
+            if (include_nation) {
+                row_summary.push(`Nationwide: ${formatFieldValue(demogdata_nation[tablerowinfo.field], tablerowinfo.format)}`);
+            }
+
+            demographic_summary.push(`${row_summary.join(', ')}.`);
+        });
+    });
+
+    return demographic_summary.join(' ');
 }
 
 
@@ -1764,7 +1779,7 @@ function performSearchIncidenceReadout (searchparams) {
     let text_cases_nation = '*';
     let text_aair_nation = '*';
     let text_lciuci_nation = '';
-    if (NATIONWIDE_INCIDENCE && cancerdata_nation) {
+    if (cancerdata_nation) {
         const value_cases = searchparams.race ? cancerdata_nation[`${searchparams.race}_Cases`] : cancerdata_nation.Cases;
         const value_aair = searchparams.race ? cancerdata_nation[`${searchparams.race}_AAIR`] : cancerdata_nation.AAIR;
         const value_lci = searchparams.race ? cancerdata_nation[`${searchparams.race}_LCI`] : cancerdata_nation.LCI;
@@ -1788,7 +1803,7 @@ function performSearchIncidenceReadout (searchparams) {
         nation_uci = value_uci;
     }
 
-    // show/hide the zone columns (well, actually, each individual cell)
+    // show/hide the Zone/County/State/Nationwide columns (well, actually, each individual cell)
     if (searchparams.ctaid && searchparams.type == 'Zone') {
         $incidence_readouts.find('[data-region="cta"]').show();
     }
@@ -1796,7 +1811,6 @@ function performSearchIncidenceReadout (searchparams) {
         $incidence_readouts.find('[data-region="cta"]').hide();
     }
 
-    // show/hide the county columns (well, actually, each individual cell)
     if (cancerdata_county) {
         $incidence_readouts.find('[data-region="county"]').show();
     }
@@ -1804,13 +1818,7 @@ function performSearchIncidenceReadout (searchparams) {
         $incidence_readouts.find('[data-region="county"]').hide();
     }
 
-    // show/hide the Nationwide content based on the NATIONWIDE_INCIDENCE config setting
-    if (NATIONWIDE_INCIDENCE) {
-        $incidence_readouts.find('[data-region="nation"]').show();
-    }
-    else {
-        $incidence_readouts.find('[data-region="nation"]').hide();
-    }
+    $incidence_readouts.find('[data-region="nation"]').show();
 
     // now fill in the blanks
     $incidence_readouts.find('span[data-region="cta"][data-statistic="cases"]').text(text_cases_cta);
@@ -1862,9 +1870,7 @@ function performSearchIncidenceReadout (searchparams) {
             incidence_summary.push(`${searchparams.type}: ${text_cases_cta} cases, age-adjusted incidence rate ${text_aair_cta} ${text_lciuci_cta}.`);
         }
         incidence_summary.push(`Statewide: ${text_cases_state} cases, age-adjusted incidence rate ${text_aair_state} ${text_lciuci_state}.`);
-        if (NATIONWIDE_INCIDENCE) {
-            incidence_summary.push(`Nationwide: ${text_cases_nation} cases, age-adjusted incidence rate ${text_aair_nation} ${text_lciuci_nation}.`);
-        }
+        incidence_summary.push(`Nationwide: ${text_cases_nation} cases, age-adjusted incidence rate ${text_aair_nation} ${text_lciuci_nation}.`);
 
         $incidence_readouts.find('#incidence-readouts-description').text(filterText);
         $incidence_readouts.attr('aria-busy', 'false');
