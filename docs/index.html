@@ -55,8 +55,8 @@
     <script type="text/javascript" src="./static/Highcharts-9.0.0/code/highcharts.js"></script>
     <script type="text/javascript" src="./static/Highcharts-9.0.0/code/modules/accessibility.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="index.css?Thu_Oct_08_2026_11_36_39_GMT_0700__Pacific_Daylight_Time_" />
-    <script type="text/javascript" src="index.js?Thu_Oct_08_2026_11_36_39_GMT_0700__Pacific_Daylight_Time_"></script>
+    <link rel="stylesheet" type="text/css" href="index.css?Wed_Oct_14_2026_13_17_56_GMT_0700__Pacific_Daylight_Time_" />
+    <script type="text/javascript" src="index.js?Wed_Oct_14_2026_13_17_56_GMT_0700__Pacific_Daylight_Time_"></script>
 </head>
 
 <body>
@@ -318,17 +318,23 @@
                 <caption class="visually-hidden">Cancer statistics for the selected filters</caption>
                 <thead>
                     <tr>
-                        <th scope="col" class="left">Zone or Statewide</th>
+                        <th scope="col" class="left">Area</th>
                         <th scope="col">Cases</th>
                         <th scope="col" colspan="2">Age-Adjusted Incidence Rates (95% LCI, 95% UCI)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr data-region="cta">
-                        <th scope="row" class="typeName">Zone</th>
+                        <th scope="row">Zone</th>
                         <td class="center"><span data-region="cta" data-statistic="cases"></span></td>
                         <td class="center"><span data-region="cta" data-statistic="aair"></span> <span data-region="cta" data-statistic="lciuci"></span></span></td>
                         <td class="d-none d-md-table-cell ucilcicandlechartcell"><span class="ucilcicandlechart" data-region="cta"></span></td>
+                    </tr>
+                    <tr data-region="county">
+                        <th scope="row">County</th>
+                        <td class="center"><span data-region="county" data-statistic="cases"></span></td>
+                        <td class="center"><span data-region="county" data-statistic="aair"></span> <span data-region="county" data-statistic="lciuci"></span></span></td>
+                        <td class="d-none d-md-table-cell ucilcicandlechartcell"><span class="ucilcicandlechart" data-region="county"></span></td>
                     </tr>
                     <tr data-region="state">
                         <th scope="row">Statewide</th>
