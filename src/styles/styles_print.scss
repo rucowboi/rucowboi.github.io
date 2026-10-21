@@ -21,21 +21,26 @@
     }
 
     #map {
-        .leaflet-control-zoom, .leaflet-control-boxzoom, .leaflet-layerpicker-control {
+        .leaflet-control-zoom,
+        .leaflet-control-boxzoom,
+        .leaflet-layerpicker-control,
+        .leaflet-control-scale,
+        .leaflet-control-attribution {
             display: none;
         }
 
-        .leaflet-choroplethlegend-control {
-    		.leaflet-choroplethlegend-headtext, .leaflet-choroplethlegend-closebutton {
-    			display: none;
-    		}
-    		select.leaflet-choroplethlegend-select {
-    			border: none !important;
-    			-moz-appearance: none;
-    			-webkit-appearance: none;
-    			appearance: none;
-    		}
-    	}
+        .leaflet-marker-icon {
+            display: none;
+        }
+    }
+
+    .choropleth-legend .choropleth-legend-picker {
+        border: 0 none transparent;
+        padding: 0;
+
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
     }
 
     #logo-img-print {
@@ -75,8 +80,22 @@
         /* see initPrintPage() and styles_datareadouts.scss for crazy hacks to resize the chart before printing */
     }
 
+    #map-table {
+        button {
+            display: none;
+        }
+
+        tbody td:nth-child(3),
+        thead th:nth-child(3) {
+            display: none;
+        }
+    }
+
     .filters-list {
         margin-top: 30px;
     }
-}
 
+    .data-filters button {
+        display: none;
+    }
+}

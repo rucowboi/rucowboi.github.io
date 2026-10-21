@@ -5,14 +5,18 @@
 @use './styles/styles_topstuff' as *;
 @use './styles/styles_filters' as *;
 @use './styles/styles_map' as *;
+@use './styles/styles_choroplethlegend.scss' as *;
 @use './styles/styles_incidencereadouts' as *;
+@use './styles/styles_aairbarchart' as *;
 @use './styles/styles_filtersandaairbarchart' as *;
 @use './styles/styles_demogreadouts' as *;
+@use './styles/styles_tablist' as *;
+@use './styles/styles_maptable' as *;
+@use './styles/styles_tablecolors' as *;
 @use './styles/styles_learn' as *;
 @use './styles/styles_termsofuse' as *;
 @use './styles/styles_tooltips' as *;
 @use './styles/styles_download' as *;
 @use './styles/styles_print' as *;
 @use './styles/styles_footer' as *;
-
-
+@use './styles/styles_sortabletable' as *;

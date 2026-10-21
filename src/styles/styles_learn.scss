@@ -22,26 +22,7 @@ div.container.learn-text {
     ul.source {
         margin-top: -20px;
     }
-    
-    li.nav-item {
-        .nav-link {
-            padding: .5rem;
-        }
-        
-        a {
-            background-color: #e6eaff;
-            color: #000000;
-            border-radius: 0;
-            text-decoration: none;
-            margin-right: 10px;
-        }
 
-        a.active {
-            background-color: #293985;
-            color: white;
-        }
-    }
-    
     @media (max-width: 436px) {  /* form a preferred line-break point for the Learn tabs on really tiny screens */
         .break {
             flex-basis: 100%;
@@ -51,7 +32,7 @@ div.container.learn-text {
             margin-top: 10px;
         }
     }
-    
+
     @media (max-width: 413px) {  /* form a preferred line-break point for the Learn tabs on really tiny screens */
         .nav li.nav-item {
             flex-basis: 100%;
@@ -81,7 +62,8 @@ div.container.learn-text {
              padding: 0.5rem 1rem;
         }
         button:focus {
-            outline:none;
+            outline: 0;
+            box-shadow: 0 0 0 .2rem #D27700;
         }
     }
 }

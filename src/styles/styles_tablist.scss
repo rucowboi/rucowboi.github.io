@@ -1,0 +1,24 @@
+ul.nav-pills {
+    li.nav-item {
+        .nav-link {
+            padding: .5rem;
+        }
+
+        a {
+            background-color: #e6eaff;
+            color: #000000;
+            border-radius: 0;
+            text-decoration: none;
+            margin-right: 10px;
+            border: 2px solid white;
+        }
+        a:hover {
+            border: 2px solid black;
+        }
+
+        a.active {
+            background-color: #293985;
+            color: white;
+        }
+    }
+}

@@ -40,17 +40,20 @@
 		padding: 4px 10px 4px 10px;
 
 		position: relative;
-		i.leaflet-layerpicker-closebutton {
+		.leaflet-layerpicker-closebutton {
 			position: absolute;
-			top: 5px;
+			top: 10px;
 			right: 5px;
 
 			color: #666666;
-			cursor: pointer;
 
-		    top: -10px;
-		    right: 3px;
-		    font-size: 25px;
+            button {
+                background-color: rgba(0, 0, 0, 0);
+                border: none;
+                font-size: 2rem;
+                padding: 0;
+                line-height: 0;
+            }
 		}
 
 		.leaflet-layerpicker-headtext {
@@ -70,6 +73,10 @@
             span.leaflet-layerpicker-name {
             }
         }
+    }
+
+    h3 {
+        color: black;
     }
 }
 

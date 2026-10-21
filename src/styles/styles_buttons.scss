@@ -13,11 +13,11 @@
         border: 1px solid #000000;
 
         &:hover, &:active {
-            color: #f99e26;
+            color: #293985;
         }
     }
     &.btn-alternate {
-        background-color: #6472B9;
+        background-color: #293985;
         color: white;
         border: 1px solid #000000;
 
@@ -25,5 +25,10 @@
             background-color: #e6eaff;
             color: #000000;
         }
+    }
+
+    &.focus, &:focus {
+        outline: 0;
+        box-shadow: 0 0 0 .2rem #D27700;
     }
 }

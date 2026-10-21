@@ -12,18 +12,15 @@
 }
 
 h1.site-title-1 {
-    color: #f99e26;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: -4px;
-}
-
-h1.site-title-2 {
     font-weight: 400;
     font-size: 28px;
     text-transform: uppercase;
 }
-
+h1.site-title-1 .stateName {
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: -4px;
+}
 
 
 /*
@@ -39,17 +36,6 @@ div.container.intro-text {
             }
         }
     }
-}
-
-.intro-text a:link, .intro-text a:visited {
-    text-decoration: none;
-}
-
-#visitlearn {
-    /* override the .btn height and padding */
-    height: 25px;
-    padding: 1px 10px 0px 10px;
-    margin-left: 5px;
 }
 
 

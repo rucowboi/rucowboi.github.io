@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NJ Cancer Maps Drill-down Mockup</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18202a;
+      --muted: #5d6978;
+      --line: #cfd7e2;
+      --panel: #ffffff;
+      --page: #f4f7fb;
+      --accent: #126c82;
+      --accent-dark: #0e5364;
+      --soft: #e7f3f6;
+      --warn: #7a4a13;
+      --warn-bg: #fff7e8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(1.6rem, 2.5vw, 2.35rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 760px;
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(24, 32, 42, 0.07);
+    }
+
+    .controls {
+      padding: 22px;
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .field.area-type {
+      grid-column: 1 / -1;
+      max-width: 360px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: #334051;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    select,
+    button {
+      font: inherit;
+    }
+
+    select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #aeb9c7;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 34px 8px 10px;
+    }
+
+    select:disabled {
+      background: #eef2f6;
+      color: #788392;
+      cursor: not-allowed;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid #e4e9f0;
+    }
+
+    button {
+      min-height: 38px;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: white;
+      padding: 8px 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #fff;
+      color: var(--accent-dark);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    .summary {
+      padding: 20px;
+    }
+
+    .summary h2 {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+    }
+
+    .selected {
+      margin: 0 0 16px;
+      padding: 14px;
+      border-radius: 7px;
+      background: var(--soft);
+      border: 1px solid #bcdde5;
+    }
+
+    .selected strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.05rem;
+    }
+
+    .counts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .count {
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid #e0e6ed;
+      border-radius: 7px;
+      background: #fbfcfe;
+    }
+
+    .count b {
+      display: block;
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    .count span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .list-title {
+      margin: 0 0 6px;
+      color: #334051;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .matches {
+      max-height: 260px;
+      overflow: auto;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border: 1px solid #e0e6ed;
+      border-radius: 7px;
+    }
+
+    .matches li {
+      padding: 9px 10px;
+      border-bottom: 1px solid #edf1f5;
+      font-size: 0.92rem;
+    }
+
+    .matches li:last-child {
+      border-bottom: 0;
+    }
+
+    .meta {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .status {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status.warn {
+      padding: 10px 12px;
+      border: 1px solid #efd18c;
+      border-radius: 7px;
+      background: var(--warn-bg);
+      color: var(--warn);
+    }
+
+    @media (max-width: 820px) {
+      main {
+        width: min(100% - 24px, 1120px);
+        padding: 20px 0;
+      }
+
+      .layout,
+      .control-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.area-type {
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Area Drill-down Mockup</h1>
+    <p class="lede">Use any dropdown to narrow the others. The default selects health zones; switching to county mode disables the zone picker and returns county-level selections.</p>
+
+    <div class="layout">
+      <section class="panel controls" aria-label="Area filters">
+        <div class="control-grid">
+          <div class="field area-type">
+            <label for="areaType">Select area type</label>
+            <select id="areaType">
+              <option value="zone" selected>Zone</option>
+              <option value="county">County</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="countySelect">County name</label>
+            <select id="countySelect" disabled>
+              <option>Loading counties...</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="citySelect">City name</label>
+            <select id="citySelect" disabled>
+              <option>Loading cities...</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="zoneSelect">Zone name</label>
+            <select id="zoneSelect" disabled>
+              <option>Loading zones...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="clearButton" class="secondary" disabled>Clear filters</button>
+          <button type="button" id="selectButton" disabled>Use current selection</button>
+        </div>
+
+        <div id="status" class="status">Loading CSV data...</div>
+      </section>
+
+      <aside class="panel summary" aria-label="Current selection summary">
+        <h2>Current selection</h2>
+        <div class="selected" id="selectedSummary">
+          <strong>Loading</strong>
+          <span>Reading local CSV files.</span>
+        </div>
+
+        <div class="counts" aria-label="Matching counts">
+          <div class="count">
+            <b id="countyCount">0</b>
+            <span>counties</span>
+          </div>
+          <div class="count">
+            <b id="cityCount">0</b>
+            <span>cities</span>
+          </div>
+          <div class="count">
+            <b id="zoneCount">0</b>
+            <span>zones</span>
+          </div>
+        </div>
+
+        <p class="list-title" id="matchesTitle">Matching zones</p>
+        <ul class="matches" id="matches"></ul>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const fields = {
+      areaType: document.getElementById('areaType'),
+      county: document.getElementById('countySelect'),
+      city: document.getElementById('citySelect'),
+      zone: document.getElementById('zoneSelect'),
+      clear: document.getElementById('clearButton'),
+      select: document.getElementById('selectButton'),
+      status: document.getElementById('status'),
+      selected: document.getElementById('selectedSummary'),
+      countyCount: document.getElementById('countyCount'),
+      cityCount: document.getElementById('cityCount'),
+      zoneCount: document.getElementById('zoneCount'),
+      matchesTitle: document.getElementById('matchesTitle'),
+      matches: document.getElementById('matches')
+    };
+
+    const state = {
+      areaType: 'zone',
+      county: '',
+      city: '',
+      zone: '',
+      confirmed: null
+    };
+
+    const data = {
+      zones: [],
+      zoneById: new Map(),
+      allCounties: [],
+      allCities: []
+    };
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let value = '';
+      let quoted = false;
+
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"' && quoted && next === '"') {
+          value += '"';
+          i += 1;
+        } else if (char === '"') {
+          quoted = !quoted;
+        } else if (char === ',' && !quoted) {
+          row.push(value);
+          value = '';
+        } else if ((char === '\n' || char === '\r') && !quoted) {
+          if (char === '\r' && next === '\n') i += 1;
+          row.push(value);
+          if (row.some(cell => cell !== '')) rows.push(row);
+          row = [];
+          value = '';
+        } else {
+          value += char;
+        }
+      }
+
+      if (value || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+
+      const headers = rows.shift() || [];
+      return rows.map(cells => Object.fromEntries(headers.map((header, index) => [header, cells[index] || ''])));
+    }
+
+    function uniqueSorted(values) {
+      return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    }
+
+    function getZoneLabel(zone) {
+      return zone ? `${zone.name} (${zone.id})` : '';
+    }
+
+    async function loadCsv(filename) {
+      const response = await fetch(filename);
+      if (!response.ok) throw new Error(`Could not load ${filename}`);
+      return parseCsv(await response.text());
+    }
+
+    async function init() {
+      try {
+        const [rates, cityRows, countyRows] = await Promise.all([
+          loadCsv('allCancerRatesData.csv'),
+          loadCsv('cities_by_cta.csv'),
+          loadCsv('counties_by_cta.csv')
+        ]);
+
+        buildData(rates, cityRows, countyRows);
+        setEnabled(true);
+        render();
+      } catch (error) {
+        fields.status.className = 'status warn';
+        fields.status.textContent = 'Could not load the CSV files. Open this page through a local web server or the app server so the browser can fetch adjacent CSV files.';
+        fields.selected.innerHTML = '<strong>CSV files unavailable</strong><span>The mockup expects allCancerRatesData.csv, cities_by_cta.csv, and counties_by_cta.csv in this folder.</span>';
+      }
+    }
+
+    function buildData(rates, cityRows, countyRows) {
+      const zoneNames = new Map();
+
+      rates.forEach(row => {
+        if (row.GeoType === 'Zone' && row.GeoID && row.GeoName && !zoneNames.has(row.GeoID)) {
+          zoneNames.set(row.GeoID, row.GeoName);
+        }
+      });
+
+      zoneNames.forEach((name, id) => {
+        const zone = {
+          id,
+          name,
+          counties: new Set(),
+          cities: new Set()
+        };
+        data.zoneById.set(id, zone);
+        data.zones.push(zone);
+      });
+
+      countyRows.forEach(row => {
+        const zone = data.zoneById.get(row.ZoneIDOrig);
+        if (zone && row.County) zone.counties.add(row.County);
+      });
+
+      cityRows.forEach(row => {
+        const zone = data.zoneById.get(row.ZoneIDOrig);
+        if (zone && row.City) zone.cities.add(row.City);
+      });
+
+      data.zones.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+      data.allCounties = uniqueSorted(data.zones.flatMap(zone => [...zone.counties]));
+      data.allCities = uniqueSorted(data.zones.flatMap(zone => [...zone.cities]));
+    }
+
+    function setEnabled(loaded) {
+      fields.areaType.disabled = !loaded;
+      fields.county.disabled = !loaded;
+      fields.city.disabled = !loaded;
+      fields.zone.disabled = !loaded || state.areaType === 'county';
+      fields.clear.disabled = !loaded;
+      fields.select.disabled = !loaded;
+    }
+
+    function zoneMatches(zone, filters = state) {
+      if (filters.county && !zone.counties.has(filters.county)) return false;
+      if (filters.city && !zone.cities.has(filters.city)) return false;
+      if (filters.zone && zone.id !== filters.zone) return false;
+      return true;
+    }
+
+    function candidateZones(overrides = {}) {
+      const filters = { ...state, ...overrides };
+      if (filters.areaType === 'county') filters.zone = '';
+      return data.zones.filter(zone => zoneMatches(zone, filters));
+    }
+
+    function optionSets() {
+      const countyZones = candidateZones({ county: '' });
+      const cityZones = candidateZones({ city: '' });
+      const zoneZones = state.areaType === 'county' ? [] : candidateZones({ zone: '' });
+
+      return {
+        counties: uniqueSorted(countyZones.flatMap(zone => [...zone.counties])),
+        cities: uniqueSorted(cityZones.flatMap(zone => [...zone.cities])),
+        zones: zoneZones
+      };
+    }
+
+    function normalizeSelections() {
+      let changed = false;
+
+      if (state.areaType === 'county' && state.zone) {
+        state.zone = '';
+        changed = true;
+      }
+
+      for (let i = 0; i < 4; i += 1) {
+        const options = optionSets();
+        if (state.county && !options.counties.includes(state.county)) {
+          state.county = '';
+          changed = true;
+          continue;
+        }
+        if (state.city && !options.cities.includes(state.city)) {
+          state.city = '';
+          changed = true;
+          continue;
+        }
+        if (state.zone && !options.zones.some(zone => zone.id === state.zone)) {
+          state.zone = '';
+          changed = true;
+          continue;
+        }
+        break;
+      }
+
+      return changed;
+    }
+
+    function populateSelect(select, placeholder, options, selected, getValue = item => item, getLabel = item => item) {
+      const previous = selected;
+      select.innerHTML = '';
+      select.append(new Option(placeholder, ''));
+
+      options.forEach(item => {
+        const option = new Option(getLabel(item), getValue(item));
+        select.append(option);
+      });
+
+      select.value = previous;
+    }
+
+    function render() {
+      normalizeSelections();
+      setEnabled(true);
+
+      const options = optionSets();
+      populateSelect(fields.county, 'Any county', options.counties, state.county);
+      populateSelect(fields.city, 'Any city', options.cities, state.city);
+      populateSelect(fields.zone, 'Any zone', options.zones, state.zone, zone => zone.id, getZoneLabel);
+
+      fields.areaType.value = state.areaType;
+      fields.zone.disabled = state.areaType === 'county';
+
+      const zones = candidateZones();
+      const counties = uniqueSorted(zones.flatMap(zone => [...zone.counties]));
+      const cities = uniqueSorted(zones.flatMap(zone => [...zone.cities]));
+
+      fields.countyCount.textContent = counties.length;
+      fields.cityCount.textContent = cities.length;
+      fields.zoneCount.textContent = zones.length;
+      fields.status.className = 'status';
+      fields.status.textContent = statusText(zones, counties, cities);
+      renderSelected(zones, counties, cities);
+      renderMatches(zones, counties);
+    }
+
+    function statusText(zones, counties, cities) {
+      if (state.areaType === 'county') {
+        if (state.county) return `County mode: ${state.county} is selected.`;
+        if (counties.length === 1) return `County mode: narrowed to ${counties[0]}.`;
+        return `County mode: ${counties.length} counties match the current filters.`;
+      }
+
+      if (state.zone) return `Zone mode: ${getZoneLabel(data.zoneById.get(state.zone))} is selected.`;
+      if (zones.length === 1) return `Zone mode: narrowed to ${getZoneLabel(zones[0])}.`;
+      return `Zone mode: ${zones.length} zones match the current filters.`;
+    }
+
+    function renderSelected(zones, counties, cities) {
+      if (state.areaType === 'county') {
+        const countyName = state.county || (counties.length === 1 ? counties[0] : '');
+        fields.selected.innerHTML = countyName
+          ? `<strong>${escapeHtml(countyName)}</strong><span>County selection, filtered by ${cities.length} matching city names and ${zones.length} related zones.</span>`
+          : '<strong>No single county yet</strong><span>Choose a county or narrow by city until one county remains.</span>';
+        return;
+      }
+
+      const zone = state.zone ? data.zoneById.get(state.zone) : (zones.length === 1 ? zones[0] : null);
+      fields.selected.innerHTML = zone
+        ? `<strong>${escapeHtml(getZoneLabel(zone))}</strong><span>${escapeHtml([...zone.counties].join(', ') || 'No county listed')} county match; ${zone.cities.size} city names in crosswalk.</span>`
+        : '<strong>No single zone yet</strong><span>Choose a county, city, or zone to narrow the health zone list.</span>';
+    }
+
+    function renderMatches(zones, counties) {
+      fields.matches.innerHTML = '';
+      fields.matchesTitle.textContent = state.areaType === 'county' ? 'Matching counties' : 'Matching zones';
+
+      if (state.areaType === 'county') {
+        counties.slice(0, 60).forEach(county => {
+          const relatedZones = zones.filter(zone => zone.counties.has(county));
+          const li = document.createElement('li');
+          li.innerHTML = `${escapeHtml(county)}<span class="meta">${relatedZones.length} related zones</span>`;
+          fields.matches.append(li);
+        });
+      } else {
+        zones.slice(0, 60).forEach(zone => {
+          const li = document.createElement('li');
+          li.innerHTML = `${escapeHtml(getZoneLabel(zone))}<span class="meta">${escapeHtml([...zone.counties].join(', ') || 'No county listed')} - ${zone.cities.size} city names</span>`;
+          fields.matches.append(li);
+        });
+      }
+
+      const total = state.areaType === 'county' ? counties.length : zones.length;
+      if (total > 60) {
+        const li = document.createElement('li');
+        li.textContent = `...and ${total - 60} more`;
+        fields.matches.append(li);
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    fields.areaType.addEventListener('change', event => {
+      state.areaType = event.target.value;
+      state.confirmed = null;
+      render();
+    });
+
+    fields.county.addEventListener('change', event => {
+      state.county = event.target.value;
+      state.confirmed = null;
+      render();
+    });
+
+    fields.city.addEventListener('change', event => {
+      state.city = event.target.value;
+      state.confirmed = null;
+      render();
+    });
+
+    fields.zone.addEventListener('change', event => {
+      state.zone = event.target.value;
+      state.confirmed = null;
+      render();
+    });
+
+    fields.clear.addEventListener('click', () => {
+      state.county = '';
+      state.city = '';
+      state.zone = '';
+      state.confirmed = null;
+      render();
+    });
+
+    fields.select.addEventListener('click', () => {
+      const zones = candidateZones();
+      const counties = uniqueSorted(zones.flatMap(zone => [...zone.counties]));
+      if (state.areaType === 'county') {
+        state.confirmed = state.county || (counties.length === 1 ? counties[0] : null);
+      } else {
+        state.confirmed = state.zone || (zones.length === 1 ? zones[0].id : null);
+      }
+
+      if (state.confirmed) {
+        fields.status.textContent = `Confirmed selection: ${state.areaType === 'county' ? state.confirmed : getZoneLabel(data.zoneById.get(state.confirmed))}`;
+      } else {
+        fields.status.textContent = 'Keep narrowing before confirming a single area.';
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

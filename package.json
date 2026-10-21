@@ -1,14 +1,14 @@
 {
-  "name": "westat-cancer-template",
+  "name": "nj-cancer-maps",
   "version": "1.0.0",
-  "description": "Westat Cancer Template",
+  "description": "New Jersey Cancer Maps is a web application that provides interactive maps and data visualizations related to cancer incidence and mortality rates in the state of New Jersey. The application allows users to explore cancer data by geographic location, time period, and demographic factors, helping to identify trends and disparities in cancer outcomes across the state.",
   "main": "./src/index.js",
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.config.js",
     "build": "webpack --mode production --progress --config webpack.config.js && rm -rf docs/static && cp -r static docs/",
     "deploy": "npm run build && git add docs && git commit -m 'compile for deployment' && git push"
   },
-  "repository": "https://github.com/GreenInfo-Network/Westat-Cancer-Template",
+  "repository": "https://github.com/GreenInfo-Network/nj-cancer-maps",
   "author": "GreenInfo Network <gin@greeninfo.org>",
   "license": "MIT",
   "dependencies": {

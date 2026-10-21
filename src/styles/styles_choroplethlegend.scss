@@ -1,0 +1,61 @@
+.choropleth-legend {
+}
+
+.choropleth-legend .choropleth-legend-picker,
+.choropleth-legend .choropleth-legend-colortheme {
+    border-radius: 5px;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #666;
+    padding: 4px 5px;
+}
+
+.choropleth-legend .choropleth-legend-gradientlegend {
+    display: flex;
+}
+
+@media screen and (min-width: 992px) {
+.choropleth-legend .choropleth-legend-twoparts {
+    display: flex;
+}
+}
+
+.choropleth-legend .choroplethlegend-picker-wrapper select {
+    margin-bottom: 1em;
+}
+
+.choropleth-legend .choropleth-legend-legendgradient {
+    width: 200px;
+    height: 20px;
+    background-image: linear-gradient(to right, white 50%, black 50%); /* this is a fallback; colors will be set by performSearchMap() and CHOROPLETH_OPTIONS */
+    border: 1px solid black;
+}
+.choropleth-legend .choropleth-legend-legendgradient::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.choropleth-legend .choropleth-legend-minvalue {
+    float: left;
+    padding-right: 1em;
+}
+.choropleth-legend .choropleth-legend-maxvalue {
+    float: right;
+    padding-left: 1em;
+}
+
+.choropleth-legend .choropleth-legend-nodata {
+    padding-left: 3em;
+}
+.choropleth-legend .choropleth-legend-swatch-nodata {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    border: 1px solid black;
+    background-size: cover;
+}
+.choropleth-legend .choropleth-legend-nodata-explanation {
+    font-size: 12px;
+    line-height: 1.5;
+}

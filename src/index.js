@@ -4,43 +4,37 @@ require('./index.scss');
 
 // require leaflets
 require('./leaflet-topojson.js');
-require('./leaflet-choroplethlegend.scss');
-require('./leaflet-choroplethlegend.js');
 require('./leaflet-layerpicker.scss');
 require('./leaflet-layerpicker.js');
-require('./leaflet-boxzoom.scss');
-require('./leaflet-boxzoom.js');
 require('./leaflet-singleclick.js');
+require('./leaflet.pattern.js');
 require('./printing-leaflet-easyPrint.js');
 
-const CARTO_API_KEY = process.env.CARTO_API_KEY;
 
 const SITE_CONSTANTS = {
-    startingLocation: [40.47593163423407, -74.42895767340794] , // Replace with your desired default location
     ctaid: 34, // Starting state for site to start up
-     stateName: "New Jersey", // The name of your state, project, or cancer registry. Commonly used with the phrase "Cancer Maps" after it, indicating the name of this website.
-     numOfCancerSites: "23", // The number of cancer sites by which data may be searched. Usually the same as the number of SEARCHOPTIONS_CANCERSITE entries.
-     numOfZones: "150", // The number of zones for your state.
-     minZonePop: "50,676", // The minimum population of a zone in your state/registry catchment area. Used in a statement describing zones.
-     maxZonePop: "97,265", // The maximum population of a zone in your state/registry catchment area. Used in a statement describing zones.
-     minTractsPerZone: "11", // The minimum number of census tracts forming any zone. Used in a statement describing zones.
-     maxTractsPerZone: "32", // The maximum number of census tracts forming any zone. Used in a statement describing zones.
-     raceList: [
-         "non-Hispanic White",
-         "non-Hispanic Black",
-         "non-Hispanic Asian/Pacific Islander",
-         "non-Hispanic American Indian/Alaska Native",
-         "Hispanic"
-     ], // A list of the races/ethnicities by which data may be displayed. This should reflect the SEARCHOPTIONS_RACE entries.
-     reportingMinCases: "15", // The minimum number of cancer cases in a zone to be reported (i.e., suppression threshold).
-     registry: "New Jersey State Cancer Registry", //Name of registry that will be listed under “Project Team” in the About section.
-     registryLink: "https://www.nj.gov/health/ces/reporting-entities/njscr/", //A hyperlink URL to this website's parent agency, cancer registry, etc. The URL associated with the text specified in ‘registry’ field above.
-     fundingSource: "Cancer data used in this study were provided by the New Jersey State Cancer Registry, Cancer Epidemiology Services, New Jersey Department of Health, which is funded by the National Cancer Institute under contract #75N91021D00009, the National Program of Cancer Registries (NPCR), Centers for Disease Control and Prevention under grant #5NU58DP007117, as well as the State of New Jersey and the Rutgers Cancer Institute.", //A statement/description of who funded the website. Displayed in the About section.
-     citationInfo: "New Jersey State Cancer Registry", //A statement/description of how this website should be cited in literature.
-     nationalCancerDataSource: "this is your national cancer data source info", //A statement/description of the national cancer data source, including data years. This should be reviewed with subsequent data updates to verify whether it needs to be updated as well (e.g., during annual data updates). An example of this statement applicable to national cancer data through 2018 is: "National incidence data come from the National Program of Cancer Registries and Surveillance, Epidemiology, and End Results SEER*Stat Database: U.S. Cancer Statistics Incidence Analytic file - 1998-2018. United States Department of Health and Human Services, Centers for Disease Control and Prevention. Released June 2021, based on the 2020 submission."
-     aboutBlurb: "This is your about blurb", //A statement/description of the website, in "What is the XXX Cancer Registry" section of the FAQ.
-     incidenceDataDate: "2016", //Last year of available incidence data. Used in one of the FAQs.
-     sociodemographicDataDateRange: "2012-2016", //Data range for ACS data used. Used in one of the FAQs.
+    stateName: "New Jersey", // The name of your state, project, or cancer registry. Commonly used with the phrase "Cancer Maps" after it, indicating the name of this website.
+    numOfCancerSites: "23", // The number of cancer sites by which data may be searched. Usually the same as the number of SEARCHOPTIONS_CANCERSITE entries.
+    numOfZones: "150", // The number of zones for your state.
+    minZonePop: "50,676", // The minimum population of a zone in your state/registry catchment area. Used in a statement describing zones.
+    maxZonePop: "97,265", // The maximum population of a zone in your state/registry catchment area. Used in a statement describing zones.
+    minTractsPerZone: "11", // The minimum number of census tracts forming any zone. Used in a statement describing zones.
+    maxTractsPerZone: "32", // The maximum number of census tracts forming any zone. Used in a statement describing zones.
+    raceList: [
+        "non-Hispanic White",
+        "non-Hispanic Black",
+        "non-Hispanic Asian/Pacific Islander",
+        "Hispanic"
+    ], // A list of the races/ethnicities by which data may be displayed. This should reflect the SEARCHOPTIONS_RACE entries.
+    reportingMinCases: "15", // The minimum number of cancer cases in a zone to be reported (i.e., suppression threshold).
+    registry: "New Jersey State Cancer Registry", //Name of registry that will be listed under “Project Team” in the About section.
+    registryLink: "https://www.nj.gov/health/ces/reporting-entities/njscr/", //A hyperlink URL to this website's parent agency, cancer registry, etc. The URL associated with the text specified in ‘registry’ field above.
+    fundingSource: "Cancer data used in this study were provided by the New Jersey State Cancer Registry, Cancer Epidemiology Services, New Jersey Department of Health, which is funded by the National Cancer Institute under contract #75N91021D00009, the National Program of Cancer Registries (NPCR), Centers for Disease Control and Prevention under grant #5NU58DP007117, as well as the State of New Jersey and the Rutgers Cancer Institute.", //A statement/description of who funded the website. Displayed in the About section.
+    citationInfo: "New Jersey State Cancer Registry", //A statement/description of how this website should be cited in literature.
+    nationalCancerDataSource: "this is your national cancer data source info", //A statement/description of the national cancer data source, including data years. This should be reviewed with subsequent data updates to verify whether it needs to be updated as well (e.g., during annual data updates). An example of this statement applicable to national cancer data through 2018 is: "National incidence data come from the National Program of Cancer Registries and Surveillance, Epidemiology, and End Results SEER*Stat Database: U.S. Cancer Statistics Incidence Analytic file - 1998-2018. United States Department of Health and Human Services, Centers for Disease Control and Prevention. Released June 2021, based on the 2020 submission."
+    aboutBlurb: "This is your about blurb", //A statement/description of the website, in "What is the XXX Cancer Registry" section of the FAQ.
+    incidenceDataDate: "2016", //Last year of available incidence data. Used in one of the FAQs.
+    sociodemographicDataDateRange: "2012-2016", //Data range for ACS data used. Used in one of the FAQs.
     MAP_BBOX: [[38.93, -75.56], [41.36, -73.89]],  // [[s, w], [n, e]] Starting Location
     MIN_ZOOM: 6,
     MAX_ZOOM: 15,
@@ -58,6 +52,7 @@ var DATA_URL_DEMOGS = 'static/data/allDemographics.csv';
 // Our JSON files
 var DATA_URL_CTAGEOM = 'static/data/cta.json'; // zones
 var DATA_URL_COUNTYGEOM = 'static/data/countybounds.json'; // counties
+var DATA_URL_PLACEGEOM = 'static/data/placebounds.json'; // zones
 
 // These files are updated by running the python scripts
 var DATA_URL_CTACITY = 'static/data/cities_by_cta.csv'; // zones
@@ -128,10 +123,6 @@ var CANCER_SEXES = {
     'Testis': 'Male',
 };
 
-// if your data will not have Nationwide stats, you may set either/both of these to false to turn that off
-var NATIONWIDE_DEMOGRAPHICS = false;
-var NATIONWIDE_INCIDENCE = false;
-
 // colors for the incidence bar chart; these mirror the SEARCHOPTIONS_SEX options
 var BARCHART_COLORS_SEX = {
     'Both': '#4f629a',       // Same as before for 'Both'
@@ -143,45 +134,69 @@ var BARCHART_COLORS_SEX = {
 // see initDemographicTables() which creates the tables in DOM during setup
 // see performSearchDemographics() which fills them in with demographic data when an area is selected
 // each table defintion is a title for the table, and a set of rows for the table
-// each row is the demographics CSV field to use, its text label, a choice of formatting for the value, and optional tooltip_id from #tooltip_contents
+// each row is the demographics CSV field to use, its text label, a choice of formatting for the value
 // see formatFieldValue() for a list of supported format types
 var DEMOGRAPHIC_TABLES = [
     {
         title: "Population",
         rows: [
-            { field: 'TotalPop', label: "Total Population", format: 'integer', tooltip_id: undefined },
-            { field: 'PctRural', label: "% Living in Rural Area", format: 'percent', tooltip_id: 'PctRural' },
+            { field: 'TotalPop', label: "Total Population", format: 'integer' },
+            { field: 'PctRural', label: "% Living in Rural Area", format: 'percent' },
+            { field: 'PctAge65plus', label: "% Age 65+", format: 'percent' },
         ],
     },
     {
         title: "Race & Ethnicity",
         rows: [
-            { field: 'PctMinority', label: "% Minority (other than non-Hispanic White)", format: 'percent', tooltip_id: 'PctMinority' },
-            { field: 'PctHispanic', label: "% Hispanic", format: 'percent', tooltip_id: 'PctHispanic' },
-            { field: 'PctBlackNH', label: "% Black (non-Hispanic)", format: 'percent', tooltip_id: 'PctBlackNH' },
-            { field: 'PctAPINH', label: "% Asian/Pacific Islander(non-Hispanic)", format: 'percent', tooltip_id: 'PctAPINH' },
-        ],
-    },
-    {
-        title: "Income",
-        rows: [
-            { field: 'Pct100Pov', label: "% Below Poverty", format: 'percent', tooltip_id: 'PctBelowPov' }, 
-            { field: 'PctNoHealthIns', label: "% Without Health Insurance", format: 'percent', tooltip_id: 'PctNoHealthIns' },
-        ],
-    },
-    {
-        title: "Education",
-        rows: [
-            { field: 'PctEducBchPlus', label: "% With Bachelors Degree or Higher", format: 'percent', tooltip_id: 'PctEducBchPlus' },
-            { field: 'PctEducLHS', label: "% Did Not Finish High School", format: 'percent', tooltip_id: 'PctEducLHS' },
+            { field: 'PctMinority', label: "% Minority (other than non-Hispanic White)", format: 'percent' },
+            { field: 'PctHispanic', label: "% Hispanic", format: 'percent' },
+            { field: 'PctBlackNH', label: "% Black (non-Hispanic)", format: 'percent' },
+            { field: 'PctAPINH', label: "% Asian/Pacific Islander (non-Hispanic)", format: 'percent' },
+            { field: 'Pct_forborn', label: "% Foreign Born", format: 'percent' },
         ],
     },
     {
         title: "Disability Status",
         rows: [
-            { field: 'PctDisabled', label: "% With a Disability", format: 'percent', tooltip_id: 'PctDisabled' }, 
+            { field: 'PctDisabled', label: "% With a Disability", format: 'percent' }, 
         ],
-    }
+    },
+    {
+        title: "Education",
+        rows: [
+            { field: 'PctEducLHS', label: "% Did Not Finish High School", format: 'percent' },
+            { field: 'PctEducBchPlus', label: "% With Bachelor's Degree or Higher", format: 'percent' },
+        ],
+    },
+    {
+        title: "Income",
+        rows: [
+            { field: 'Pct100Pov', label: "% Below Poverty", format: 'percent' }, 
+            { field: 'PctNoHealthIns', label: "% Without Health Insurance", format: 'percent' },
+        ],
+    },
+    {
+        title: "Health and Health Care",
+        rows: [
+            { field: 'N_BINGE', label: "% Binge Drinking", format: 'percent' }, 
+            { field: 'N_CSMOKING', label: "% Current Smoking", format: 'percent' }, 
+            { field: 'N_LPA', label: "% Physical Inactivity", format: 'percent' }, 
+            { field: 'N_OBESITY', label: "% Obese", format: 'percent' }, 
+            { field: 'N_CERVICAL', label: "% Cervical Cancer Screening", format: 'percent' }, 
+            { field: 'N_MAMMOUSE', label: "% Mammography", format: 'percent' }, 
+            { field: 'N_COLON_SCREEN', label: "% Colorectal Cancer Screening", format: 'percent' }, 
+            { field: 'N_COREM', label: "% Preventive Care (Men 65+)", format: 'percent' }, 
+            { field: 'N_COREW', label: "% Preventive Care (Women 65+)", format: 'percent' }, 
+            { field: 'N_CHECKUP', label: "% Annual Checkup", format: 'percent' }, 
+        ],
+    },
+    {
+        title: "Socioenvironmental",
+        rows: [
+            { field: 'RPL_EJI', label: "Environmental Justice Index", format: 'float' }, 
+            { field: 'RPL_SVI', label: "Social Vulnerability Index", format: 'float' }, 
+        ],
+    },
 ];
 
 // the Leaflet styles for those choropleth options defined in CHOROPLETH_OPTIONS below
@@ -189,26 +204,40 @@ var DEMOGRAPHIC_TABLES = [
 // then CHOROPLETH_BORDER_DEFAULT and CHOROPLETH_BORDER_SELECTED are added to form a thicker border for selected/highlighted state
 // then CHOROPLETH_STYLE_INCIDENCE and CHOROPLETH_STYLE_DEMOGRAPHIC are added to form the choropleth coloring
 // see performSearchMap() which calculates scoring and uses these color ramps, to implement the choropleth behavior
-var CHOROPLETH_STYLE_NODATA = { fillOpacity: 0.25, fillColor: '#cccccc', color: 'black', opacity: 0.2, weight: 1 };
-var CHOROPLETH_STYLE_NODATA_CLEAR = { fillOpacity: 0, fillColor: '#cccccc', color: 'black', opacity: 0, weight: 0 };
-var CHOROPLETH_BORDER_DEFAULT = { color: 'black', opacity: 1, weight: 1, fill: false };
-var CHOROPLETH_BORDER_SELECTED = { color: '#293885', opacity: 1, weight: 5, fill: false };
-var CHOROPLETH_BORDER_NONE = { color: null, opacity: 100, weight: 0, fill: false };
+var CHOROPLETH_STYLE_NODATA = { fillOpacity: 1, fillColor: '#cccccc', color: 'black', opacity: 0.75, weight: 1, interactive: false };  // used in conjunction with MAP.pattern_stripes
+var CHOROPLETH_STYLE_NODATA_CLEAR = { fillOpacity: 0, fillColor: '#cccccc', color: 'black', opacity: 0, weight: 0, interactive: false };
+var CHOROPLETH_BORDER_DEFAULT = { color: 'black', opacity: 1, weight: 1, fillColor: "transparent", interactive: false };
+var CHOROPLETH_BORDER_SELECTED = { color: '#293885', opacity: 1, weight: 5, fillColor: "transparent", interactive: false };
+var CHOROPLETH_BORDER_NONE = { color: null, opacity: 100, weight: 0, fillColor: "transparent", interactive: false };
 
 var CHOROPLETH_STYLE_INCIDENCE = {
-    Q1: { fillOpacity: 0.75, fillColor: '#ffffb3', stroke: false },
-    Q2: { fillOpacity: 0.75, fillColor: '#ffe066', stroke: false },
-    Q3: { fillOpacity: 0.75, fillColor: '#f99e26', stroke: false },
-    Q4: { fillOpacity: 0.75, fillColor: '#b36093', stroke: false },
-    Q5: { fillOpacity: 0.75, fillColor: '#873d6a', stroke: false },
+    accessible: [
+        { fillOpacity: 1, fillColor: '#D8FFEA', color: "black" },
+        { fillOpacity: 1, fillColor: '#258345', color: "black" },
+        { fillOpacity: 1, fillColor: '#081D18', color: "white" },
+    ],
+    colorful: [
+        { fillOpacity: 1, fillColor: '#D8FFEA', color: "#7F7F7F" },
+        { fillOpacity: 1, fillColor: '#7FC198', color: "#7F7F7F" },
+        { fillOpacity: 1, fillColor: '#258345', color: "#7F7F7F" },
+        { fillOpacity: 1, fillColor: '#17502F', color: "#7F7F7F" },
+        { fillOpacity: 1, fillColor: '#081D18', color: "#7F7F7F" },
+    ],
 };
 
 var CHOROPLETH_STYLE_DEMOGRAPHIC = {
-    Q1: { fillOpacity: 0.75, fillColor: '#e6eaff', stroke: false },
-    Q2: { fillOpacity: 0.75, fillColor: '#abb4e0', stroke: false },
-    Q3: { fillOpacity: 0.75, fillColor: '#7683c2', stroke: false },
-    Q4: { fillOpacity: 0.75, fillColor: '#4b5aa3', stroke: false },
-    Q5: { fillOpacity: 0.75, fillColor: '#293885', stroke: false },
+    accessible: [
+        { fillOpacity: 1, fillColor: '#CFE8E5', color: "black" },
+        { fillOpacity: 1, fillColor: '#3E838A', color: "black" },
+        { fillOpacity: 1, fillColor: '#131A2D', color: "white" },
+    ],
+    colorful: [
+        { fillOpacity: 1, fillColor: '#CFE8E5', color: "#7F7F7F" },
+        { fillOpacity: 1, fillColor: '#87B6B8', color: "#7F7F7F" },
+        { fillOpacity: 1, fillColor: '#3E838A', color: "#7F7F7F" },
+        { fillOpacity: 1, fillColor: '#294F5C', color: "#7F7F7F" },
+        { fillOpacity: 1, fillColor: '#131A2D', color: "#7F7F7F" },
+    ],
 };
 
 // options for the choropleth map (Color By)
@@ -221,23 +250,40 @@ var CHOROPLETH_OPTIONS = [
     { field: 'Cases', label: "Cases", format: 'integer', colorramp: CHOROPLETH_STYLE_INCIDENCE },
     { field: 'AAIR', label: "Incidence", format: 'float', colorramp: CHOROPLETH_STYLE_INCIDENCE },
     // demographic data; customize this to suit your preferences
-    { field: 'TotalPop', label: "Total Population", format: 'integer', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctRural', label: "% Living in Rural Area", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctMinority', label: "% Minority (other than non-Hispanic White)", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctHispanic', label: "% Hispanic", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctBlackNH', label: "% Black (non-Hispanic)", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'Pct100Pov', label: "% Below Poverty", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // cht comment out because not in data causes error
-    { field: 'PctNoHealthIns', label: "% Without Health Insurance", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctEducBchPlus', label: "% With Bachelors Degree or Higher", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctEducLHS', label: "% Did Not Finish High School", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctDisabled', label: "% With a Disability", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // cht comment out because not in data causes error
-    { field: 'Pct_forborn', label: "% Foreign Born", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
-    { field: 'PctAPINH', label: "% Asian/Pacific Islander (non-Hispanic)", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // 
+    { field: 'TotalPop', label: "Total Population", group: "Population", format: 'integer', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctRural', label: "% Living in Rural Area", group: "Population", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctAge65plus', label: "% Age 65+", group: "Population", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctMinority', label: "% Minority (other than non-Hispanic White)", group: "Race & Ethnicity", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctHispanic', label: "% Hispanic", group: "Race & Ethnicity", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctBlackNH', label: "% Black (non-Hispanic)", group: "Race & Ethnicity", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctAPINH', label: "% Asian/Pacific Islander (non-Hispanic)", group: "Race & Ethnicity", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'Pct_forborn', label: "% Foreign Born", group: "Race & Ethnicity", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctDisabled', label: "% With a Disability", group: "Disability Status", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // cht comment out because not in data causes error
+    { field: 'PctEducLHS', label: "% Did Not Finish High School", group: "Education", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'PctEducBchPlus', label: "% With Bachelor's Degree or Higher", group: "Education", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'Pct100Pov', label: "% Below Poverty", group: "Income", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC }, // cht comment out because not in data causes error
+    { field: 'PctNoHealthIns', label: "% Without Health Insurance", group: "Income", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_BINGE', label: "% Binge Drinking", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_CSMOKING', label: "% Current Smoking", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_LPA', label: "% Physical Inactivity", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_OBESITY', label: "% Obese", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_CERVICAL', label: "% Cervical Cancer Screening", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_MAMMOUSE', label: "% Mammography", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_COLON_SCREEN', label: "% Colorectal Cancer Screening", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_COREM', label: "% Preventive Care (Men 65+)", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_COREW', label: "% Preventive Care (Women 65+)", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'N_CHECKUP', label: "% Annual Checkup", group: "Health and Health Care", format: 'percent', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'RPL_EJI', label: "Environmental Justice Index", group: "Socio-environmental", format: 'float', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
+    { field: 'RPL_SVI', label: "Social Vulnerability Index", group: "Socio-environmental", format: 'float', colorramp: CHOROPLETH_STYLE_DEMOGRAPHIC },
 ];
 
 // the style to use for the MAP_LAYERS.county GeoJSON overlay
-var COUNTYBOUNDS_STYLE = { fill: false, color: 'black', weight: 5 };
-var ZONEBOUNDS_STYLE = { fill: false, color: 'black', weight: 1 };
+var COUNTYBOUNDS_STYLE1 = { fill: false, color: 'black', weight: 9 };
+var COUNTYBOUNDS_STYLE2 = { fill: false, color: 'white', weight: 5 };
+var ZONEBOUNDS_STYLE1 = { fill: false, color: 'black', weight: 3 };
+var ZONEBOUNDS_STYLE2 = { fill: false, color: 'white', weight: 1 };
+var PLACEBOUNDS_STYLE1 = { fill: false, color: 'black', weight: 4 };
+var PLACEBOUNDS_STYLE2 = { fill: false, color: 'white', weight: 2 };
 
 // map layers to be offered in the lower-right Map Layers control
 // we have some complicated desires for layer stacking, such as labels and streets (L.TileLayer raster tiles) showing above CTA Zones (L.GeoJSON paths in overlayPane)
@@ -247,20 +293,20 @@ var MAP_LAYERS = [
         id: 'basemap',
         label: "Base Map",
         checked: true,
-        layer: L.tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}.png?key=${CARTO_API_KEY}`, {
+        layer: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png?key=cb1_29ez_1_e6053c92a428e94dd47b54ee', {
             pane: 'tilePane',
             zIndex: 0,
-            attribution: 'Map tiles by <a target="_blank" href="http://www.mapbox.com">MapBox</a>.<br />Data &copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributings</a>',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         }),
     },
     {
         id: 'labels',
         label: "Labels",
         checked: true,
-        layer: L.tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/light_only_labels/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`, {
+        layer: L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_labels/{z}/{x}/{y}.png', {
             pane: 'popupPane',
             zIndex: 999,
-            attribution: 'Map tiles by <a target="_blank" href="http://www.mapbox.com">MapBox</a>.<br />Data &copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributings</a>',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         }),
     },
     {
@@ -272,13 +318,13 @@ var MAP_LAYERS = [
         id: 'zones',
         label: "Zones",
         checked: false,
-        layer: undefined,  // see initFixCountyOverlay() where we patch this in to become a L.GeoJSON layer, since that comes after startup promises but before initMap()
+        layer: undefined,  // see initFixZoneOverlay() where we patch this in to become a L.GeoJSON layer, since that comes after startup promises but before initMap()
     },
-    // {
-    //     id: 'places',
-    //     label: "Places",
-    //     layer: undefined,  // see initFixCountyOverlay() where we patch this in to become a L.GeoJSON layer, since that comes after startup promises but before initMap()
-    // },
+    {
+        id: 'places',
+        label: "Cities and Towns",
+        layer: undefined,  // see initFixPlaceOverlay() where we patch this in to become a L.GeoJSON layer, since that comes after startup promises but before initMap()
+    },
     // {
     //     id: 'streets',
     //     label: "Streets",
@@ -290,7 +336,7 @@ var MAP_LAYERS = [
     // },
 ];
 
-var CTATOPOJSONDATA, COUNTYTOPOJSONDATA;
+var CTATOPOJSONDATA, COUNTYTOPOJSONDATA, PLACETOPOJSONDATA;
 var DATA_CANCER, DATA_DEMOGS, DATA_CTACITY, DATA_CTACOUNTY;
 
 // a cache of geocoder results, so we don't have to re-geocode every time the form changes
@@ -305,6 +351,9 @@ $(document).ready(function () {
         new Promise(function(resolve) {
             $.get(DATA_URL_COUNTYGEOM, (data) => { resolve(data); }, 'json');
         }),
+        new Promise(function(resolve) {
+            $.get(DATA_URL_PLACEGEOM, (data) => { resolve(data); }, 'json');
+        }),
         Papa.parsePromise(DATA_URL_DEMOGS),
         Papa.parsePromise(DATA_URL_CANCER),
         Papa.parsePromise(DATA_URL_CTACOUNTY),
@@ -314,10 +363,12 @@ $(document).ready(function () {
     Promise.all(waitforparsing).then(function (data) {
         CTATOPOJSONDATA = data[0];
         COUNTYTOPOJSONDATA = data[1];
-        DATA_DEMOGS = data[2];
-        DATA_CANCER = data[3];
-        DATA_CTACOUNTY = data[4];
-        DATA_CTACITY = data[5];
+        PLACETOPOJSONDATA = data[2];
+        DATA_DEMOGS = data[3];
+        DATA_CANCER = data[4];
+        DATA_CTACOUNTY = data[5];
+        DATA_CTACITY = data[6];
+
         initRenameState(SITE_CONSTANTS.stateName);
         initNumberOfCancerSites(SITE_CONSTANTS.numOfCancerSites);
         initNumberOfZones(SITE_CONSTANTS.numOfZones);
@@ -334,23 +385,25 @@ $(document).ready(function () {
         initAboutBlurb(SITE_CONSTANTS.aboutBlurb);
         initIncidenceDataDate(SITE_CONSTANTS.incidenceDataDate);
         initSociodemographicDataDateRange(SITE_CONSTANTS.sociodemographicDataDateRange);
+
         initValidateDemographicDataset();
         initValidateIncidenceDataset();
         initFixCountyOverlay();
         initFixZoneOverlay();
-        // initFixPlaceOverlay();
+        initFixPlaceOverlay();
         initDemographicTables();
+        initChoroplethControl();
         initMapAndPolygonData();
-        initDataFilters(SITE_CONSTANTS.startingLocation);
-        initTooltips();
+        initMapTable();
+        initDataFilters();
         initPrintPage();
+        initIncidenceBarchart();
         initDownloadButtons();
         initFaqAccordion();
         initGoogleAnalyticsHooks();
         initTermsOfUse();
+
         initLoadInitialState();
-        performSearch();
-        initUrlParamUpdater();
     });   
 });
 
@@ -393,12 +446,6 @@ window.onload = function () {
 };
 
 
-
-function initUrlParamUpdater () {
-    setInterval(() => {
-        updateUrlParams();
-    }, 1 * 1000);
-}
 
 function initRenameState(name) {
     const elements = document.querySelectorAll('.stateName');
@@ -461,40 +508,48 @@ function initFundingSource(text) {
     if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
+
 function initCitationInfo(text) {
     const elements = document.querySelectorAll('.citationInfo');
     if (text){ elements.forEach(element => { element.innerText = text })}
 }
+
 
 function initNationalCancerDataSourceInfo(text) {
     const elements = document.querySelectorAll('.nationalCancerDataSource');
     if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
+
 function initAboutBlurb(text) {
     const elements = document.querySelectorAll('.aboutBlurb');
     if (text){ elements.forEach(element => { element.innerText = text })}
 }
+
 
 function initIncidenceDataDate(text) {
     const elements = document.querySelectorAll('.incidenceDateDate');
     if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
+
 function initSociodemographicDataDateRange(text) {
     const elements = document.querySelectorAll('.sociodemographicDataDateRange');
     if (text){ elements.forEach(element => { element.innerText = text })}
 }
 
+
 function initLoadInitialState () {
     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
     const params = new URLSearchParams(window.location.search);
+    let anythingchanged = false;
 
     ['address', 'site', 'sex', 'race', 'time'].forEach((fieldname) => {
         const $widget = $searchwidgets.filter(`[name="${fieldname}"]`);
         const value = params.get(fieldname);
         if (value) {
             $widget.val(value);
+            anythingchanged = true;
         }
     });
 
@@ -503,41 +558,39 @@ function initLoadInitialState () {
         MAP.layerpicker.getLayerStates().forEach(function (layerinfo) {
             const turnon = enablethese.indexOf(layerinfo.id) != -1;
             MAP.layerpicker.toggleLayer(layerinfo.id, turnon);
+            if (turnon) anythingchanged = true;
         });
     }
+
     if (params.get('choropleth')) {
-        MAP.choroplethcontrol.setSelection(params.get('choropleth'));
+        choroplethSetSelection(params.get('choropleth'));
+        anythingchanged = true;
     }
     else {
-        MAP.choroplethcontrol.setSelection('AAIR');
+        choroplethSetSelection('AAIR');
+        anythingchanged = true;
     }
-}
 
+    if (params.get('colortheme')) {
+        choroplethSetColorTheme(params.get('colortheme'));
+        anythingchanged = true;
+    }
+    else {
+        choroplethSetSelection('AAIR');
+        anythingchanged = true;
+    }
 
-function initTooltips () {
-    $('i[data-tooltip]').each(function () {
-        const $trigger = $(this);
-        const tooltipid = $(this).attr('data-tooltip');
+    if (params.get('type')) {
+        const areatype = params.get('type');
+        if (areatype != 'Zone') {
+            $searchwidgets.filter('[name="type"]').val(areatype);
+            anythingchanged = true;
+        }
+    }
 
-        $trigger
-        .attr('data-tooltip-content', `#tooltip_contents > div[data-tooltip="${tooltipid}"]`)
-        .tooltipster({
-            trigger: 'click',
-            animation: 'fade',
-            animationDuration: 150,
-            distance: 0,
-            maxWidth: 400,
-            minWidth: 300,
-            side: [ 'right', 'left', 'bottom', 'top' ],
-            contentCloning: true,
-            interactive: true, // don't auto-dismiss on mouse activity inside, let user copy text, follow links, ...
-            functionBefore: function (instance, helper) {  // close open ones before opening this one
-                jQuery.each(jQuery.tooltipster.instances(), function (i, instance) {
-                    instance.close();
-                });
-            },
-        });
-    });
+    if (anythingchanged) {
+        performSearch(false);
+    }
 }
 
 
@@ -657,10 +710,8 @@ function initValidateDemographicDataset () {
         const hasstatewide = DATA_DEMOGS.filter(function (row) { return row.GeoID == SITE_CONSTANTS.ctaid; });
         if (hasstatewide.length != SEARCHOPTIONS_TIME.length) errors.push(`Found ${hasstatewide.length} demographic rows for Statewide`);
 
-        if (NATIONWIDE_DEMOGRAPHICS) {
-            const hasnationwide = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US'; });
-            if (hasnationwide.length != SEARCHOPTIONS_TIME.length) errors.push(`Found ${hasnationwide.length} demographic rows for Nationwide`);
-        }
+        const hasnationwide = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US'; });
+        if (hasnationwide.length != SEARCHOPTIONS_TIME.length) errors.push(`Found ${hasnationwide.length} demographic rows for Nationwide`);
     }
 
     // if we found errors, throw a tantrum and die
@@ -683,80 +734,84 @@ function initValidateDemographicDataset () {
 
 function initFixCountyOverlay () {
     const maplayerinfo = MAP_LAYERS.filter(function (maplayerinfo) { return maplayerinfo.id == 'counties'; })[0];
-    maplayerinfo.layer = L.topoJson(COUNTYTOPOJSONDATA, {
-        pane: 'tooltipPane',
-        zIndex: 500,
-        style: COUNTYBOUNDS_STYLE,  // see performSearchMap() where these are reassigned based on filters
-    });
+    maplayerinfo.layer = L.featureGroup([
+        L.topoJson(COUNTYTOPOJSONDATA, {
+            pane: 'tooltipPane',
+            zIndex: 500,
+            style: COUNTYBOUNDS_STYLE1,  // see performSearchMap() where these are reassigned based on filters
+        }),
+        L.topoJson(COUNTYTOPOJSONDATA, {
+            pane: 'tooltipPane',
+            zIndex: 500,
+            style: COUNTYBOUNDS_STYLE2,  // see performSearchMap() where these are reassigned based on filters
+        }),
+    ]);
 }
 
 function initFixZoneOverlay () {
     const maplayerinfo = MAP_LAYERS.filter(function (maplayerinfo) { return maplayerinfo.id == 'zones'; })[0];
-    maplayerinfo.layer = L.topoJson(CTATOPOJSONDATA, {
-        pane: 'tooltipPane',
-        zIndex: 500,
-        style: ZONEBOUNDS_STYLE,  // see performSearchMap() where these are reassigned based on filters
-    });
+    maplayerinfo.layer = L.featureGroup([
+        L.topoJson(CTATOPOJSONDATA, {
+            pane: 'tooltipPane',
+            zIndex: 500,
+            style: ZONEBOUNDS_STYLE1,  // see performSearchMap() where these are reassigned based on filters
+        }),
+        L.topoJson(CTATOPOJSONDATA, {
+            pane: 'tooltipPane',
+            zIndex: 500,
+            style: ZONEBOUNDS_STYLE2,  // see performSearchMap() where these are reassigned based on filters
+        }),
+    ]);
 }
 
-// function initFixPlaceOverlay () {
-//     const maplayerinfo = MAP_LAYERS.filter(function (maplayerinfo) { return maplayerinfo.id == 'places'; })[0];
-//     maplayerinfo.layer = L.topoJson(PlaceTOPOJSONDATA, {
-//         pane: 'tooltipPane',
-//         zIndex: 500,
-//         style: COUNTYBOUNDS_STYLE,  // see performSearchMap() where these are reassigned based on filters
-//     });
-// }
+
+function initFixPlaceOverlay () {
+    const maplayerinfo = MAP_LAYERS.filter(function (maplayerinfo) { return maplayerinfo.id == 'places'; })[0];
+    maplayerinfo.layer = L.featureGroup([
+        L.topoJson(PLACETOPOJSONDATA, {
+            pane: 'tooltipPane',
+            zIndex: 500,
+            style: PLACEBOUNDS_STYLE1  // see performSearchMap() where these are reassigned based on filters
+        }),
+        L.topoJson(PLACETOPOJSONDATA, {
+            pane: 'tooltipPane',
+            zIndex: 500,
+            style: PLACEBOUNDS_STYLE2  // see performSearchMap() where these are reassigned based on filters
+        }),
+    ]);
+}
 
 
 function initPrintPage () {
-    const $printbutton = $('#printpagebutton');
-    const $mapdomnode = $('#map').parent('div').get(0);
-    const originalclasslist = $mapdomnode.className;
-    const $incidencebarchart = $('#incidence-barchart');
-    let hiddenMarkers = [];
+    // with a map it's never simple to change sizes, and with them in table cells side-by-side it's even weirder
+    // entering print mode, we want the left-side content hidden (it is, via nopprint) then to expand the map's cell to full-width, then trigger Leaflet resize
+    // leaving print mode, need to undo all of that
+    // also, have the Print button change text, so folks don't get impatient waiting for that delay as we redraw the map
+    // also, the chart is now on the edge so gets clipped, so try to resize it and not do that
 
-    $printbutton.data('ready-html', $printbutton.html() );
+    const $printbutton = $('#printpagebutton');
+    const $mapdomnode = $('#map').parent('div').parent('div').parent('div').get(0);
+    const originalclasslist = $mapdomnode.className;
+
+    const $demogtablecolumns = $('#data-readouts > div.row > div')
+
+    $printbutton.data('ready-html', $printbutton.html() );  // fetch whatever the HTML is when the page loads, so we don't have to repeat ourselves here
     $printbutton.data('busy-html', '<i class="fa fa-clock"></i> Printing');
 
-    let leafletControls = [];
-
     window.addEventListener('beforeprint', function () {
-        leafletControls = [
-            document.querySelector('.leaflet-control-attribution'),
-            document.querySelector('.leaflet-control-zoom'),
-            document.querySelector('.leaflet-control-boxzoom'),
-            document.querySelector('.leaflet-control-scale'),
-            document.querySelector('.leaflet-layerpicker-control')
-        ];
-        leafletControls.forEach(control => {
-            if (control) {
-                control.style.display = 'none';
-            }
-        });
-        $printbutton.html( $printbutton.data('busy-html') );
-        hiddenMarkers = [];
-        MAP.eachLayer(function (layer) {
-            if (layer instanceof L.Marker) {
-                hiddenMarkers.push(layer);
-                MAP.removeLayer(layer);
-            }
-        });
+        $mapdomnode.className = 'col-12';
         MAP.invalidateSize();
+        $printbutton.html( $printbutton.data('busy-html') );
+
+        $demogtablecolumns.removeClass('col').addClass('col-12');
     });
 
     window.addEventListener('afterprint', function () {
-        leafletControls.forEach(control => {
-            if (control) {
-                control.style.display = '';
-            }
-        });
-        $incidencebarchart.removeClass('printing');
+        $demogtablecolumns.addClass('col').removeClass('col-12');
+
         $mapdomnode.className = originalclasslist;
         MAP.invalidateSize();
         $printbutton.html( $printbutton.data('ready-html') );
-        hiddenMarkers.forEach(marker => MAP.addLayer(marker));
-        hiddenMarkers = [];
     });
 }
 
@@ -775,12 +830,12 @@ function initDownloadButtons () {
         if (already) {
             $downloadtogglecaret.addClass('fa-caret-down').removeClass('fa-caret-up');
             $downloadoptions.addClass('d-none');
-            $downloadoptions.attr('aria-expanded', 'false');
+            $downloadtogglebutton.attr('aria-expanded', 'false');
         }
         else {
             $downloadtogglecaret.addClass('fa-caret-up').removeClass('fa-caret-down');
             $downloadoptions.removeClass('d-none');
-            $downloadoptions.attr('aria-expanded', 'true');
+            $downloadtogglebutton.attr('aria-expanded', 'true');
         }
     });
     $downloadlinks.click(function (event) {
@@ -793,22 +848,11 @@ function initDownloadButtons () {
     // $downloadinks.filter('[data-export="all"]');
 
     // Download Map is a tedious slog, because we want to hide some Leaflet controls, leave some, and customize some others
-    // this means hooks in some specific controls such as MAP.choroplethcontrol.setPrintMode()
-    // we also want the print button to change text because printing can take several seconds...
     $printmapbutton.click(() => {
         // the filename is based on the choropleth selection; .png is added automatically
-        const choroplethlabel = MAP.choroplethcontrol.getSelectionLabel().replace('%', 'Percent').replace(/\W/, '');
+        const choroplethlabel = choroplethGetSelectionLabel().replace('%', 'Percent').replace(/\W/, '');
         const filename = `MapExport-${choroplethlabel}`;
         MAP.printplugin.printMap('CurrentSize', filename);
-    });
-
-    $printmapbutton.data('ready-html', $printmapbutton.html() );  // fetch whatever the HTML is when the page loads, so we don't have to repeat ourselves here
-    $printmapbutton.data('busy-html', '<i class="fa fa-clock"></i> One Moment');
-    MAP.on('easyPrint-start', () => {
-        $printmapbutton.html( $printmapbutton.data('busy-html') );
-    });
-    MAP.on('easyPrint-finished', () => {
-        $printmapbutton.html( $printmapbutton.data('ready-html') );
     });
 
     MAP.on('easyPrint-start', () => {
@@ -819,33 +863,29 @@ function initDownloadButtons () {
         const mapdiv = MAP.getContainer();
         mapdiv.style.width = `${mapsize.x}px`;
         mapdiv.style.height = `${mapsize.y}px`;
-
-        // enable the "print mode hacks" in the map controls that were kept visible
-        MAP.choroplethcontrol.setPrintMode(true);
     });
     MAP.on('easyPrint-finished', () => {
         // workaround for a bug in easyPrint: an explicit W&H were asserted above; clear those so the map can again be responsive
         const mapdiv = MAP.getContainer();
         mapdiv.style.removeProperty('width');
         mapdiv.style.removeProperty('height');
-
-        // clear the "print mode hacks" in the map controls that were kept visible
-        MAP.choroplethcontrol.setPrintMode(false);
     });
 }
 
 
 function initDemographicTables () {
     const $demographics_section = $('#demographic-tables');
-    DEMOGRAPHIC_TABLES.forEach(function (tableinfo) {
+    DEMOGRAPHIC_TABLES.forEach(function (tableinfo, index) {
         const $table = $(`
-            <table class="table-striped table-sm">
+            <table class="table-sm table-colorscheme2">
+                <caption class="visually-hidden">${tableinfo.title} demographics</caption>
                 <thead>
                     <tr>
-                        <th class="nowrap left"><span class="subtitle" tabindex="0">${tableinfo.title}</span></th>
-                        <th class="nowrap right typeName" data-region="cta" >Zone</th>
-                        <th class="nowrap right" data-region="state" >Statewide</th>
-                        <th class="nowrap right" data-region="nation" >Nationwide</th>
+                        <th scope="col" class="nowrap left">${tableinfo.title}</th>
+                        <th scope="col" class="nowrap right" data-region="cta" >Zone</th>
+                        <th scope="col" class="nowrap right" data-region="county" >County</th>
+                        <th scope="col" class="nowrap right" data-region="state" >Statewide</th>
+                        <th scope="col" class="nowrap right" data-region="nation" >Nationwide</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -855,19 +895,46 @@ function initDemographicTables () {
 
         const $tbody = $table.children('tbody');
         tableinfo.rows.forEach(function (tablerowinfo) {
-            const tooltiphtml = tablerowinfo.tooltip_id ? `<i class="fa fa-info-circle"  data-tooltip="${tablerowinfo.tooltip_id}"></i>` : '';
-
             $(`
                 <tr>
-                    <th scope="row">${tablerowinfo.label} ${tooltiphtml}</th>
+                    <th scope="row">${tablerowinfo.label}</th>
                     <td class="right nowrap" data-region="cta"><span data-region="cta" data-statistic="${tablerowinfo.field}"></span></td>
+                    <td class="right nowrap" data-region="county"><span data-region="county" data-statistic="${tablerowinfo.field}"></span></td>
                     <td class="right nowrap" data-region="state"><span data-region="state" data-statistic="${tablerowinfo.field}"></span></td>
                     <td class="right nowrap" data-region="nation"><span data-region="nation" data-statistic="${tablerowinfo.field}"></span></td>
                 </tr>
             `).appendTo($tbody);
         });
 
+        if (index > 0) {
+            $table.addClass('mt-3');
+        }
+
         $table.appendTo($demographics_section);
+    });
+}
+
+
+function initIncidenceBarchart () {
+    // very deep tweaking here to get some intricate mobiler behaviors
+    // the AAIR chart looks bad under 500px width
+    // on screen size <500px pick the Table view instead of Chart view, then hide the Chart/Table picker so they're forced to Table view
+    const $tabs = $('#incidence-barchart-tabs');
+    const $tab_tablemode = $tabs.find('a[href="#incidence-barchart-tablemode"]');
+    const $tab_chartmode = $tabs.find('a[href="#incidence-barchart-chartmode"]');
+
+    $(window).resize(function () {
+        const width = $(window).width();
+        const ischart = $tab_chartmode.attr('aria-selected') == 'true';
+
+        if (width < 500) {
+            if (ischart) {
+                $tab_tablemode.click();
+            }
+            $tabs.addClass('d-none');
+        } else {
+            $tabs.removeClass('d-none');
+        }
     });
 }
 
@@ -883,9 +950,9 @@ function initMapAndPolygonData () {
 
     L.control.scale().addTo(MAP);
 
-    L.Control.boxzoom({
-        position:'topleft',
-    }).addTo(MAP);
+    // Custom pane above popupPane (700) so the address marker renders above the labels tile layer
+    MAP.createPane('markerAboveLabels');
+    MAP.getPane('markerAboveLabels').style.zIndex = 750;
 
     // a marker for address searches
     var blackIcon = L.icon({
@@ -896,9 +963,25 @@ function initMapAndPolygonData () {
     });
     
     MAP.addressmarker = L.marker([0, 0], {
-        pane: 'popupPane',
-        icon: blackIcon
+        pane: 'markerAboveLabels',
+        icon: blackIcon,
+        title: "Searched address",
+        interactive: false,
+        clickable: false,
+        keyboard: false,
     });
+
+    // a pattern fill for No Data areas
+    MAP.pattern_stripes = new L.StripePattern({
+        weight: 2, // width of the primary stripe
+        spaceWeight: 6, // width of the secondaty stripe, typically an empty space
+        color: "black", // color of the primary stripe
+        spaceColor: "white", // color of the secondary stripe
+        opacity: 1.0, // opacity of the primary stripe
+        spaceOpacity: 1.0, // opacity of the secondary stripe
+        angle: 45,  // rotate angle
+    });
+    MAP.pattern_stripes.addTo(MAP);
 
     // the layer-picker control
     MAP.layerpicker = new L.Control.LayerPicker({
@@ -930,8 +1013,7 @@ function initMapAndPolygonData () {
         hideControlContainer: false,
         hideClasses: [
             // hide these other controls
-            'leaflet-layerpicker-control', 'leaflet-control-attribution',
-            'leaflet-control-zoom', 'leaflet-control-boxzoom',
+            'leaflet-layerpicker-control',
             // within the choroplethlegend control which we do not hide, setPrintMode() sets certain CSS to show/hide those items
         ],
     }).addTo(MAP);
@@ -942,7 +1024,6 @@ function initMapAndPolygonData () {
     // they decided later that they want to stick a tilelayer in between the fills and the boundary lines,
     // so there are in fact two JSON layers, and performSearchMap() manages both of them to highlight one, color the other, ...
     // the tilelayer then has a zindex within markerPane to fit it in between
-
     MAP.ctapolygonfills = L.topoJson(CTATOPOJSONDATA, {
         pane: 'shadowPane',
         style: CHOROPLETH_STYLE_NODATA,  // see performSearchMap() where these are reassigned based on filters
@@ -967,32 +1048,139 @@ function initMapAndPolygonData () {
     })
     .addTo(MAP);
 
-    MAP.choroplethcontrol = new L.Control.ChoroplethLegend({
-        expanded: true,
-        selectoptions: CHOROPLETH_OPTIONS,
-        onChoroplethChange: (picked) => {
-            performSearch();
-            logGoogleAnalyticsEvent('map', 'choropleth', picked);
-        },
-    }).addTo(MAP);
+    // on map click, fill in the latlng coordinates as an address search and submit it
+    MAP.on('click', function (event) {
+        const lat = event.latlng.lat.toFixed(5);
+        const lng = event.latlng.lng.toFixed(5);
+        const address = `${lat},${lng}`;
 
-    // clicking the map = find latlng, set this as a latlng address search, and let performSearch() take its course
-    MAP.on('singleclick', function (event) {
-        const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
-        const $addressbox = $searchwidgets.filter('[name="address"]');
-        const address = `${event.latlng.lat.toFixed(5)},${event.latlng.lng.toFixed(5)}`;
-        $addressbox.val(address).change();
+        const $addressbox = $('div.data-filters input[type="text"][name="address"]');
+        $addressbox.val(address);
+        performSearch();
     });
 }
 
 
-function initDataFilters (location) {
-    // part 1: fill in the SELECT options from the configurable constants
+function initMapTable () {
+    const $readout_table = $('#map-table');
+    const $tablefilter = $('#map-table-textfilter');
+    const $tablefilterapplybutton = $('#map-table-textfilter-button');
+    const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
+
+    // the Select and Deselect buttons
+    $readout_table.on('click', 'button[data-selected="false"]', function () {
+        const lat = $(this).attr('data-lat');
+        const lng = $(this).attr('data-lng');
+
+        $searchwidgets.filter('[name="address"]').val(`${lat},${lng}`);
+        performSearch();
+    });
+    $readout_table.on('click', 'button[data-selected="true"]', function () {
+        $searchwidgets.filter('[name="address"]').val("");
+        performSearch();
+    });
+
+    $tablefilterapplybutton.click(function () {
+        applyMapTableFiltering();
+    });
+    $tablefilter.keydown(function () {
+        if (event.key == 'Enter') $tablefilterapplybutton.click();
+    });
+
+    // table sorting, see performSearchMap() where the table is re-populated
+    // and class SortableTable; there are interactions between sorting and hiding rows
+
+
+	// ARIA tablist keyboard navigation: roving tabindex so Tab exits the list; left/right arrows move between tabs
+	$('[role="tablist"]').each(function () {
+		const $list = $(this);
+		// Initialize: active tab gets tabindex=0, all others get tabindex=-1
+		$list.find('a[role="tab"]').attr('tabindex', '-1');
+		$list.find('a[role="tab"][aria-selected="true"]').attr('tabindex', '0');
+
+		$list.on('keydown', 'a[role="tab"]', function (e) {
+			const $tabs = $list.find('a[role="tab"]');
+			const currentIndex = $tabs.index(this);
+			let nextIndex = null;
+			if (e.key === 'ArrowRight') nextIndex = (currentIndex + 1) % $tabs.length;
+			else if (e.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + $tabs.length) % $tabs.length;
+			if (nextIndex !== null) {
+				e.preventDefault();
+				$tabs.attr('tabindex', '-1');
+				$tabs.eq(nextIndex).attr('tabindex', '0').focus();
+			} else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+				e.preventDefault();
+			} else if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				$(this).tab('show');
+			}
+		});
+	});
+
+	// Keep roving tabindex in sync when a tab is activated by click
+	$('[role="tablist"]').on('shown.bs.tab', 'a[role="tab"]', function () {
+		const $list = $(this).closest('[role="tablist"]');
+		$list.find('a[role="tab"]').attr('tabindex', '-1');
+		$(this).attr('tabindex', '0');
+	});
+
+
+    // on tab change, if the newly-visible tab is the Map tab, the map may be broken because it had 0x0 size
+    $('ul.nav-pills a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+        const targetid = event.target.ariaControlsElements[0].id;
+        if (targetid == 'map-or-table-map') {
+            MAP.invalidateSize();
+        }
+    });
+}
+
+
+function initChoroplethControl () {
+    const $choroplethlegend = $('#choroplethlegend');
+    const $choroplethlegend_picker = $choroplethlegend.find('.choropleth-legend-picker');
+    const $choroplethlegend_colortheme = $choroplethlegend.find('.choropleth-legend-colortheme');
+    const $choroplethlegend_minvalue = $choroplethlegend.find('.choropleth-legend-minvalue');
+    const $choroplethlegend_maxvalue = $choroplethlegend.find('.choropleth-legend-maxvalue');
+    const $choroplethlegend_gradient = $choroplethlegend.find('.choropleth-legend-legendgradient');
+
+    const $choropleth_groups = {};
+    CHOROPLETH_OPTIONS.forEach((vizopt) => {
+        const $option = $('<option></option>').prop('value', vizopt.field).text(vizopt.label);
+        if (! vizopt.group) {
+            $option.appendTo($choroplethlegend_picker);
+        }
+        else {
+            if (! $choropleth_groups[vizopt.group]) {
+                $choropleth_groups[vizopt.group] = $('<optgroup></optgroup>').prop('label', vizopt.group).appendTo($choroplethlegend_picker);
+            }
+            $option.appendTo($choropleth_groups[vizopt.group]);
+        }
+    });
+
+    $choroplethlegend_picker.change(() => {
+        const picked = choroplethGetSelectionValue();
+        performSearch();
+        logGoogleAnalyticsEvent('map', 'choropleth', picked);
+    });
+
+    $choroplethlegend_colortheme.change(() => {
+        performSearch();
+    });
+}
+
+
+function initDataFilters () {
+    // fill in the SELECT options from the configurable constants
     const $searchwidgets_site = $('div.data-filters select[name="site"]');
     const $searchwidgets_sex = $('div.data-filters select[name="sex"]');
     const $searchwidgets_race = $('div.data-filters select[name="race"]');
     const $searchwidgets_time = $('div.data-filters select[name="time"]');
     const $searchwidgets_type = $('div.data-filters select[name="type"]');
+    const $searchwidgets_address = $('div.data-filters input[name="address"]');
+    const $choroplethlegend_picker = $('div.data-filters select[name="whichchoropleth"]');
+
+    const $submitbutton = $('#data-filters-submit1');
+    const $resetbutton = $('#data-filters-reset1');
 
     SEARCHOPTIONS_CANCERSITE.forEach(function (option) {
         $(`<option value="${option.value}">${option.label}</option>`).appendTo($searchwidgets_site);
@@ -1010,13 +1198,15 @@ function initDataFilters (location) {
         $(`<option value="${option.value}">${option.label}</option>`).appendTo($searchwidgets_type);
     });
 
-    if (getOptionCount('time') < 2) {  // since some datasets have only 1 option
-        $searchwidgets_time.closest('div.input-group').hide();
-    }
-    
-    $('#data-filters-address').val(location);
+    CHOROPLETH_OPTIONS.forEach((vizopt) => {
+        $('<option></option>').prop('value', vizopt.field).text(vizopt.label).appendTo($choroplethlegend_picker);
+    });
 
-    // part 2: add actions to the search widgets
+    if (getOptionCount('time') < 2) {  // since some datasets have only 1 option
+        $searchwidgets_time.closest('div.filter-control').hide();
+    }
+
+    // add actions to the search widgets
     // the search widgets: select race/sex/cancer/time and trigger a search
     // some selections may need to force others, e.g. some cancer selections will force a sex selection
     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
@@ -1031,28 +1221,17 @@ function initDataFilters (location) {
                 $searchwidgets_sex.val(autopick_sex);
             }
         }
-
-        // go ahead and search
-        performSearch();
     });
 
-
-    // performSearch() will zoom the map to the searched CTA Zone, but only if the reason for the search was a changed address search
-    // e.g. changing sex should not re-zoom the map
-    // this hasbeenchanged datum is how we detect that an address change is the reason for the re-search
-    $searchwidgets.filter('[name="address"]')
-    .keydown(function (event) {
-        // don't update our flag if the keypress was a tab; it was probably a screenreader just passing through
-        if (event.keyCode != 9) $(this).data('hasbeenchanged', true);
-
-        if (event.keyCode == 13) $(this).blur();
+    $searchwidgets_address.keydown(function () {
+        if (event.key == 'Enter') $submitbutton.click();
     });
 
     // the anti-filters: Xs in the div.data-filters-summary which will clear a specific filter
     // how we clear the filter varies: most are select, one is text
     // at any rate, upon clearing the filter trigger its change to re-search
     $filtersummary.on('keypress', 'div', function (event) {
-        if (event.keyCode == 13) $(this).click();  // ARIA/508 translate hitting enter as clicking
+        if (event.key == 'Enter') $(this).click();  // ARIA/508 translate hitting enter as clicking
     });
     $filtersummary.on('click', '[data-filter]', function () {
         const whichfilter = $(this).closest('span').attr('data-filter');
@@ -1071,6 +1250,15 @@ function initDataFilters (location) {
             throw "Clear filter: unknown filter type";
         }
     });
+
+    // submit button and clear button
+    $submitbutton.click(function () {
+        performSearch();
+    });
+
+    $resetbutton.click(function () {
+        resetFilters();
+    });
 }
 
 
@@ -1079,7 +1267,7 @@ function initFaqAccordion () {
     const $buttons = $('#learn-faq button.usa-accordion__button');
     $buttons.click(function (event) {
         const $this = $(this);
-        const $definition = $this.closest('h2').next('.usa-accordion__content');
+        const $definition = $this.closest('.usa-accordion__heading').next('.usa-accordion__content');
         const isvisible = $this.attr('aria-expanded') == 'true';
 
         if (isvisible) {
@@ -1115,34 +1303,24 @@ function initFaqAccordion () {
 function initTermsOfUse () {
     const $modal = $('#termsofusemodal');
     const $acceptbutton = $modal.find('button');
-    const $attachtopleft = $('#above-map');
+    const $main = $('main');
+    const $footer = $('footer');
+    const $header = $('header');
 
-    // not a real BS modal but a DIV with a contrived position and size, to make it cover up the map and data portions of the page
-    // so we have to do our own resizing handler, to make it continue to cover up even if they change size
-    $(window).resize(function () {
-        const height = $('#above-map').height() + $('#search-and-map').height() + $('#filters-and-aairbarchart').height() + $('#demographic-tables').height() + 25;  // extra for various padding, spacing, margins
-        const width = $('#search-and-map').width() + 15 + 15;  // add 2*15 to match .container padding
-
-        $modal.css({
-            height: `${height}px`,
-            width: `${width}px`,
-            top: `${$attachtopleft.offset().top}px`,
-            left: `${$attachtopleft.offset().left}px`,
-        });
-    });
-
-    // clickin the button = set the cookie and clear the modal
+    // click the button = set the cookie and clear the modal
     $acceptbutton.click(function () {
         document.cookie = "termsaccepted=true;max-age=31536000";
-        $modal.addClass('d-none');
+        $modal.modal('hide');
+        window.setTimeout(function () {
+            $('#data-filters-type').focus();
+        }, 0);
     });
 
     // unless we have a cookie set, go ahead and show the modal, triggering a resize event now to assert its size and position
     const hastermscookie = document.cookie.split(';').filter(item => item.indexOf('termsaccepted=true') >= 0).length;
     if (! hastermscookie) {
         setTimeout(function () {
-            $(window).resize();
-            $modal.removeClass('d-none');
+            $modal.modal('show');
         }, 0.5 * 1000);
     }
 }
@@ -1190,7 +1368,6 @@ function initGoogleAnalyticsHooks () {
     });
 
     // map events, including some reall custom mods to the controls to the custom controls to capture these events
-    // MAP.choroplethcontrol -- see the constructor's onChoroplethChange callback
     // MAP.layerpicker -- see the constructor's onLayerChange callback
 }
 
@@ -1199,18 +1376,32 @@ function initGoogleAnalyticsHooks () {
 // FUNCTIONS
 //
 
-function performSearch () {
+function resetFilters() {
+    const $searchwidgets_site = $('div.data-filters select[name="site"]');
+    const $searchwidgets_sex = $('div.data-filters select[name="sex"]');
+    const $searchwidgets_race = $('div.data-filters select[name="race"]');
+    const $searchwidgets_time = $('div.data-filters select[name="time"]');
+    const $searchwidgets_type = $('div.data-filters select[name="type"]');
+    const $searchwidgets_address = $('div.data-filters input[name="address"]');
+
+    $searchwidgets_site.val('AllSite');
+    $searchwidgets_sex.val('Both');
+    $searchwidgets_race.val('');
+    $searchwidgets_time.val('05yrs');
+    $searchwidgets_type.val('Zone');
+    $searchwidgets_address.val('');
+
+    performSearch();
+}
+
+
+function performSearch (announceResults=true) {
     toggleAddressSearchFailure(false);
     MAP.addressmarker.setLatLng([0, 0]).removeFrom(MAP);
     const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
     const $addrbox = $searchwidgets.filter('[name="address"]');
-    const causedbyaddresschange = $addrbox.data('hasbeenchanged');
-    $addrbox.data('hasbeenchanged', false);
 
     const params = compileParams();
-    console.log('params: ', params)
-    params.ctaid = SITE_CONSTANTS.ctaid;
-    params.ctaname = SITE_CONSTANTS.stateName;
     if (params.address) {
         const isctaid = params.address.match(/^\s*((A|B)\d\d\d\d)\s*$/);
         const conainsctaid = params.address.match(/\(((A|B)\d\d\d\d)\)/);
@@ -1219,9 +1410,9 @@ function performSearch () {
             const cta = findCTAById(ctaid);
             if (cta) {
                 params.ctaid = cta.feature.properties.ZoneIDOrig;
-                params.ctaname = cta.feature.properties.ZoneName.replace(/\_\d+$/, '');
-                params.bbox = causedbyaddresschange ? cta.getBounds() : null;
-                performSearchReally(params);
+                params.ctaname = getAreaNameByGeoId(params.ctaid);
+                params.bbox = cta.getBounds();
+                performSearchReally(params, announceResults);
             }
             else {
                 toggleAddressSearchFailure('Could not find that CTA');
@@ -1232,150 +1423,209 @@ function performSearch () {
                 if (! latlng) return toggleAddressSearchFailure('Could not find that address');
                 const searchlatlng = [ latlng[0], latlng[1] ];
                 const zone = findCTAContainingLatLng(searchlatlng);
-                const county = findCountyContainingLatLng(searchlatlng)
+                const county = findCountyContainingLatLng(searchlatlng);
                 if (zone) {
                     params.ctaid = zone.feature.properties.ZoneIDOrig;
-                    params.ctaname = zone.feature.properties.ZoneName.replace(/\_\d+$/, '');
+                    params.ctaname = getAreaNameByGeoId(params.ctaid);
                     params.latlng = searchlatlng;
-                    params.bbox = causedbyaddresschange ? zone.getBounds() : null;
-                    params.countyId = county.feature.properties.GEOID
-                    params.countyName = county.feature.properties.Name
-                    performSearchReally(params);
+                    params.bbox = zone.getBounds();
+                    params.countyId = county.feature.properties.GEOID;
+                    params.countyName = getAreaNameByGeoId(county.feature.properties.GEOID);
+                    performSearchReally(params, announceResults);
                 }
                 else {
                     MAP.addressmarker.setLatLng(searchlatlng).addTo(MAP);
                     toggleAddressSearchFailure('Data not available for that location');
-                    performSearchReally(params);
+                    performSearchReally(params, announceResults);
                 }
             });
         }
     }
     else {
-        performSearchReally(params);
+        performSearchReally(params, announceResults);
     }
 }
 
 
-function performSearchReally (searchparams) {
-    const typeNames = $('.typeName')
-    if(searchparams.type == 'Zone'){
-        for (let i=0; i < typeNames.length; i++){
-            typeNames[i].innerHTML = "Zone"
-        }
-    }
-    if(searchparams.type == 'County'){
-        for (let i=0; i < typeNames.length; i++){
-            typeNames[i].innerHTML = "County"
-        }
-    }
+function performSearchReally (searchparams, announceResults = true) {
+    const $search_results_status = $('#search-results-status');
+    $search_results_status.text('');
+
     performSearchMap(searchparams);
-    performSearchDemographics(searchparams);
-    performSearchPlaces(searchparams);
-    performSearchIncidenceReadout(searchparams);
-    performSearchIncidenceBarChart(searchparams);
+    const search_result_summaries = [
+        performSearchPlaces(searchparams),
+        performSearchIncidenceBarChart(searchparams),
+        performSearchIncidenceReadout(searchparams),
+        performSearchDemographics(searchparams),
+    ].filter(Boolean);
+
+    if (announceResults) {
+        window.setTimeout(function () {
+            $search_results_status.text(search_result_summaries.join(' '));
+        }, 0);
+    }
     
     // performSearchUpdateDataDownloadLinks(searchparams); // commented out until file downloads addressed
+
+    // done, update the URL params that got us here
+    updateUrlParams();
 }
 
+
 function performSearchDemographics (searchparams) {
-    let demogdata_cta = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.ctaid && row.Years == searchparams.time; })[0];
-    if (searchparams.type == 'County'){
-        const demogdata_county = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.countyId && row.Years == searchparams.time; })[0];
-        demogdata_cta = demogdata_county
+    let demogdata_zone;
+    if (searchparams.ctaid) {
+        demogdata_zone = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.ctaid && row.Years == searchparams.time; })[0];
     }
+
     const demogdata_state = DATA_DEMOGS.filter(function (row) { return row.GeoID == SITE_CONSTANTS.ctaid && row.Years == searchparams.time; })[0];
+    const demogdata_county = DATA_DEMOGS.filter(function (row) { return row.GeoID == searchparams.countyId && row.Years == searchparams.time; })[0];
     const demogdata_nation = DATA_DEMOGS.filter(function (row) { return row.GeoID == 'US' && row.Years == searchparams.time; })[0];
+
     const $demographics_section = $('#demographic-tables');
     const $ctastats = $demographics_section.find('[data-region="cta"]');
+    const $countystats = $demographics_section.find('[data-region="county"]');
     const $nationstats = $demographics_section.find('[data-region="nation"]');
 
-    // show/hide the CTA Zone content, depending whether a CTA Zone was selected (that is, not Statewide)
-    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) {
-        $ctastats.hide();
-    }
-    else {
+    $demographics_section.attr('aria-busy', 'true');
+
+    // show/hide the County, the Zone, and Nationwide cells/columns
+    $nationstats.show();
+
+    if (searchparams.ctaid && searchparams.type == 'Zone') {
         $ctastats.show();
     }
+    else {
+        $ctastats.hide();
+    }
 
-    // show/hide the Nationwide cells, depending on the global setting
-    if (NATIONWIDE_DEMOGRAPHICS) {
-        $nationstats.show();
+    if (searchparams.countyId) {
+        $countystats.show();
     }
     else {
-        $nationstats.hide();
+        $countystats.hide();
     }
 
     // fill in the blanks: the CTA name and ID
     let ctanametext = searchparams.ctaname;
-    if (searchparams.type == 'County'){
-        ctanametext = searchparams.countyName + ' County'
+    if (searchparams.countyId && searchparams.type == 'County') {
+        ctanametext = searchparams.countyName;
+    } else if (searchparams.ctaid && searchparams.type == 'Zone') {
+        ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
+    } else {
+        ctanametext = SITE_CONSTANTS.stateName;
     }
-    const ctaidtext = searchparams.ctaid == SITE_CONSTANTS.ctaid ? '' : `(${demogdata_cta.GeoID})`;
     $demographics_section.find('span[data-statistics="ctaname"]').text(ctanametext);
-    // $demographics_section.find('span[data-statistics="ctaid"]').text(ctaidtext);
-    $demographics_section.find('span[data-statistics="ctaname"]').closest('span.subtitle').prop('aria-label', ctanametext + ' ' + ctaidtext);
 
     // fill in the blanks: demographics
     // go over the DEMOGRAPHIC_TABLES which we used to construct the table, and fill in the corresponding values for CTA & Statewide demographics
     DEMOGRAPHIC_TABLES.forEach(function (tableinfo) {
         tableinfo.rows.forEach(function (tablerowinfo) {
             const $slots_cta = $demographics_section.find(`span[data-region="cta"][data-statistic="${tablerowinfo.field}"]`);
-            const value_cta = formatFieldValue(demogdata_cta[tablerowinfo.field], tablerowinfo.format);
-            // console.log('value_cta', value_cta)
+            const value_cta = demogdata_zone ? formatFieldValue(demogdata_zone[tablerowinfo.field], tablerowinfo.format) : "";
             $slots_cta.text(value_cta);
 
+            const $slots_county = $demographics_section.find(`span[data-region="county"][data-statistic="${tablerowinfo.field}"]`);
+            const value_county = demogdata_county ? formatFieldValue(demogdata_county[tablerowinfo.field], tablerowinfo.format) : "";
+            $slots_county.text(value_county);
+
             const $slots_state = $demographics_section.find(`span[data-region="state"][data-statistic="${tablerowinfo.field}"]`);
-            const value_state = formatFieldValue(demogdata_state[tablerowinfo.field], tablerowinfo.format);
+            const value_state = demogdata_state ? formatFieldValue(demogdata_state[tablerowinfo.field], tablerowinfo.format) : "";
             $slots_state.text(value_state);
 
-            if (NATIONWIDE_DEMOGRAPHICS) {
-                const $slots_nation = $demographics_section.find(`span[data-region="nation"][data-statistic="${tablerowinfo.field}"]`);
-                const value_nation = formatFieldValue(demogdata_nation[tablerowinfo.field], tablerowinfo.format);
-                $slots_nation.text(value_nation);
-            }
+            const $slots_nation = $demographics_section.find(`span[data-region="nation"][data-statistic="${tablerowinfo.field}"]`);
+            const value_nation = formatFieldValue(demogdata_nation[tablerowinfo.field], tablerowinfo.format);
+            $slots_nation.text(value_nation);
         });
     });
+
+    $demographics_section.attr('aria-busy', 'false');
+
+    const include_cta = searchparams.ctaid && searchparams.type == 'Zone';
+    const include_county = searchparams.countyId;
+    const include_nation = true;
+    const demographic_summary = [`Demographics updated for ${ctanametext}.`];
+    DEMOGRAPHIC_TABLES.forEach(function (tableinfo) {
+        demographic_summary.push(`${tableinfo.title}.`);
+        tableinfo.rows.forEach(function (tablerowinfo) {
+            const row_summary = [tablerowinfo.label];
+
+            if (include_cta) {
+                row_summary.push(`Zone: ${formatFieldValue(demogdata_zone[tablerowinfo.field], tablerowinfo.format)}`);
+            }
+
+            if (include_county) {
+                row_summary.push(`County: ${formatFieldValue(demogdata_county[tablerowinfo.field], tablerowinfo.format)}`);
+            }
+
+            row_summary.push(`Statewide: ${formatFieldValue(demogdata_state[tablerowinfo.field], tablerowinfo.format)}`);
+
+            if (include_nation) {
+                row_summary.push(`Nationwide: ${formatFieldValue(demogdata_nation[tablerowinfo.field], tablerowinfo.format)}`);
+            }
+
+            demographic_summary.push(`${row_summary.join(', ')}.`);
+        });
+    });
+
+    return demographic_summary.join(' ');
 }
 
 
 function performSearchPlaces (searchparams) {
-    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) return;
+    const $placesslot = $('#places-area');
+    $placesslot.attr('aria-busy', 'true');
+    $placesslot.empty();
+
+    if (! searchparams.ctaid && ! searchparams.countyId) {
+        $placesslot.attr('aria-busy', 'false');
+        updateFilterSummary(searchparams);
+        return;
+    }
+
     const counties = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => `${row.County} County`);
     const cities = DATA_CTACITY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.City);
     counties.sort();
     cities.sort();
-    const $putafterthisone = $('div.places-area');
-    $putafterthisone.empty()
-    $("<h3 class='title'></h3>").text('Location Details').appendTo($putafterthisone);
 
-    if (searchparams.type == 'Zone') {
+    $("<h3></h3>").text('Location Details').appendTo($placesslot);
+
+    const places_summary = ['Location details updated.'];
+    if (searchparams.ctaid) {
         const text = searchparams.ctaname + ' (' + searchparams.ctaid + ')'
-        const $block = $("<div ></div>").html(`<b class='subtitle'>Zone: </b>`).appendTo($putafterthisone);
+        const $block = $("<div ></div>").html(`<b class='subtitle'>Zone: </b>`).appendTo($placesslot);
         $("<span></span>").text(text).appendTo($block);
+        places_summary.push(`Zone: ${text}.`);
     }
     if (counties.length) {
         const text = counties.join(', ');
-        const $block = $('<div></div>').html(`<b class='subtitle'>Counties: </b>`).appendTo($putafterthisone);
+        const $block = $('<div></div>').html(`<b class='subtitle'>County: </b>`).appendTo($placesslot);
         $('<span></span>').text(text).appendTo($block);
+        places_summary.push(`County: ${text}.`);
     }
-    if (cities.length && searchparams.type == "Zone") {
+    if (cities.length && searchparams.ctaid) {
         const text = cities.join(', ');
-        const $block = $('<div></div>').html(`<b class='subtitle'>Places: </b>`).appendTo($putafterthisone);
+        const $block = $('<div></div>').html(`<b class='subtitle'>Places: </b>`).appendTo($placesslot);
         $('<span></span>').text(text).appendTo($block);
+        places_summary.push(`Places: ${text}.`);
     }
 
-    updateFilterSummary(searchparams)
-    
+    $placesslot.attr('aria-busy', 'false');
+    updateFilterSummary(searchparams);    
+    return places_summary.join(' ');
 }
 
-function updateFilterSummary(searchparams) {
+
+function updateFilterSummary (searchparams) {
     const $summaryContainer = $('#data-filters-summary');
     $summaryContainer.find('.filters-list').remove();
     let summaryHtml = '<div class="filters-list" style="margin-top: 10px;">';
 
-    $('.data-filters .input-group').each(function () {
+    $('.data-filters .filter-control').each(function () {
         let label = $(this).find('label').text().trim();
         const input = $(this).find('select, input');
+        if (! input.length) return;
+
         let value = input.val() ? input.val().trim() : 'Not Selected';
 
         if (input.is('select')) {
@@ -1389,7 +1639,7 @@ function updateFilterSummary(searchparams) {
 
         if (label.includes('Location Search') && searchparams.type == "County") {
             label = "Location"
-            value = searchparams.countyName + " County";
+            value = searchparams.countyName;
         }
 
         let valueStyle = 'background-color: #e6eaff;; padding: 5px;';
@@ -1408,13 +1658,18 @@ function updateFilterSummary(searchparams) {
 }
 
 
-
-
 function performSearchIncidenceReadout (searchparams) {
     const $incidence_section = $('#incidence-title');
+    const $incidence_readouts = $('#incidence-readouts');
+    $incidence_readouts.attr('aria-busy', 'true');
+
     let ctanametext = searchparams.ctaname;
-    if (searchparams.type == 'County'){
-        ctanametext = searchparams.countyName + ' County'
+    if (searchparams.countyId && searchparams.type == 'County') {
+        ctanametext = searchparams.countyName;
+    } else if (searchparams.ctaid && searchparams.type == 'Zone') {
+        ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
+    } else {
+        ctanametext = SITE_CONSTANTS.stateName;
     }
     $incidence_section.find('span[data-statistics="ctaname"]').text(ctanametext);
 
@@ -1423,14 +1678,17 @@ function performSearchIncidenceReadout (searchparams) {
     //
     // note that we could end up with 0 rows e.g. there is no row for Male Uterine nor Female Prostate
     // we could also end up with null values for some data, e.g. low sample sizes so they chose not to report a value
-    let cancerdata_cta = DATA_CANCER.filter(row => row.GeoID == searchparams.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
-    if (searchparams.type == 'County'){
-        const cancerdata_county = DATA_CANCER.filter(row => row.GeoID == searchparams.countyId && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
-        console.log('cancerdata_county: ', cancerdata_county)
-        cancerdata_cta = cancerdata_county
+    let cancerdata_cta;
+    if (searchparams.ctaid) {
+        cancerdata_cta = DATA_CANCER.filter(row => row.GeoID == searchparams.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
+    } else if (searchparams.countyId) {
+        cancerdata_cta = DATA_CANCER.filter(row => row.GeoID == searchparams.countyId && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
+    } else {
+        cancerdata_cta = DATA_CANCER.filter(row => row.GeoType == 'State' && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
     }
 
     const cancerdata_state = DATA_CANCER.filter(row => row.GeoID == SITE_CONSTANTS.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
+    const cancerdata_county = DATA_CANCER.filter(row => row.GeoID == searchparams.countyId && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
     const cancerdata_nation = DATA_CANCER.filter(row => row.GeoID == 'US' && row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)[0];
 
     let cta_lci, cta_uci, cta_aair;
@@ -1489,11 +1747,39 @@ function performSearchIncidenceReadout (searchparams) {
         state_uci = value_uci;
     }
 
+    let county_lci, county_uci, county_aair;
+    let text_cases_county = '*';
+    let text_aair_county = '*';
+    let text_lciuci_county = '';
+    if (cancerdata_county) {
+        const value_cases = searchparams.race ? cancerdata_county[`${searchparams.race}_Cases`] : cancerdata_county.Cases;
+        const value_aair = searchparams.race ? cancerdata_county[`${searchparams.race}_AAIR`] : cancerdata_county.AAIR;
+        const value_lci = searchparams.race ? cancerdata_county[`${searchparams.race}_LCI`] : cancerdata_county.LCI;
+        const value_uci = searchparams.race ? cancerdata_county[`${searchparams.race}_UCI`] : cancerdata_county.UCI;
+
+        const has_cases = ! isNaN(parseInt(value_cases));
+        const has_aair = ! isNaN(parseFloat(value_cases));
+
+        if (has_cases) text_cases_county = value_cases.toLocaleString();
+        if (has_aair) text_aair_county = value_aair.toFixed(1);
+
+        if (has_cases && has_aair) {
+            const lcitext = (searchparams.race ? cancerdata_county[`${searchparams.race}_LCI`] : cancerdata_county.LCI).toFixed(1);
+            const ucitext = (searchparams.race ? cancerdata_county[`${searchparams.race}_UCI`] : cancerdata_county.UCI).toFixed(1);
+            text_lciuci_county = `(${lcitext}, ${ucitext})`;
+        }
+
+        // tacked on months later, a need to stow these for some comparison charts
+        county_aair = value_aair;
+        county_lci = value_lci;
+        county_uci = value_uci;
+    }
+
     let nation_lci, nation_uci, nation_aair;
     let text_cases_nation = '*';
     let text_aair_nation = '*';
     let text_lciuci_nation = '';
-    if (NATIONWIDE_INCIDENCE && cancerdata_nation) {
+    if (cancerdata_nation) {
         const value_cases = searchparams.race ? cancerdata_nation[`${searchparams.race}_Cases`] : cancerdata_nation.Cases;
         const value_aair = searchparams.race ? cancerdata_nation[`${searchparams.race}_AAIR`] : cancerdata_nation.AAIR;
         const value_lci = searchparams.race ? cancerdata_nation[`${searchparams.race}_LCI`] : cancerdata_nation.LCI;
@@ -1517,41 +1803,47 @@ function performSearchIncidenceReadout (searchparams) {
         nation_uci = value_uci;
     }
 
-    // show/hide the CTA columns (well, actually, each individual cell)
-    if (searchparams.ctaid == SITE_CONSTANTS.ctaid) {
-        $('#incidence-readouts [data-region="cta"]').hide();
+    // show/hide the Zone/County/State/Nationwide columns (well, actually, each individual cell)
+    if (searchparams.ctaid && searchparams.type == 'Zone') {
+        $incidence_readouts.find('[data-region="cta"]').show();
     }
     else {
-        $('#incidence-readouts [data-region="cta"]').show();
+        $incidence_readouts.find('[data-region="cta"]').hide();
     }
 
-    // show/hide the Nationwide content based on the NATIONWIDE_INCIDENCE config setting
-    if (NATIONWIDE_INCIDENCE) {
-        $('#incidence-readouts [data-region="nation"]').show();
+    if (cancerdata_county) {
+        $incidence_readouts.find('[data-region="county"]').show();
     }
     else {
-        $('#incidence-readouts [data-region="nation"]').hide();
+        $incidence_readouts.find('[data-region="county"]').hide();
     }
+
+    $incidence_readouts.find('[data-region="nation"]').show();
 
     // now fill in the blanks
-    $('#incidence-readouts span[data-region="cta"][data-statistic="cases"]').text(text_cases_cta);
-    $('#incidence-readouts span[data-region="cta"][data-statistic="aair"]').text(text_aair_cta);
-    $('#incidence-readouts span[data-region="cta"][data-statistic="lciuci"]').text(text_lciuci_cta);
+    $incidence_readouts.find('span[data-region="cta"][data-statistic="cases"]').text(text_cases_cta);
+    $incidence_readouts.find('span[data-region="cta"][data-statistic="aair"]').text(text_aair_cta);
+    $incidence_readouts.find('span[data-region="cta"][data-statistic="lciuci"]').text(text_lciuci_cta);
 
-    $('#incidence-readouts span[data-region="state"][data-statistic="cases"]').text(text_cases_state);
-    $('#incidence-readouts span[data-region="state"][data-statistic="aair"]').text(text_aair_state);
-    $('#incidence-readouts span[data-region="state"][data-statistic="lciuci"]').text(text_lciuci_state);
+    $incidence_readouts.find('span[data-region="state"][data-statistic="cases"]').text(text_cases_state);
+    $incidence_readouts.find('span[data-region="state"][data-statistic="aair"]').text(text_aair_state);
+    $incidence_readouts.find('span[data-region="state"][data-statistic="lciuci"]').text(text_lciuci_state);
 
-    $('#incidence-readouts span[data-region="nation"][data-statistic="cases"]').text(text_cases_nation);
-    $('#incidence-readouts span[data-region="nation"][data-statistic="aair"]').text(text_aair_nation);
-    $('#incidence-readouts span[data-region="nation"][data-statistic="lciuci"]').text(text_lciuci_nation);
+    $incidence_readouts.find('span[data-region="county"][data-statistic="cases"]').text(text_cases_county);
+    $incidence_readouts.find('span[data-region="county"][data-statistic="aair"]').text(text_aair_county);
+    $incidence_readouts.find('span[data-region="county"][data-statistic="lciuci"]').text(text_lciuci_county);
+
+    $incidence_readouts.find('span[data-region="nation"][data-statistic="cases"]').text(text_cases_nation);
+    $incidence_readouts.find('span[data-region="nation"][data-statistic="aair"]').text(text_aair_nation);
+    $incidence_readouts.find('span[data-region="nation"][data-statistic="lciuci"]').text(text_lciuci_nation);
 
     // part 2
     // tacked on several months later, a candle chart (sort of) for the LCI/UCI/AAIR of these regions
     // but existing candle chart UIs aen't suited, as they want a really custom UI
-    const $candlechart_cta = $('#incidence-readouts span.ucilcicandlechart[data-region="cta"]');
-    const $candlechart_state = $('#incidence-readouts span.ucilcicandlechart[data-region="state"]');
-    const $candlechart_nation = $('#incidence-readouts span.ucilcicandlechart[data-region="nation"]');
+    const $candlechart_cta = $incidence_readouts.find('span.ucilcicandlechart[data-region="cta"]');
+    const $candlechart_state = $incidence_readouts.find('span.ucilcicandlechart[data-region="state"]');
+    const $candlechart_county = $incidence_readouts.find('span.ucilcicandlechart[data-region="county"]');
+    const $candlechart_nation = $incidence_readouts.find('span.ucilcicandlechart[data-region="nation"]');
 
     let minlci = (nation_lci && nation_uci) ? Math.min(cta_lci, state_lci, nation_lci) : Math.min(cta_lci, state_lci);
     let maxuci = (nation_lci && nation_uci) ? Math.max(cta_uci, state_uci, nation_uci) : Math.max(cta_uci, state_uci);
@@ -1562,27 +1854,62 @@ function performSearchIncidenceReadout (searchparams) {
 
     updateCandleChart($candlechart_cta, 'Selected Area', cta_aair, cta_lci, cta_uci, minlci, maxuci);
     updateCandleChart($candlechart_state, SITE_CONSTANTS.ctaid, state_aair, state_lci, state_uci, minlci, maxuci);
+    updateCandleChart($candlechart_county, 'County', county_aair, county_lci, county_uci, minlci, maxuci);
     updateCandleChart($candlechart_nation, 'US', nation_aair, nation_lci, nation_uci, minlci, maxuci);
+
+    // fill in some text describing the filtering applied to the data
+    {
+        const yearText = getLabelFor('time', searchparams.time);
+        const siteText = getLabelFor('site', searchparams.site);
+        const sexText = getLabelFor('sex', searchparams.sex);
+        const raceText = getLabelFor('race', searchparams.race);
+        const filterText = `Filtered to ${siteText}, ${yearText}, ${sexText}, ${raceText}`;
+        const include_cta = searchparams.ctaid != SITE_CONSTANTS.ctaid;
+        const incidence_summary = [`Cancer statistics updated for ${ctanametext}. ${filterText}.`];
+        if (include_cta) {
+            incidence_summary.push(`${searchparams.type}: ${text_cases_cta} cases, age-adjusted incidence rate ${text_aair_cta} ${text_lciuci_cta}.`);
+        }
+        incidence_summary.push(`Statewide: ${text_cases_state} cases, age-adjusted incidence rate ${text_aair_state} ${text_lciuci_state}.`);
+        incidence_summary.push(`Nationwide: ${text_cases_nation} cases, age-adjusted incidence rate ${text_aair_nation} ${text_lciuci_nation}.`);
+
+        $incidence_readouts.find('#incidence-readouts-description').text(filterText);
+        $incidence_readouts.attr('aria-busy', 'false');
+        return incidence_summary.join(' ');
+    }
 }
 
 
 function performSearchIncidenceBarChart (searchparams) {
     const $chart_section  = $('#filters-and-aairbarchart');
+    $chart_section.attr('aria-busy', 'true');
     $chart_section.find('span[data-statistic="cancersite"]').text( getLabelFor('site', searchparams.site) );
     $chart_section.find('span[data-statistics="ctaname"]').text(searchparams.ctaname);
-    if (searchparams.type == 'County'){
-        // const countiesCode = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.CountyCode);
-        // const county = DATA_CTACOUNTY.filter(row => row.ZoneIDOrig == searchparams.ctaid).map(row => row.County);
 
-        $chart_section.find('span[data-statistics="ctaname"]').text(searchparams.countyName + ' County');
+    let ctanametext = searchparams.ctaname;
+    if (searchparams.countyId && searchparams.type == 'County') {
+        ctanametext = searchparams.countyName;
+    } else if (searchparams.ctaid && searchparams.type == 'Zone') {
+        ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
+    } else {
+        ctanametext = SITE_CONSTANTS.stateName;
+    }
+
+    $chart_section.find('span[data-statistics="ctaname"]').text(ctanametext);
+    if (! searchparams.countyId && ! searchparams.ctaid) {
+        $chart_section.find('span[data-statistics="ctaname"]').text(SITE_CONSTANTS.stateName);
     }
 
     // incidence chart is multiple rows: filter by CTA+cancer+time, but keep data for all sexes
     // note that we could end up with 0 rows for some of these, e.g. Male Uterine nor Female Prostate, so undefined is a condition to handle
-    let incidencedata = DATA_CANCER.filter(row => row.GeoID == searchparams.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site);
-    if (searchparams.type == 'County'){
+    let incidencedata;
+    if (searchparams.ctaid) {
+        incidencedata = DATA_CANCER.filter(row => row.GeoID == searchparams.ctaid && row.Years == searchparams.time && row.Cancer == searchparams.site);
+    } else if (searchparams.countyId) {
         incidencedata = DATA_CANCER.filter(row => row.GeoID == searchparams.countyId && row.Years == searchparams.time && row.Cancer == searchparams.site);
+    } else {
+        incidencedata = DATA_CANCER.filter(row => row.GeoType == 'State' && row.Years == searchparams.time && row.Cancer == searchparams.site);
     }
+
     const incidencebysex = {};
     SEARCHOPTIONS_SEX.forEach(function (sexoption) {
         incidencebysex[sexoption.value] = incidencedata.filter(row => row.Sex == sexoption.value)[0];
@@ -1615,15 +1942,6 @@ function performSearchIncidenceBarChart (searchparams) {
 
     // chart it!
 
-    // a special hack here, to adjust the barchart's DIV based on SEARCHOPTIONS_RACE
-    // to achieve ideal height for the number of categories, without a lot of empty space for deployments with 2-3 races instead of 5-7
-    // see also the groupPadding option which affects the spacing between categories
-    const $barchartdiv = $('#incidence-barchart');
-    var chartheight = 20 + 15 + 15 + 55 * SEARCHOPTIONS_RACE.length;  // top legend + axis labels + credits + (categoryheight * numcategories)
-    $barchartdiv.css({
-        height: `${chartheight}px`,
-    });
-
     // a special hack here to insert "data not calculated" text any place where data are 0
     // for this dataset, we know that 0 never happens and above we set nulls to be 0 for our purposes
     // we also have data labels so there will be a value label with the text 0 in it
@@ -1648,9 +1966,10 @@ function performSearchIncidenceBarChart (searchparams) {
         plotOptions: {
             series: {
                 groupPadding: 0.1,
-                maxPointWidth: 12,
+                maxPointWidth: 8,
+                borderColor: "black",
                 animation: {
-                    duration: 0
+                    duration: 0,
                 },
                 accessibility: {
                     pointDescriptionFormatter: function (point) {
@@ -1667,24 +1986,16 @@ function performSearchIncidenceBarChart (searchparams) {
                     useHTML: true,
                     formatter: function () {
                         if (this.y === 0 || this.y === null) {
-                        return '<span style="font-size: 15px; color: #666; position: relative; top: 5px;">*</span>';
+                            return '<span style="font-size: 15px; color: #666; position: relative; top: 5px;">*</span>';
                         } else {
-                        return '<span style="font-size: 10px;">' + this.y + '</span>';
+                            return '<span style="font-size: 10px;">' + this.y + '</span>';
                         }
                     },
                 },
             },
         },
         legend: {
-            layout: 'horizontal',
-            floating: true,
-            verticalAlign: 'top',
-            y: -20,
-            symbolRadius: 0,  // square swatches
-            itemStyle: {
-                fontSize: '18px', // Increase legend font size
-                fontWeight: 'bold',
-            }
+            enabled: false,
         },
         title: null,
         xAxis: {
@@ -1696,7 +2007,7 @@ function performSearchIncidenceBarChart (searchparams) {
                 style: {
                     fontSize: '16px', // Increase x-axis labels size
                 }
-            }
+            },
         },
         yAxis: {
             min: 0,
@@ -1723,10 +2034,37 @@ function performSearchIncidenceBarChart (searchparams) {
             }
         },
         credits: {
-            enabled: true,
+            enabled: false,
         },
         series: chartseries,
     });
+
+    // the table of the same data as in the barchart
+    const $tableslots = $('#incidence-barchart-table span[data-statistic]');
+    SEARCHOPTIONS_RACE.map(function (raceoption) {
+        SEARCHOPTIONS_SEX.map(function (sexoption) {
+            const slotname = `AAIR-${raceoption.value}-${sexoption.value}`;
+            let aair;
+            try {
+                // will fail if there is no data at all e.g. female prostate cancer
+                aair = raceoption.value ? incidencebysex[sexoption.value][`${raceoption.value}_AAIR`] : incidencebysex[sexoption.value].AAIR;
+            } catch {
+            }
+            $tableslots.filter(`[data-statistic="${slotname}"]`).text(aair ? aair.toFixed(1) : "");
+        });
+    });
+
+    // fill in some text describing the filtering applied to the data
+    {
+        const yearText = getLabelFor('time', searchparams.time);
+        const siteText = getLabelFor('site', searchparams.site);
+        const sexText = getLabelFor('sex', searchparams.sex);
+        const raceText = getLabelFor('race', searchparams.race);
+        const filterText = `Filtered to ${siteText}, ${yearText}, ${sexText}, ${raceText}`;
+        $('#incidence-barchart-description').text(filterText);
+        $chart_section.attr('aria-busy', 'false');
+        return `Age-adjusted incidence rates chart updated for ${ctanametext}. ${filterText}.`;
+    }
 }
 
 
@@ -1747,25 +2085,12 @@ function performSearchMap (searchparams) {
         layer.setStyle(Object.assign({}, CHOROPLETH_STYLE_NODATA_CLEAR));
     })
 
-    if (searchparams.type == 'Zone'){
-
     // if we were given a bbox, zoom to it
     if (searchparams.bbox) {
-        MAP.fitBounds(searchparams.bbox);
+        MAP.fitBounds(searchparams.bbox.pad(0.25));
+    } else {
+        MAP.fitBounds(SITE_CONSTANTS.MAP_BBOX);
     }
-
-    // highlight the selected CTA
-    MAP.ctapolygonbounds.eachLayer((layer) => {
-        const ctaid = layer.feature.properties.ZoneIDOrig;
-        const istheone = ctaid == searchparams.ctaid;
-        if (istheone) {
-            layer.setStyle(CHOROPLETH_BORDER_SELECTED);
-            layer.bringToFront();
-        }
-        else {
-            layer.setStyle(CHOROPLETH_BORDER_DEFAULT);
-        }
-    });
 
     // if a latlng was given in the search, place the marker
     if (searchparams.latlng) {
@@ -1775,28 +2100,35 @@ function performSearchMap (searchparams) {
         MAP.addressmarker.setLatLng([0, 0]).removeFrom(MAP);
     }
 
-    //
-    // PART 2: choropleth
-    // the map has a CTA polygons layer, showing all CTAs colored to form a choropleth map
-    // the choice of value used to calculate and color, is selected by the custom MAP.choroplethcontrol
-    // which doesn't actually do the updating, but provides the UI for selection
-    // this-here function is what does the real choropleth work, as well as telling the control to update the legend
-    //
+    // choropleth calculations
+    // whether this applies to counties or zones or whatever on map, calculations are still from DATA_CANCER and DATA_DEMOGS
+    // the choice of value used to calculate and color, is selected by the choropleth selection
 
-    // rank the CTAs by what...
-    // depends on that map control; could be incidence data or demographic data
-    const rankthemby = MAP.choroplethcontrol.getSelection();
+    const rankthemby = choroplethGetSelectionValue();
+    const rankthemby_text = choroplethGetSelectionLabel();
     const vizopt = CHOROPLETH_OPTIONS.filter(function (vizopt) { return vizopt.field == rankthemby; })[0];
-    const colors = [ vizopt.colorramp.Q1.fillColor, vizopt.colorramp.Q2.fillColor, vizopt.colorramp.Q3.fillColor, vizopt.colorramp.Q4.fillColor, vizopt.colorramp.Q5.fillColor ];
+    const colortheme = choroplethGetColorTheme();
+    const colorramp = vizopt.colorramp[colortheme];
+    const colors = vizopt.colorramp[colortheme].map(t => t.fillColor);
 
     // make up a dict of CTA scores for all CTA Zones, ZoneID => score
-    const ctascores = {};
+    // also, since we'll use the results later keep a tabular listing as well with additional info such as the area name
+    let ctascores = {};
+    let tabularscores = [];
+    let optiontype;
 
     if (['Cases', 'AAIR'].indexOf(rankthemby) != -1) {  // the special case for AAIR/Cases incidence data
+        optiontype = 'cancer';
+
         DATA_CANCER
         .filter(row => row.GeoID != 'US')
         .filter(row => row.GeoID != SITE_CONSTANTS.ctaid)
         .filter(row => row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)
+        .filter((row) => {
+            const isctazone = (typeof row.GeoID == 'string' ? row.GeoID : row.GeoID.toString()).match(/^(A|B)\d+/);
+            if (searchparams.type == 'Zone' && isctazone) return true;
+            if (searchparams.type == 'County' && ! isctazone) return true;
+        })
         .forEach((row) => {
             let choropleth_score;
             switch (rankthemby) {
@@ -1808,30 +2140,38 @@ function performSearchMap (searchparams) {
                     break;
             }
             ctascores[row.GeoID] = choropleth_score;
+
+            tabularscores.push(Object.assign({}, row, {choropleth_score}));
         });
     }
     else {  // demographic data
+        optiontype = 'demographic';
+
         DATA_DEMOGS
         .filter(row => row.GeoID != 'US')
         .filter(row => row.GeoID != SITE_CONSTANTS.ctaid)  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
+        .filter(row => row.GeoType == searchparams.type && row.Years == searchparams.time)
         .forEach((row) => {
             const choropleth_score = row[rankthemby];  // the control's selected value = a CHOROPLETH_OPTIONS "field" = a literal CSV column name
             ctascores[row.GeoID] = choropleth_score;
+
+            tabularscores.push(Object.assign({}, row, {choropleth_score}));
         });
     }
-    // find the min and max, and send it to the control for display
+
+    // find the min and max, and send it to the display
     const allscores = Object.values(ctascores).filter(function (score) { return score; });
     const scoringmin = Math.min(...allscores);
     const scoringmax = Math.max(...allscores);
     const legendformat = CHOROPLETH_OPTIONS.filter(function (vizopt) { return vizopt.field == rankthemby; })[0].format;
     const scoremintext = scoringmin == Infinity ? 'No Data' : formatFieldValue(scoringmin, legendformat);
     const scoremaxtext = scoringmax == -Infinity ? 'No Data' : formatFieldValue(scoringmax, legendformat);
-    MAP.choroplethcontrol.setMinMax(scoremintext, scoremaxtext);
+    choroplethSetMinMax(scoremintext, scoremaxtext);
 
     // update the color ramp gradient in the control
-    MAP.choroplethcontrol.setGradientColors(colors);
+    choroplethSetGradientColors(colors);
 
-    // find quantiles to make up 5 classes, for use in the choropleth assignments coming up
+    // find quantiles to make up X classes (X = length of colors), for use in the choropleth assignments coming up
     // thanks to buboh at https://stackoverflow.com/questions/48719873/how-to-get-median-and-quartiles-percentiles-of-an-array-in-javascript-or-php
     const asc = arr => arr.sort((a, b) => a - b);
     const quantile = (arr, q) => {
@@ -1846,170 +2186,246 @@ function performSearchMap (searchparams) {
         }
     };
 
-    const q1brk = quantile(allscores, .20);
-    const q2brk = quantile(allscores, .40);
-    const q3brk = quantile(allscores, .60);
-    const q4brk = quantile(allscores, .80);
-
-    // assign the color/style to each CTA Zone polygon
-    MAP.ctapolygonfills.eachLayer((layer) => {
-        // const ctaid = layer.feature.properties.Zone;
-        const ctaid = layer.feature.properties.ZoneIDOrig;
-        const score = ctascores[ctaid];
-        let style;
-        if (score == null || score == undefined || score == "") {
-            style = Object.assign({}, CHOROPLETH_STYLE_NODATA);
-        }
-        else {
-            let bucket = 'Q5';
-            if (score <= q1brk) bucket = 'Q1';
-            else if (score <= q2brk) bucket = 'Q2';
-            else if (score <= q3brk) bucket = 'Q3';
-            else if (score <= q4brk) bucket = 'Q4';
-
-            style = Object.assign({}, vizopt.colorramp[bucket]);  // take a copy!
-        }
-
-        layer.setStyle(style);
-    });
-    } else if (searchparams.type == "County") {
-        
-    // if we were given a bbox, zoom to it
-    if (searchparams.bbox) {
-        MAP.fitBounds(searchparams.bbox);
+    const scorebreaks = [];
+    for (let i=1; i<colors.length; i++) {
+        scorebreaks.push(quantile(allscores, i * (1.0 / colors.length)));
     }
 
-    // clear the zone borders
-    MAP.ctapolygonbounds.eachLayer((layer) => {
-        layer.setStyle({ color: null });
-    })
-
-    // highlight the selected CTA
-    MAP.countypolygonbounds.eachLayer((layer) => {
-        // const ctaid = layer.feature.properties.Zone;
-        // const ctaid = layer.feature.properties.ZoneIDOrig;
-        const ctaid = layer.feature.properties.GEOID;
-        const istheone = ctaid == searchparams.countyId;
-        if (istheone) {
-            layer.setStyle(CHOROPLETH_BORDER_SELECTED);
-            layer.bringToFront();
-        }
-        else {
-            layer.setStyle(CHOROPLETH_BORDER_DEFAULT);
-        }
-    });
-
-    // if a latlng was given in the search, place the marker
-    if (searchparams.latlng) {
-        MAP.addressmarker.setLatLng(searchparams.latlng).addTo(MAP);
-    }
-    else {
-        MAP.addressmarker.setLatLng([0, 0]).removeFrom(MAP);
+    function getBucketForScore (score, scorebreaks) {
+        const bucket = scorebreaks.filter(b => score >= b).length + 1;
+        return bucket;
     }
 
-    //
-    // PART 2: choropleth
-    // the map has a CTA polygons layer, showing all CTAs colored to form a choropleth map
-    // the choice of value used to calculate and color, is selected by the custom MAP.choroplethcontrol
-    // which doesn't actually do the updating, but provides the UI for selection
-    // this-here function is what does the real choropleth work, as well as telling the control to update the legend
-    //
+    if (searchparams.type == 'Zone') {
+        // highlight the selected CTA
+        MAP.ctapolygonbounds.eachLayer((layer) => {
+            const ctaid = layer.feature.properties.ZoneIDOrig;
+            const istheone = ctaid == searchparams.ctaid;
+            const score = ctascores[ctaid];
+            const style = {};
 
-    // rank the CTAs by what...
-    // depends on that map control; could be incidence data or demographic data
-    const rankthemby = MAP.choroplethcontrol.getSelection();
-    const vizopt = CHOROPLETH_OPTIONS.filter(function (vizopt) { return vizopt.field == rankthemby; })[0];
-    const colors = [ vizopt.colorramp.Q1.fillColor, vizopt.colorramp.Q2.fillColor, vizopt.colorramp.Q3.fillColor, vizopt.colorramp.Q4.fillColor, vizopt.colorramp.Q5.fillColor ];
-
-    // make up a dict of CTA scores for all CTA Zones, ZoneID => score
-    const ctascores = {};
-
-    if (['Cases', 'AAIR'].indexOf(rankthemby) != -1) {  // the special case for AAIR/Cases incidence data
-        DATA_CANCER
-        .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != SITE_CONSTANTS.ctaid)
-        .filter(row => row.Years == searchparams.time && row.Cancer == searchparams.site && row.Sex == searchparams.sex)
-        .forEach((row) => {
-            let choropleth_score;
-            switch (rankthemby) {
-                case 'Cases':
-                    choropleth_score = searchparams.race ? row[`${searchparams.race}_Cases`] : row.Cases;
-                    break;
-                case 'AAIR':
-                    choropleth_score = searchparams.race ? row[`${searchparams.race}_AAIR`] : row.AAIR;
-                    break;
+            if (istheone) {
+                Object.assign(style, CHOROPLETH_BORDER_SELECTED);
+                layer.bringToFront();
             }
-            ctascores[row.GeoID] = choropleth_score;
-        });
-    }
-    else {  // demographic data
-        DATA_DEMOGS
-        .filter(row => row.GeoID != 'US')
-        .filter(row => row.GeoID != SITE_CONSTANTS.ctaid)  // only 1 demog row per CTZ Zone, so only filtering is Not Statewide
-        .forEach((row) => {
-            const choropleth_score = row[rankthemby];  // the control's selected value = a CHOROPLETH_OPTIONS "field" = a literal CSV column name
-            ctascores[row.GeoID] = choropleth_score;
-        });
-    }
-    const filteredDataWithoutZones = Object.fromEntries(
-        Object.entries(ctascores).filter(([key, value]) => !key.includes("A"))
-    );
-    // find the min and max, and send it to the control for display
-    const allscores = Object.values(filteredDataWithoutZones).filter(function (score) { return score; });
-    const scoringmin = Math.min(...allscores);
-    const scoringmax = Math.max(...allscores);
-    const legendformat = CHOROPLETH_OPTIONS.filter(function (vizopt) { return vizopt.field == rankthemby; })[0].format;
-    const scoremintext = scoringmin == Infinity ? 'No Data' : formatFieldValue(scoringmin, legendformat);
-    const scoremaxtext = scoringmax == -Infinity ? 'No Data' : formatFieldValue(scoringmax, legendformat);
-    MAP.choroplethcontrol.setMinMax(scoremintext, scoremaxtext);
+            else {
+                Object.assign(style, CHOROPLETH_BORDER_DEFAULT);
+            }
 
-    // update the color ramp gradient in the control
-    MAP.choroplethcontrol.setGradientColors(colors);
+            if (optiontype == 'cancer' && (score == null || score == undefined || score == "")) {
+                Object.assign(style, CHOROPLETH_STYLE_NODATA, { fillPattern: MAP.pattern_stripes });
+            }
+            else {
+                const bucket = getBucketForScore(score, scorebreaks);
+                const thisstyle = colorramp[bucket - 1];
+                Object.assign(style, thisstyle, { fillPattern: undefined });
+            }
 
-    // find quantiles to make up 5 classes, for use in the choropleth assignments coming up
-    // thanks to buboh at https://stackoverflow.com/questions/48719873/how-to-get-median-and-quartiles-percentiles-of-an-array-in-javascript-or-php
-    const asc = arr => arr.sort((a, b) => a - b);
-    const quantile = (arr, q) => {
-        const sorted = asc(arr);
-        const pos = ((sorted.length) - 1) * q;
-        const base = Math.floor(pos);
-        const rest = pos - base;
-        if ((sorted[base + 1] !== undefined)) {
-            return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+            layer.setStyle(style);
+        });
+    } else if (searchparams.type == "County") {        
+        // clear the zone borders
+        MAP.ctapolygonbounds.eachLayer((layer) => {
+            layer.setStyle({ color: null });
+        })
+
+        // highlight the selected CTA
+        MAP.countypolygonbounds.eachLayer((layer) => {
+            const ctaid = layer.feature.properties.GEOID;
+            const istheone = ctaid == searchparams.countyId;
+            const score = ctascores[ctaid];
+            const style = {};
+
+            if (istheone) {
+                Object.assign(style, CHOROPLETH_BORDER_SELECTED);
+                layer.bringToFront();
+            }
+            else {
+                Object.assign(style, CHOROPLETH_BORDER_DEFAULT);
+            }
+
+            if (optiontype == 'cancer' && (score == null || score == undefined || score == "")) {
+                Object.assign(style, CHOROPLETH_STYLE_NODATA, { fillPattern: MAP.pattern_stripes });
+            }
+            else {
+                const bucket = getBucketForScore(score, scorebreaks);
+                const thisstyle = colorramp[bucket - 1];
+                Object.assign(style, thisstyle, { fillPattern: undefined });
+            }
+
+            layer.setStyle(style);
+        });
+    }  // end of the if/elseif coloring by area type
+
+    // fill in a table of the selected statistic; this is part of performSearchMap() for two reasons
+    // a) it uses the choropleth calculations above for color indicators, b) this is the accessible equivalent
+    // a lot to do here:
+    // detect the current sorting
+    // rewrite the TH to indicate what we're showing
+    // purge and reload the rows
+    // re-apply sorting and filtering
+    const $readout_table = $('#map-table');
+    const $readout_message_nodata = $('#map-table-nodata');
+    const $readout_table_thead = $readout_table.children('thead');
+    const $readout_table_tbody = $readout_table.children('tbody');
+
+    const $current_sorting = $readout_table_thead.find('th[aria-sort]');
+    const current_sorting_index = $current_sorting.index();
+    const current_sorting_ascdesc = $current_sorting.attr('aria-sort');
+
+    const selected_geoid = $readout_table.find('button[data-selected="true"]').attr('data-geoid');
+
+    $readout_table_thead.empty();
+    $readout_table_tbody.empty();
+
+    const $searchwidgets = $('div.data-filters input[type="text"], div.data-filters select');
+
+    let format = 'text';
+    if (optiontype == 'demographic') {
+        format = DEMOGRAPHIC_TABLES.map(group => group.rows).reduce((f, i) => { return f.concat(i); }, []).filter(f => f.field == rankthemby);
+        if (format.length) format = format[0].format;
+    } else if (rankthemby == 'Cases') {
+        format = 'integer';
+    } else if (rankthemby == 'AAIR') {
+        format = 'float';
+    }
+
+    const $thr = $('<tr></tr>').appendTo($readout_table_thead);
+    const $th1 = $('<th class="left"></th>').appendTo($thr);
+    const $th2 = $('<th class="right sortable-number"></th>').appendTo($thr);
+    const $th3 = $('<th class="center"></th>').text("Select").appendTo($thr);
+
+    $('<button></button>').text(searchparams.type).append($('<span aria-hidden="true"></span>')).appendTo($th1);  // why button? for sorting
+    $('<button></button>').text(rankthemby_text).append($('<span aria-hidden="true"></span>')).appendTo($th2);  // why button? for sorting
+
+    let $focusthisbutton;
+
+    tabularscores.forEach(function (row, rowindex) {
+        let name = getAreaNameByGeoId(row.GeoID);
+        if (searchparams.type == 'Zone') name = `${name} (${row.GeoID})`;
+
+        // whatever the field was, including race filters, we stowed it as the choropleth score used on the map
+        const score = row.choropleth_score;
+        let bucket = getBucketForScore(score, scorebreaks);
+        const thisstyle = colorramp[bucket - 1];
+
+        let scoretext;
+        if (optiontype == 'cancer' && (score == null || score == undefined || score == "")) {
+            scoretext = "Suppressed";
+            bucket = null;
         } else {
-            return sorted[base];
-        }
-    };
-
-    const q1brk = quantile(allscores, .20);
-    const q2brk = quantile(allscores, .40);
-    const q3brk = quantile(allscores, .60);
-    const q4brk = quantile(allscores, .80);
-
-    // assign the color/style to each CTA Zone polygon
-    MAP.countypolygonfills.eachLayer((layer) => {
-        // const ctaid = layer.feature.properties.Zone;
-        // const ctaid = layer.feature.properties.ZoneIDOrig;
-        const ctaid = layer.feature.properties.GEOID;
-        const score = ctascores[ctaid];
-        let style;
-        if (score == null || score == undefined || score == "") {
-            style = Object.assign({}, CHOROPLETH_STYLE_NODATA);
-        }
-        else {
-            let bucket = 'Q5';
-            if (score <= q1brk) bucket = 'Q1';
-            else if (score <= q2brk) bucket = 'Q2';
-            else if (score <= q3brk) bucket = 'Q3';
-            else if (score <= q4brk) bucket = 'Q4';
-
-            style = Object.assign({}, vizopt.colorramp[bucket]);  // take a copy!
+            scoretext = formatFieldValue(score, format);
         }
 
-        layer.setStyle(style);
+        let isselected;
+        if (searchparams.type == 'Zone' && searchparams.ctaid == row.GeoID) isselected = true;
+        if (searchparams.type == 'County' && searchparams.countyId == row.GeoID) isselected = true;
+
+        const $tr = $('<tr></tr>').attr('aria-rowindex', rowindex + 1);
+        const $cell1 = $('<th scope="row" class="left"></th>').text(name).appendTo($tr);
+        const $cell2 = $('<td class="right"></td>').text(scoretext).appendTo($tr);
+        const $cell3 = $('<td class="center"></td>').appendTo($tr);
+
+        // add a color swatch
+        const $swatch = $('<span></span>').css({
+            'display': 'inline-block',
+            'width': '1em',
+            'height': '1em',
+            'margin-left': '1em',
+            'border': '1px solid black',
+        });
+        if (bucket) {
+            $swatch.css({
+                'opacity': thisstyle.fillOpacity,
+                'background-color': thisstyle.fillColor,
+            });
+        } else {
+            $swatch.css({
+                'background-image': "url(./static/nodata.png)",
+                'background-size': "cover",
+            });
+        }
+        $swatch.appendTo($cell2);
+
+        // a button to find the area, find its center, and then fill in that latlng as an address
+        // these are all proper convex shapes, no weird horseshoes etc, so we can use the center
+        let thefeature;
+        if (searchparams.type == 'Zone') {
+            thefeature = MAP.ctapolygonbounds.getLayers().filter(layer => layer.feature.properties.ZoneIDOrig == row.GeoID)[0];
+        } else if (searchparams.type == 'County') {
+            thefeature = MAP.countypolygonbounds.getLayers().filter(layer => layer.feature.properties.GEOID == row.GeoID)[0];
+        }
+
+        if (thefeature) {
+            // see initMapTable() for delegated event handler on these buttons
+            const latlng = thefeature.getCenter();
+            const $selectbutton = $('<button class="btn btn-default py-0">XXX</button>').attr('data-lat', latlng.lat).attr('data-lng', latlng.lng).attr('data-geoid', row.GeoID);
+
+            if (isselected) {
+                $selectbutton.text("Clear Selection").attr('data-selected', 'true').attr('aria-label', `Stop selecting area ${name}`);;
+                $focusthisbutton = $selectbutton;
+            } else {
+                $selectbutton.text("Select").attr('data-selected', 'false').attr('aria-label', `Select area ${name}`);
+                if (row.GeoID == selected_geoid) {
+                    $focusthisbutton = $selectbutton;
+                }
+            }
+
+            $selectbutton.appendTo($cell3);
+        }
+
+        if (isselected) {
+            $tr.addClass('selected-row');
+        }
+
+        // done; add this row to the table
+        $tr.appendTo($readout_table_tbody);
     });
+
+    if ($focusthisbutton) {
+        setTimeout(function () {
+            $focusthisbutton.focus();
+        }, 0.1 * 1000);
     }
 
+    if (optiontype == 'cancer') {
+        $readout_table.removeClass('map-table-demographic').addClass('map-table-cancer');
+    } else {
+        $readout_table.addClass('map-table-demographic').removeClass('map-table-cancer');
+    }
+
+    $readout_table.attr('aria-rowcount', tabularscores.length);
+
+    // re-calculate the sortable table, apply the sorting we had previously
+    const sortme = document.querySelector('#map-table');
+    const sortable = new SortableTable(sortme);
+
+    if (current_sorting_ascdesc) {
+        sortable.setColumnHeaderSort(current_sorting_index, current_sorting_ascdesc);
+    } else {
+        sortable.setColumnHeaderSort(0, 'ascending');
+    }
+
+    // re-apply filtering
+    // see also initMapTable() and applyMapTableFiltering() which apply filtering to the table rows
+    $('#map-table-textfilter').change();
+
+    // update the text describing the filter, to say the name of the selected area type
+    {
+    const $searchwidgets_type = $('div.data-filters select[name="type"]');
+    const $table_filter_text = $('label[for="map-table-textfilter"]');
+    const type = $searchwidgets_type.val();
+    const type_text = getLabelFor('type', type);
+    const table_filter_text = `Filter the table by ${type_text.toLowerCase()} name:`;
+    $table_filter_text.text(table_filter_text);
+    }
+
+    // if there are no rows at all, show this message
+    if (tabularscores.length) {
+        $readout_message_nodata.addClass('d-none');
+    } else {
+        $readout_message_nodata.removeClass('d-none');
+    }
 }
 
 
@@ -2027,46 +2443,67 @@ function performSearchUpdateDataDownloadLinks (searchparams) {
 }
 
 
-function geocodeAddress(address, callback) {
-  const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN;
+function geocodeAddress (address, callback) {
+    const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN;
 
-  // If it's already lat,lng coordinates
-  const islatlng = address.match(/\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*/);
-  if (islatlng) {
-    const coordinates = [parseFloat(islatlng[1]), parseFloat(islatlng[2])];
-    return callback(coordinates);
-  }
-
-  // Cached results
-  if (GEOCODE_CACHE[address]) {
-    return callback(GEOCODE_CACHE[address]);
-  }
-
-  if (!MAPBOX_ACCESS_TOKEN) {
-    alert("Cannot look up addresses because MAPBOX_ACCESS_TOKEN has not been set.");
-    return;
-  }
-
-  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
-
-  $.ajax({
-    url: url,
-    dataType: 'json',
-    success: function(data) {
-      if (data.features && data.features.length > 0) {
-        const [lon, lat] = data.features[0].center;
-        const coordinates = [lat, lon];
-        GEOCODE_CACHE[address] = coordinates;
-        callback(coordinates);
-      } else {
-        callback(null);
-      }
-    },
-    error: function(xhr, status, error) {
-      console.error('Error fetching geocode data:', error);
-      alert("There was a problem finding that address. Please try again.");
+    // If it's already lat,lng coordinates
+    const islatlng = address.match(/\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*/);
+    if (islatlng) {
+        const coordinates = [parseFloat(islatlng[1]), parseFloat(islatlng[2])];
+        return callback(coordinates);
     }
-  });
+
+    // Cached results
+    if (GEOCODE_CACHE[address]) {
+        return callback(GEOCODE_CACHE[address]);
+    }
+
+    if (MAPBOX_ACCESS_TOKEN) {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            success: function(data) {
+                if (data.features && data.features.length > 0) {
+                    const [lon, lat] = data.features[0].center;
+                    const coordinates = [lat, lon];
+                    GEOCODE_CACHE[address] = coordinates;
+                    callback(coordinates);
+                } else {
+                    callback(null);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching geocode data:', error);
+                alert("There was a problem finding that address. Please try again.");
+            }
+        });
+    } else {
+        console.error("MAPBOX_ACCESS_TOKEN has not been set so falling back to Nominatim.");
+
+        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q=${encodeURIComponent(address)}`;
+
+        $.ajax({
+            url: url,
+            dataType: "json",
+            success: function (data) {
+                if (data && data.length) {
+                    const lon = parseFloat(data[0].lon);
+                    const lat = parseFloat(data[0].lat);
+                    const coordinates = [lat, lon];
+                    GEOCODE_CACHE[address] = coordinates;
+                    callback(coordinates);
+                } else {
+                    callback(null);
+                }
+            },
+            error: function (e) {
+                console.error('Error fetching geocode data:', error);
+                alert("There was a problem finding that address. Please try again.");
+            }
+        });
+    }
 }
 
 
@@ -2087,6 +2524,27 @@ function getOptionCount (fieldname) {
     const $picker = $(`div.data-filters select[name="${fieldname}"]`);
     const $options = $picker.find('option');
     return $options.length;
+}
+
+
+function applyMapTableFiltering () {
+    const $readout_table = $('#map-table');
+    const $trs = $readout_table.find('tbody tr');
+    const $tablefilter = $('#map-table-textfilter');
+    const searchstring = $tablefilter.val().toLowerCase().trim();
+
+    $trs.each(function () {
+        // we only filter by cell 0, the area name
+        const $tr = $(this);
+        const thevalue = $tr.children().first().text().toLowerCase().trim();
+        const matches = thevalue.indexOf(searchstring) != -1;
+
+        if (matches) {
+            $tr.removeClass('d-none');
+        } else {
+            $tr.addClass('d-none');
+        }
+    });
 }
 
 
@@ -2111,12 +2569,14 @@ function compileParams (addextras=false) {
             .join(',');
         if (! params.overlays) params.overlays = 'none';  // so we always have something, even if it's all layers off
 
-        params.choropleth = MAP.choroplethcontrol.getSelection();
+        params.choropleth = choroplethGetSelectionValue();
+        params.colortheme = choroplethGetColorTheme();
     }
 
     // done
     return params;
 }
+
 
 function updateUrlParams () {
     const baseurl = document.location.href.indexOf('?') == -1 ? document.location.href : document.location.href.substr(0, document.location.href.indexOf('?'));
@@ -2132,6 +2592,7 @@ function findCTAContainingLatLng (inputlatlng) {
     return containingcta[0];
 }
 
+
 function findCountyContainingLatLng (inputlatlng) {
     const latlng = inputlatlng.hasOwnProperty('length') ? L.latLng(inputlatlng[0], inputlatlng[1]) : inputlatlng;
     const containingCounty = leafletPip.pointInLayer(latlng, MAP.countypolygonfills);
@@ -2143,14 +2604,20 @@ function findCTAById (ctaid) {
     const targetcta = MAP.ctapolygonfills.getLayers().filter(function (layer) {
         // return layer.feature.properties.Zone == ctaid;
         return layer.feature.properties.ZoneIDOrig == ctaid;
-
     });
     return targetcta[0];
 }
 
 
+// the zones' names in the GeoJSON file are not maintained as well as the ones in the incidence CSV,, so query the CSV to get a zone's name
+function getAreaNameByGeoId (geoid) {
+    const row = DATA_CANCER.filter(x => x.GeoID == geoid)[0];
+    return row ? row.GeoName : "Unknown";
+}
+
+
 function toggleAddressSearchFailure (message) {
-    const $textarea = $('div.data-filters label[for="data-filters-address"] span');
+    const $textarea = $('#data-filters-address-error');
 
     if (message) {
         $textarea.text(message).removeClass('d-none');
@@ -2247,11 +2714,71 @@ function updateCandleChart($candlediv, subtitle, aair, lci, uci, minlci, maxuci)
         width: `${cirangeidthpercent}%`,
         left: `${cirangeleftpercent}%`,
     });
-
-    // some accessibility and user-friendliness touches
-    const charttooltip = `${subtitle} LCI ${lci}, UCI ${uci}, AAIR ${aair}`;
-    $candlediv.attr('aria-label', charttooltip).prop('title', charttooltip);
 }
+
+
+function choroplethSetSelection (whichone) {
+    const $choroplethlegend = $('#choroplethlegend');
+    const $choroplethlegend_picker = $choroplethlegend.find('.choropleth-legend-picker');
+    $choroplethlegend_picker.val(whichone).change();
+}
+
+
+function choroplethGetSelectionLabel () {
+    const $choroplethlegend = $('#choroplethlegend');
+    const $choroplethlegend_picker = $choroplethlegend.find('.choropleth-legend-picker');
+    return $choroplethlegend_picker.find('option:selected').text();
+}
+
+
+function choroplethGetSelectionValue () {
+    const $choroplethlegend = $('#choroplethlegend');
+    const $choroplethlegend_picker = $choroplethlegend.find('.choropleth-legend-picker');
+    return $choroplethlegend_picker.find('option:selected').prop('value');
+}
+
+
+function choroplethGetColorTheme () {
+    const $choroplethlegend = $('#choroplethlegend');
+    const $choroplethlegend_picker = $choroplethlegend.find('.choropleth-legend-colortheme');
+    return $choroplethlegend_picker.find('option:selected').prop('value');
+}
+
+
+function choroplethSetColorTheme (nnewtheme) {
+    const $choroplethlegend = $('#choroplethlegend');
+    const $choroplethlegend_picker = $choroplethlegend.find('.choropleth-legend-colortheme');
+    return $choroplethlegend_picker.val(nnewtheme);
+}
+
+
+function choroplethSetMinMax (scoremintext, scoremaxtext) {
+    const $choroplethlegend = $('#choroplethlegend');
+    const $choroplethlegend_minvalue = $choroplethlegend.find('.choropleth-legend-minvalue');
+    const $choroplethlegend_maxvalue = $choroplethlegend.find('.choropleth-legend-maxvalue');
+
+    $choroplethlegend_minvalue.text(scoremintext);
+    $choroplethlegend_maxvalue.text(scoremaxtext);
+}
+
+
+function choroplethSetGradientColors (colorlist) {
+    const $choroplethlegend = $('#choroplethlegend');
+    const $choroplethlegend_gradient = $choroplethlegend.find('.choropleth-legend-legendgradient');
+
+    const percentage = 100.0 / colorlist.length;
+    const colorclauses = [];
+    colorlist.forEach(function (color, i) {
+        colorclauses.push(`${color} ${i * percentage}%`);
+        colorclauses.push(`${color} ${(i + 1) * percentage}%`);
+    });
+
+	const csscolor = `linear-gradient(to right, ${colorclauses.join(', ') })`;
+    $choroplethlegend_gradient.css({
+        'background-image': csscolor,
+    });
+}
+
 
 function downloadDataAsZip() {
     const zip = new JSZip();
@@ -2282,6 +2809,7 @@ function downloadDataAsZip() {
     });
 }
 
+
 // Attach event listener to the download link
 document.addEventListener("DOMContentLoaded", function () {
     const downloadLink = document.querySelector('[data-export="data"]');
@@ -2290,3 +2818,164 @@ document.addEventListener("DOMContentLoaded", function () {
         downloadDataAsZip();
     });
 });
+
+
+/*
+ *   This content is licensed according to the W3C Software License at https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document
+ *   File:   sortable-table.js
+ *   Desc:   Adds sorting to a HTML data table that implements ARIA Authoring Practices
+ */
+
+class SortableTable {
+  constructor(tableNode) {
+    this.tableNode = tableNode;
+
+    this.columnHeaders = tableNode.querySelectorAll('thead th');
+
+    this.sortColumns = [];
+
+    for (var i = 0; i < this.columnHeaders.length; i++) {
+      var ch = this.columnHeaders[i];
+      var buttonNode = ch.querySelector('button');
+      if (buttonNode) {
+        this.sortColumns.push(i);
+        buttonNode.setAttribute('data-column-index', i);
+        buttonNode.addEventListener('click', this.handleClick.bind(this));
+      }
+    }
+
+    this.optionCheckbox = document.querySelector(
+      'input[type="checkbox"][value="show-unsorted-icon"]'
+    );
+
+    if (this.optionCheckbox) {
+      this.optionCheckbox.addEventListener(
+        'change',
+        this.handleOptionChange.bind(this)
+      );
+      if (this.optionCheckbox.checked) {
+        this.tableNode.classList.add('show-unsorted-icon');
+      }
+    }
+  }
+
+  setColumnHeaderSort(columnIndex, ascdesc) {
+    if (typeof columnIndex === 'string') {
+      columnIndex = parseInt(columnIndex);
+    }
+
+    for (var i = 0; i < this.columnHeaders.length; i++) {
+      var ch = this.columnHeaders[i];
+      var buttonNode = ch.querySelector('button');
+      if (i === columnIndex) {
+        var value = ch.getAttribute('aria-sort');
+        if (value === 'descending' || ascdesc == 'ascending') {
+          ch.setAttribute('aria-sort', 'ascending');
+          this.sortColumn(
+            columnIndex,
+            'ascending',
+            ch.classList.contains('sortable-number')
+          );
+        } else {
+          ch.setAttribute('aria-sort', 'descending');
+          this.sortColumn(
+            columnIndex,
+            'descending',
+            ch.classList.contains('sortable-number')
+          );
+        }
+      } else {
+        if (ch.hasAttribute('aria-sort') && buttonNode) {
+          ch.removeAttribute('aria-sort');
+        }
+      }
+    }
+  }
+
+  sortColumn(columnIndex, sortValue, isNumber) {
+    function compareValues(a, b) {
+      if (sortValue === 'ascending') {
+        if (a.value === b.value) {
+          return 0;
+        } else {
+          if (isNumber) {
+            return a.value - b.value;
+          } else {
+            return a.value < b.value ? -1 : 1;
+          }
+        }
+      } else {
+        if (a.value === b.value) {
+          return 0;
+        } else {
+          if (isNumber) {
+            return b.value - a.value;
+          } else {
+            return a.value > b.value ? -1 : 1;
+          }
+        }
+      }
+    }
+
+    if (typeof isNumber !== 'boolean') {
+      isNumber = false;
+    }
+
+    var tbodyNode = this.tableNode.querySelector('tbody');
+    var rowNodes = [];
+    var dataCells = [];
+
+    var rowNode = tbodyNode.firstElementChild;
+
+    var index = 0;
+    while (rowNode) {
+      rowNodes.push(rowNode);
+      var rowCells = rowNode.querySelectorAll('th, td');
+      var dataCell = rowCells[columnIndex];
+
+      var data = {};
+      data.index = index;
+      data.value = dataCell.textContent.toLowerCase().trim();
+      if (isNumber) {
+        data.value = parseFloat(data.value.replace(/[^\d\.\-]/, ''));
+      }
+      dataCells.push(data);
+      rowNode = rowNode.nextElementSibling;
+      index += 1;
+    }
+
+    dataCells.sort(compareValues);
+
+    // remove rows
+    while (tbodyNode.firstChild) {
+      tbodyNode.removeChild(tbodyNode.lastChild);
+    }
+
+    // add sorted rows
+    for (var i = 0; i < dataCells.length; i += 1) {
+      const tr = rowNodes[dataCells[i].index];
+      tr.setAttribute('aria-rowindex', i + 1);
+      tbodyNode.appendChild(tr);
+    }
+
+    // apply our custom table filtering
+    applyMapTableFiltering();
+  }
+
+  /* EVENT HANDLERS */
+
+  handleClick(event) {
+    var tgt = event.currentTarget;
+    this.setColumnHeaderSort(tgt.getAttribute('data-column-index'));
+  }
+
+  handleOptionChange(event) {
+    var tgt = event.currentTarget;
+
+    if (tgt.checked) {
+      this.tableNode.classList.add('show-unsorted-icon');
+    } else {
+      this.tableNode.classList.remove('show-unsorted-icon');
+    }
+  }
+}

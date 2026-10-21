@@ -6,7 +6,16 @@
     height: 600px;
     width: 100%;
     background-color: white;
-    // outline: solid 1px grey;
-    box-shadow: 0 0 0 1px grey; /* Simulates an outline */
 }
 
+#map:focus {
+    outline: 0;
+    box-shadow: 0 0 0 .2rem #D27700;
+}
+
+#map .leaflet-control-zoom-in:focus,
+#map .leaflet-control-zoom-out:focus {
+    outline: 2px #FFFFFF solid;
+    box-shadow: 0 0 0 2px #000000;
+    outline-offset: 2px;
+}

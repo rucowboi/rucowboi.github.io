@@ -1,4 +1,3 @@
-
 # Cancer Mapping Template
 
 This is a template for web developers to set up a website that displays cancer statistics by cancer reporting zone. Note that throughout the template, cancer reporting zones are often referred to as CTAs (Cancer Tabulation Areas).
@@ -16,7 +15,7 @@ This template was developed based on the California Health Maps website at https
 
 # 2024 Zone/County Update
 
-This section outlines updates made to the template to display county and zone-level data, as well as updates made to the build to simplify the process for updating the site. Users should be able to use this section to build the site, but additional supplemental information is available in subsequent sections. 
+This section outlines updates made to the template to display county and zone-level data, as well as updates made to the build to simplify the process for updating the site. Users should be able to use this section to build the site, but additional supplemental information is available in subsequent sections.
 
 To update the site, ensure you have the data described below and then follow the steps for building the site.
 
@@ -24,12 +23,12 @@ To update the site, ensure you have the data described below and then follow the
 
 You will need to provide a number of data tables and geographic boundary files to supply content for the website.  These are described briefly here -- see the *Integrating Your Own Data* section of this document for more details, if needed:
 
-* A CSV file of cancer incidence statistics for each cancer reporting zone and by other geographies (e.g., county, state, nationwide).  
-	* Documentation is available for calculating the necessary rates within SEER*Stat using the ZoneRateCalcs process: https://github.com/NCI-NAACCR-Zone-Design/Template-Map-Zone-County/tree/master/zone-rate-calcs-process 
-	* After calculating the rates, follow the documentation and utilize the materials in the WebToolTable process to generate the file of cancer incidence statistics: https://github.com/NCI-NAACCR-Zone-Design/Template-Map-Zone-County/tree/master/web-tool-table-process 
+* A CSV file of cancer incidence statistics for each cancer reporting zone and by other geographies (e.g., county, state, nationwide).
+	* Documentation is available for calculating the necessary rates within SEER*Stat using the ZoneRateCalcs process: https://github.com/NCI-NAACCR-Zone-Design/Template-Map-Zone-County/tree/master/zone-rate-calcs-process
+	* After calculating the rates, follow the documentation and utilize the materials in the WebToolTable process to generate the file of cancer incidence statistics: https://github.com/NCI-NAACCR-Zone-Design/Template-Map-Zone-County/tree/master/web-tool-table-process
 
 * A CSV file of demographic statistics for each cancer reporting zone and by other geographies (e.g., county, state, nationwide).
-	* Follow the documentation and utilize the materials in the WebToolTable process to generate the file of demographic statistics:  https://github.com/NCI-NAACCR-Zone-Design/Template-Map-Zone-County/tree/master/web-tool-table-process 
+	* Follow the documentation and utilize the materials in the WebToolTable process to generate the file of demographic statistics:  https://github.com/NCI-NAACCR-Zone-Design/Template-Map-Zone-County/tree/master/web-tool-table-process
 
 * A shapefile describing the geographic boundaries of the cancer reporting zones.
 	* A shapefile should have been provided to you as part of the final materials package after finalizing your zones.
@@ -39,7 +38,7 @@ You will need to provide a number of data tables and geographic boundary files t
 
 * A shapefile describing the geographic boundaries of the cities/Census Designated Places (CDPs) for your state.
 	* This shapefile can be downloaded from the Census Cartographic Boundary Files website: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html. Find and download the most recent Places 500k shapefile.
-	
+
 ## Steps for building the site
 
 ### Prerequisites
@@ -71,16 +70,16 @@ You will need to provide a number of data tables and geographic boundary files t
 1. Replace **/datascript/inputs/CTAZones.shp** and associated **CTAZones files** with your **zone boundaries files**
 2. Replace **/datascript/inputs/cities.shp** and associated **cities files** with your **cities boundaries files**
 3. Replace **/datascript/inputs/counties.shp** and associated **counties files** with your **county boundaries files**
- 
+
 ### 3. Run Python Scripts
 - run the data-preparation scripts under the `datascripts/` folder
-1. 
+1.
    ```bash
    python make_ctageofile.py
    ```
    This will create `static/data/cta.json`.
 
-2. 
+2.
    ```bash
    python make_countygeofile.py
    ```
@@ -96,7 +95,7 @@ You will need to provide a number of data tables and geographic boundary files t
 
 ### 4. Mapbox Setup (Required for Map Rendering)
 
-1. Create a free Mapbox account at:  
+1. Create a free Mapbox account at:
    [https://account.mapbox.com/](https://account.mapbox.com/)
 
 2. After logging in, go to your **Account** page and copy your **Access Token**.
@@ -201,7 +200,7 @@ The command `npm run build` will compile the source files and static assets into
 * **Github Pages** After using `npm run build`, run `git commit` and `git push` as usual, and Github Pages will update your website within 5 minutes. The command `npm run deploy` is a convenient shortcut: it will run the commands to build, add, commit, and push in one single command.
 * **Commodity Web Hosting** The contents of this folder (not the folder itself) may be uploaded into your hosting directory via FTP/SFTP using a file transfer client such as WinSCP or FileZilla.
 * **Amazon S3** The contents of this folder (not the folder itself) may be uploaded into your S3 bucket, via the S3 console or via a graphical client such as Cyberduck, S3 Browser, or DragonDisk.
- 
+
 
 ## Integrating Your Own Data
 
@@ -223,7 +222,7 @@ Cancer incidence rates are provided in a CSV file.  Zone-level rates can be calc
 
 * The `Years` field is a text string specifying domain values for the range of years and is used for filtering.
 
-* The incidence data fields `Cases` (number of cancer cases), `AAIR` (age-adjusted incidence rate per 100,000), `LCI` (95% lower confidence interval), `UCI` (95% upper confidence interval), and `PopTot` (population denominator) are numeric values used for reporting incidence. 
+* The incidence data fields `Cases` (number of cancer cases), `AAIR` (age-adjusted incidence rate per 100,000), `LCI` (95% lower confidence interval), `UCI` (95% upper confidence interval), and `PopTot` (population denominator) are numeric values used for reporting incidence.
 
 * The same incidence fields must be defined for each race/ethnicity filter that you will define, and must be prefixed by the race/ethnicity's "short version". For example, If you use `W` as a domain value for Non-Hispanic Whites then cancer rates for Non-Hispanic Whites will be reported using these fields: `W_Cases`, `W_AAIR`, `W_LCI`, `W_UCI`, and `W_PopTot`.
 
@@ -233,11 +232,11 @@ Edit `index.js` and set up `SEARCHOPTIONS_CANCERSITE` to match your dataset's do
 
 Edit `index.js` and set up `SEARCHOPTIONS_SEX` to match your dataset's domain values. The `value` field gives the short text string used in the data file and the `label` field gives a longer text string used for filtering and displaying the data.
 
-If any of the cancer site options will be specific to one sex, edit `index.js` and set up `CANCER_SEXES` to auto-select that sex if that cancer site is selected. 
+If any of the cancer site options will be specific to one sex, edit `index.js` and set up `CANCER_SEXES` to auto-select that sex if that cancer site is selected.
 
 Edit `index.js` and set up `SEARCHOPTIONS_TIME` to match your dataset's year range values. The set of year ranges must match between the incidence and demographic datasets. The `value` field gives the short text string used in the data file and the `label` field gives a longer text string used for filtering and displaying the data.
 
-Edit `index.js` and set up `SEARCHOPTIONS_RACE` to match your dataset's domain values. The `value` field gives the short text string (usually a single letter) used as a race/ethnicity prefix for the five cancer incidence fields in the data file and the `label` field gives a longer race/ethnicity description used for filtering and displaying the data.  A null value (  ) is usually used for all race/ethnicities.  
+Edit `index.js` and set up `SEARCHOPTIONS_RACE` to match your dataset's domain values. The `value` field gives the short text string (usually a single letter) used as a race/ethnicity prefix for the five cancer incidence fields in the data file and the `label` field gives a longer race/ethnicity description used for filtering and displaying the data.  A null value (  ) is usually used for all race/ethnicities.
 
 Edit `index.js` and set `NATIONWIDE_INCIDENCE` to indicate whether your data will support Nationwide readouts for comparison with the Zone and State statistics.
 
@@ -253,13 +252,13 @@ Demographic and socioeconomic data to be displayed in a table below the cancer i
 	* State: State FIPS code
 	* Nationwide: value 'US'
 
-* The `Years` field is a text string specifying domain values for the range of years and is used for filtering. Values must match those used for the incidence data.  
+* The `Years` field is a text string specifying domain values for the range of years and is used for filtering. Values must match those used for the incidence data.
 
 * A set of numeric fields specify the values for each demographic data item.  The data items are defined in the `DEMOGRAPHIC_TABLES` as described below.
 
 Copy your demographics CSV into `static/data/demographics.csv`
 
-Edit `index.js` and set up `DEMOGRAPHIC_TABLES` to define the demographic data items to be displayed. This variable consists of a set of groups of demographic data items with a `title` field that gives a group name for a set.  Each group contains a set of rows of data items in which the `field` field gives the short name for the data item used in the data file, the `label` field gives a longer description of the data item used for filtering and displaying the data, the `format` field specifies the display format, and the `tooltip_id` field points to tooltip text in `index.html`. 
+Edit `index.js` and set up `DEMOGRAPHIC_TABLES` to define the demographic data items to be displayed. This variable consists of a set of groups of demographic data items with a `title` field that gives a group name for a set.  Each group contains a set of rows of data items in which the `field` field gives the short name for the data item used in the data file, the `label` field gives a longer description of the data item used for filtering and displaying the data, the `format` field specifies the display format, and the `tooltip_id` field points to tooltip text in `index.html`.
 
 Edit `index.js` and set up `CHOROPLETH_OPTIONS` to include a row for each demographic data item with `field`, `label`, and `format` fields matching those in the `DEMOGRAPHIC_TABLES` variable and an additional `colorramp` field that specifies the `Color By` option to use when displaying the data item in the choropleth map.
 
@@ -319,7 +318,7 @@ Relevant attributes are as follows. Other fields will be ignored.
 
 * `NAME` -- The name of the city/place.
 
-After the CTA zones, counties, and places shapefiles are in place, run `python3 make_placescsv.py` to create `static/data/counties_by_cta.csv` and `static/data/cities_by_cta.csv` which provide a list of places intersecting each CTA Zone.  Note that, prior to determining the intersections, this script sets a projection for each shapefile using the projection specified in `PLANAR_SRS` in the `settings.py` script.  The default projection is Texas Centric Albers Equal Area (https://spatialreference.org/ref/epsg/3083/).  Other Albers equal area projections could be specified.  
+After the CTA zones, counties, and places shapefiles are in place, run `python3 make_placescsv.py` to create `static/data/counties_by_cta.csv` and `static/data/cities_by_cta.csv` which provide a list of places intersecting each CTA Zone.  Note that, prior to determining the intersections, this script sets a projection for each shapefile using the projection specified in `PLANAR_SRS` in the `settings.py` script.  The default projection is Texas Centric Albers Equal Area (https://spatialreference.org/ref/epsg/3083/).  Other Albers equal area projections could be specified.
 
 Again, **do not forget to do `npm run build`** after making changes to the content of `static/`, including replacing images or loading new data.
 

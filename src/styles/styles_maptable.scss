@@ -1,0 +1,45 @@
+@media screen and (min-width: 768px) {
+#map-table-wrapper {
+    max-height: 550px;
+    overflow-y: auto;
+}
+}
+
+/* table-colorthemeX also sets column widths and paddings and stuff, so we can't use them here; but we do like the colors */
+
+#map-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 3px 1px;
+
+    tbody th {
+        font-weight: normal;
+    }
+
+    &.map-table-demographic {
+        tbody th,
+        tbody td {
+            background-color: #feecd4;
+        }
+    }
+
+    &.map-table-cancer {
+        tbody th,
+        tbody td {
+            background-color: #e6eaff;
+        }
+    }
+
+    tbody tr.selected-row {
+        td, th {
+            border-top: 2px solid black;
+            border-bottom: 2px solid black;
+            &:first-child {
+                border-left: 2px solid black;
+            }
+            &:last-child {
+                border-right: 2px solid black;
+            }
+        }
+    }
+}

@@ -6,6 +6,7 @@ L.Control.LayerPicker = L.Control.extend({
         expanded: false,
         layers: [],
 		onLayerChange: function () {},
+		control_id: "leaflet-control-layerpicker-content",
 	},
 	initialize: function(options) {
 		L.setOptions(this,options);
@@ -15,21 +16,28 @@ L.Control.LayerPicker = L.Control.extend({
 
 		// create our container
 		this.container = L.DomUtil.create('div', 'leaflet-control leaflet-bar leaflet-layerpicker-control leaflet-layerpicker-collapsed');
-		this.content_collapsed = L.DomUtil.create('div', 'leaflet-layerpicker-button', this.container);
-		this.content_expanded = L.DomUtil.create('div', 'leaflet-layerpicker-content', this.container);
+        this.container.role = 'group';
+        this.container.setAttribute('aria-labelledby', `${this.options.control_id}-heading`);
 
-        // our closed state: a button to open
-		this.content_collapsed.innerHTML = '<i class="fa fa-layer-group"></i>';
+		const opener = L.DomUtil.create('div', 'leaflet-layerpicker-button', this.container);
+		opener.innerHTML = '<button type="button" aria-label="Show layers to be displayed on the map"><i class="fa fa-layer-group"></i></button>';
+		this.openbutton = opener.querySelector('button');
+        this.openbutton.setAttribute('aria-controls', this.options.control_id);
 
         // expanded content
+		this.content_expanded = L.DomUtil.create('div', 'leaflet-layerpicker-content', this.container);
+		this.content_expanded.id = this.options.control_id;
 
         // close button
-        this.closebutton = L.DomUtil.create('i', 'leaflet-layerpicker-closebutton', this.content_expanded);
-        this.closebutton.innerHTML = '&times;';
+        const closer = L.DomUtil.create('div', 'leaflet-layerpicker-closebutton', this.content_expanded);
+        closer.innerHTML = '<button type="button" aria-label="Close reference layers">&times;</button>';
+        this.closebutton = closer.querySelector('button');
+        this.closebutton.setAttribute('aria-controls', this.options.control_id);
 
         // head text
-        this.headtext = L.DomUtil.create('div', 'leaflet-layerpicker-headtext', this.content_expanded);
+        this.headtext = L.DomUtil.create('h3', 'leaflet-layerpicker-headtext', this.content_expanded);
         this.headtext.innerHTML = 'Reference Layers';
+        this.headtext.id = `${this.options.control_id}-heading`;
 
         // layer checkboxes
         // create them, their labels, etc. and also a registry of these for random access e.g. toggleLayer()
@@ -40,6 +48,7 @@ L.Control.LayerPicker = L.Control.extend({
             const checkbox = L.DomUtil.create('input', 'leaflet-layerpicker-checkbox', entry);
             checkbox.type = 'checkbox';
             checkbox.value = layerinfo.id;
+            checkbox.setAttribute('aria-label', `Toggle map layer ${layerinfo.label}`);
 
             const label = L.DomUtil.create('span', 'leaflet-layerpicker-name', entry);
             label.innerHTML = layerinfo.label;
@@ -70,19 +79,34 @@ L.Control.LayerPicker = L.Control.extend({
 
 		// click X to close & click closed version to open
         // ARIA/508 translate hitting enter as clicking
-		L.DomEvent.addListener(this.content_collapsed, 'keydown', (event) => {
-            if (event.keyCode == 13) this.content_collapsed.click();
+		L.DomEvent.addListener(this.openbutton, 'keydown', (event) => {
+            if (event.key != 'Enter') return;
+
+            setTimeout(() => {
+                this.openbutton.click();
+            }, 0.1 * 1000);
 		});
 		L.DomEvent.addListener(this.closebutton, 'keydown', (event) => {
-            if (event.keyCode == 13) this.closebutton.click();
+            if (event.key != 'Enter') return;
+
+            setTimeout(() => {
+                this.closebutton.click();
+            }, 0.1 * 1000);
 		});
 
-		L.DomEvent.addListener(this.content_collapsed, 'click', () => {
+		L.DomEvent.addListener(this.openbutton, 'click', () => {
 			this.expand();
+
+            // then focus the close button, so keyboard users are in the same place as they were
+            this.closebutton.focus();
 		});
 		L.DomEvent.addListener(this.closebutton, 'click', () => {
 			this.collapse();
+
+            // then focus the open button, so keyboard users are in the same place as they were
+            this.openbutton.focus();
 		});
+
         if (this.options.expanded) {
             setTimeout(() => {
                 this.expand();
@@ -91,7 +115,7 @@ L.Control.LayerPicker = L.Control.extend({
 
 		// enable keyboard interactions
         if (this._map.options.keyboard) {
-            this.content_collapsed.tabIndex = 0;
+            this.openbutton.tabIndex = 0;
 			this.closebutton.tabIndex = 0;
         }
 
@@ -101,10 +125,16 @@ L.Control.LayerPicker = L.Control.extend({
 	expand: function (html) {
 		L.DomUtil.addClass(this.container, 'leaflet-layerpicker-expanded');
 		L.DomUtil.removeClass(this.container, 'leaflet-layerpicker-collapsed');
+
+        this.closebutton.setAttribute('aria-expanded', 'true');
+        this.openbutton.setAttribute('aria-expanded', 'true');
 	},
 	collapse: function (html) {
 		L.DomUtil.removeClass(this.container, 'leaflet-layerpicker-expanded');
 		L.DomUtil.addClass(this.container, 'leaflet-layerpicker-collapsed');
+
+        this.closebutton.setAttribute('aria-expanded', 'false');
+        this.openbutton.setAttribute('aria-expanded', 'false');
 	},
     toggleLayer: function (layerid, show) {
         const reglayer = this.layercheckboxes[layerid];

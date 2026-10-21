@@ -1,0 +1,24 @@
+/*
+ * AAIR BARCHART AND TABLE
+ */
+
+#incidence-barchart-table {
+}
+
+/* see also BARCHART_COLORS_SEX */
+.aair-barchart-swatch {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    background-color: white;
+    border: 1px solid #000;
+}
+.aair-barchart-swatch.aair-barchart-swatch-Both {
+    background-color: #4f629a;
+}
+.aair-barchart-swatch.aair-barchart-swatch-Female {
+    background-color: #7a89d7;
+}
+.aair-barchart-swatch.aair-barchart-swatch-Male {
+    background-color: #8faed2;
+}

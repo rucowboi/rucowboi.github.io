@@ -7,6 +7,11 @@
     color-adjust: exact !important;
 }
 
+*:focus {
+    outline: 0;
+    box-shadow: 0 0 0 .2rem #D27700;
+}
+
 body, html {
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
@@ -16,25 +21,16 @@ body, html {
 
 h1 {
     color: #293985;
-    font-size: 32px;
     font-weight: bold;
 }
 
 h2 {
     color: #6472B9;
-    font-size: 28px;
     font-weight: bold;
 }
 
-h2.title {  /* a special type of H2 that's smaller; used to be H3 but ARIA says no */
+h3 {
     color: #6472B9;
-    font-size: 24px;
-    font-weight: normal;
-}
-
-.title {
-    color: #6472B9;
-    font-size: 22px;
     font-weight: bold;
 }
 
@@ -47,6 +43,8 @@ h2.title {  /* a special type of H2 that's smaller; used to be H3 but ARIA says 
 .warnmessage {
     background-color: #f99e26;
     color: #000000;
+    padding: 1em;
+    line-height: 1;
 }
 
 hr {
@@ -59,7 +57,11 @@ label { font-weight:normal; }
 a {
     color: #000000;
     &:hover, &:active {
-        color: #f99e26;
+        color: #293985;
+    }
+    &:focus {
+        outline: 0;
+        box-shadow: 0 0 0 .2rem #D27700;
     }
     text-decoration: underline;
 }
@@ -123,6 +125,18 @@ i.fa-info-circle {  /* these are used exclusively for tooltip triggers, so get a
 .left { text-align:left !important; }
 .bold { font-weight:bold !important; }
 .nowrap { white-space:nowrap !important; }
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
 
 .rightfloat { float: right; }
 
