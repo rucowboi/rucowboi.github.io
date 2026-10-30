@@ -1511,7 +1511,7 @@ function performSearchDemographics (searchparams) {
     if (searchparams.countyId && searchparams.type == 'County') {
         ctanametext = searchparams.countyName;
     } else if (searchparams.ctaid && searchparams.type == 'Zone') {
-        ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
+        ctanametext = `Zone = ${searchparams.ctaname} (${searchparams.ctaid})`;
     } else {
         ctanametext = SITE_CONSTANTS.stateName;
     }
@@ -1667,7 +1667,7 @@ function performSearchIncidenceReadout (searchparams) {
     if (searchparams.countyId && searchparams.type == 'County') {
         ctanametext = searchparams.countyName;
     } else if (searchparams.ctaid && searchparams.type == 'Zone') {
-        ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
+        ctanametext = `Zone = ${searchparams.ctaname} (${searchparams.ctaid})`;
     } else {
         ctanametext = SITE_CONSTANTS.stateName;
     }
@@ -1889,7 +1889,7 @@ function performSearchIncidenceBarChart (searchparams) {
     if (searchparams.countyId && searchparams.type == 'County') {
         ctanametext = searchparams.countyName;
     } else if (searchparams.ctaid && searchparams.type == 'Zone') {
-        ctanametext = `${searchparams.ctaname} (${searchparams.ctaid})`;
+        ctanametext = `Zone = ${searchparams.ctaname} (${searchparams.ctaid})`;
     } else {
         ctanametext = SITE_CONSTANTS.stateName;
     }
